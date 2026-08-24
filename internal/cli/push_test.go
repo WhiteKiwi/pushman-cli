@@ -1,0 +1,113 @@
+package cli
+
+import (
+	"bytes"
+	"context"
+	"strings"
+	"testing"
+	"time"
+)
+
+func TestReadBody(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name, stdin string
+		terminal    bool
+		args        []string
+		want        string
+		wantErr     bool
+	}{
+		{name: "argument", terminal: true, args: []string{"done"}, want: "done"},
+		{name: "automatic stdin", stdin: "line one\nline two\n", args: nil, want: "line one\nline two"},
+		{name: "explicit stdin", stdin: "done\r\n", terminal: true, args: []string{"-"}, want: "done"},
+		{name: "remove only one newline", stdin: "done\n\n", args: []string{"-"}, want: "done\n"},
+		{name: "missing interactive body", terminal: true, wantErr: true},
+		{name: "argument and pipe", stdin: "ignored", args: []string{"argument"}, wantErr: true},
+		{name: "whitespace", terminal: true, args: []string{" \t"}, wantErr: true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := readBody(strings.NewReader(tt.stdin), tt.terminal, tt.args)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("readBody() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			if got != tt.want {
+				t.Fatalf("readBody() = %q, want %q", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestValidatePushOptions(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name    string
+		opts    pushOptions
+		wantErr bool
+	}{
+		{name: "defaults", opts: pushOptions{sound: "default"}},
+		{name: "valid", opts: pushOptions{sound: "none", url: "myapp://message/1", image: "https://example.com/a.png", group: "deploy:prod", key: "build-1", devices: []string{"iPhone", "iPad"}}},
+		{name: "json quiet", opts: pushOptions{sound: "default", json: true, quiet: true}, wantErr: true},
+		{name: "invalid sound", opts: pushOptions{sound: "loud"}, wantErr: true},
+		{name: "invalid key", opts: pushOptions{sound: "default", key: "space here"}, wantErr: true},
+		{name: "insecure image", opts: pushOptions{sound: "default", image: "http://example.com/a.png"}, wantErr: true},
+		{name: "blocked URL", opts: pushOptions{sound: "default", url: "javascript:alert(1)"}, wantErr: true},
+		{name: "hostless web URL", opts: pushOptions{sound: "default", url: "https:/message/1"}, wantErr: true},
+		{name: "local image", opts: pushOptions{sound: "default", image: "https://localhost/a.png"}, wantErr: true},
+		{name: "duplicate device", opts: pushOptions{sound: "default", devices: []string{"Phone", "phone"}}, wantErr: true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := validatePushOptions(tt.opts); (got != nil) != tt.wantErr {
+				t.Fatalf("validatePushOptions() error = %v, wantErr %v", got, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestPushOutput(t *testing.T) {
+	t.Parallel()
+	service := stubService{pushResult: PushResult{ID: "msg_123", Status: "accepted", DeviceCount: 1, AcceptedAt: time.Date(2026, 8, 25, 1, 2, 3, 0, time.UTC)}}
+	out := new(bytes.Buffer)
+	cmd := New(Dependencies{In: strings.NewReader(""), Out: out, IsTerminal: func() bool { return true }, Service: service})
+	cmd.SetArgs([]string{"push", "complete"})
+	if err := cmd.Execute(); err != nil {
+		t.Fatal(err)
+	}
+	if got, want := out.String(), "Accepted msg_123 for 1 device\n"; got != want {
+		t.Fatalf("output = %q, want %q", got, want)
+	}
+}
+
+func TestCommandSurface(t *testing.T) {
+	t.Parallel()
+	root := New(Dependencies{})
+	for _, path := range [][]string{{"pair"}, {"status"}, {"rename"}, {"logout"}, {"push"}, {"devices"}, {"history"}, {"history", "show"}, {"usage"}, {"doctor"}, {"version"}, {"help"}} {
+		if _, _, err := root.Find(path); err != nil {
+			t.Errorf("command %q missing: %v", strings.Join(path, " "), err)
+		}
+	}
+	if command, _, err := root.Find([]string{"completion"}); err == nil && command.Name() == "completion" {
+		t.Fatal("unexpected completion command")
+	}
+}
+
+func TestExitCode(t *testing.T) {
+	t.Parallel()
+	if got := ExitCode(usagef("bad input")); got != 2 {
+		t.Fatalf("usage exit = %d", got)
+	}
+	if got := ExitCode(&AuthorizationError{Err: context.Canceled}); got != 4 {
+		t.Fatalf("auth exit = %d", got)
+	}
+	if got := ExitCode(context.Canceled); got != 130 {
+		t.Fatalf("interrupt exit = %d", got)
+	}
+}
+
+type stubService struct {
+	UnconfiguredService
+	pushResult PushResult
+}
+
+func (s stubService) Push(context.Context, PushRequest) (PushResult, error) { return s.pushResult, nil }
