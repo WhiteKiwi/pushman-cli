@@ -15,7 +15,8 @@ type VersionInfo struct {
 }
 
 type PairRequest struct {
-	Platform string
+	Platform      string
+	SuggestedName string
 }
 
 type PairResult struct {

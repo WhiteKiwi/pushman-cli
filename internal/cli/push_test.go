@@ -92,6 +92,20 @@ func TestCommandSurface(t *testing.T) {
 	}
 }
 
+func TestNormalizeSuggestedName(t *testing.T) {
+	t.Parallel()
+	got, err := normalizeSuggestedName("  " + strings.Repeat("가", 70) + "  ")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if countScalars(got) != 64 {
+		t.Fatalf("scalar count = %d", countScalars(got))
+	}
+	if _, err := normalizeSuggestedName(" \t "); err == nil {
+		t.Fatal("expected empty hostname to fail")
+	}
+}
+
 func TestExitCode(t *testing.T) {
 	t.Parallel()
 	if got := ExitCode(usagef("bad input")); got != 2 {

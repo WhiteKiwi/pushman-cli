@@ -12,7 +12,15 @@ import (
 
 func newPairCommand(deps Dependencies) *cobra.Command {
 	cmd := &cobra.Command{Use: "pair", Short: "Pair this CLI with Pushman", Args: func(_ *cobra.Command, args []string) error { return noArgs(args) }, RunE: func(cmd *cobra.Command, _ []string) error {
-		result, err := deps.Service.Pair(cmd.Context(), PairRequest{Platform: runtime.GOOS})
+		hostname, err := deps.Hostname()
+		if err != nil {
+			return fmt.Errorf("read hostname for pairing: %w", err)
+		}
+		suggestedName, err := normalizeSuggestedName(hostname)
+		if err != nil {
+			return err
+		}
+		result, err := deps.Service.Pair(cmd.Context(), PairRequest{Platform: runtime.GOOS, SuggestedName: suggestedName})
 		if err != nil {
 			return err
 		}
@@ -20,6 +28,18 @@ func newPairCommand(deps Dependencies) *cobra.Command {
 		return nil
 	}}
 	return cmd
+}
+
+func normalizeSuggestedName(value string) (string, error) {
+	name := norm.NFC.String(strings.TrimSpace(value))
+	if !utf8.ValidString(name) || name == "" {
+		return "", usagef("hostname must contain valid non-whitespace UTF-8")
+	}
+	runes := []rune(name)
+	if len(runes) > 64 {
+		name = string(runes[:64])
+	}
+	return name, nil
 }
 
 func newStatusCommand(deps Dependencies) *cobra.Command {

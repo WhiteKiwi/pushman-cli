@@ -12,6 +12,7 @@ type Dependencies struct {
 	Out        io.Writer
 	ErrOut     io.Writer
 	IsTerminal func() bool
+	Hostname   func() (string, error)
 	Service    Service
 	Version    VersionInfo
 }
@@ -62,6 +63,9 @@ func withDefaults(deps Dependencies) Dependencies {
 	}
 	if deps.IsTerminal == nil {
 		deps.IsTerminal = func() bool { return true }
+	}
+	if deps.Hostname == nil {
+		deps.Hostname = os.Hostname
 	}
 	if deps.Service == nil {
 		deps.Service = UnconfiguredService{}
