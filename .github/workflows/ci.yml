@@ -19,6 +19,10 @@ jobs:
           cache: true
       - name: Check formatting
         run: test -z "$(gofmt -l .)"
+      - name: Verify generated API client
+        run: |
+          go generate ./internal/api
+          git diff --exit-code -- internal/api/api.gen.go
       - name: Test
         run: go test -race -coverprofile=coverage.out ./...
       - name: Vet

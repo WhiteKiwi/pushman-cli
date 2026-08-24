@@ -50,6 +50,8 @@ Cobra commands depend on the `internal/cli.Service` interface. A later generated
 
 Release metadata is injected with linker flags into `main.version`, `main.commit`, and `main.date`.
 
+`api/openapi.yaml` is a bundled snapshot of the authoritative public contract in `WhiteKiwi/pushman`. After updating that snapshot, run `go generate ./internal/api` and commit the generated client. CI rejects stale generated code.
+
 ## Product contract
 
 The source of truth for first-release behavior is the frozen specification in the adjacent private planning repository at `../pushman/docs/SPEC.md`. Public API documentation and generated clients will move to a shared public contract once its repository boundary is finalized.
