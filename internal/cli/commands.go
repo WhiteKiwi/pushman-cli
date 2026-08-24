@@ -20,11 +20,17 @@ func newPairCommand(deps Dependencies) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		result, err := deps.Service.Pair(cmd.Context(), PairRequest{Platform: runtime.GOOS, SuggestedName: suggestedName})
+		result, err := deps.Service.Pair(cmd.Context(), PairRequest{
+			Platform: runtime.GOOS, SuggestedName: suggestedName,
+			OnChallenge: func(challenge PairChallenge) error {
+				_, err := fmt.Fprintf(cmd.OutOrStdout(), "Pairing code: %s\nVerify at: %s\n", challenge.UserCode, challenge.VerificationURL)
+				return err
+			},
+		})
 		if err != nil {
 			return err
 		}
-		fmt.Fprintf(cmd.OutOrStdout(), "Pairing code: %s\nVerify at: %s\n", result.UserCode, result.VerificationURL)
+		fmt.Fprintf(cmd.OutOrStdout(), "Paired as %s\n", result.Nickname)
 		return nil
 	}}
 	return cmd

@@ -79,6 +79,21 @@ func TestPushOutput(t *testing.T) {
 	}
 }
 
+func TestPairOutput(t *testing.T) {
+	t.Parallel()
+	service := stubService{pairResult: PairResult{Nickname: "Build Mac"}}
+	out := new(bytes.Buffer)
+	cmd := New(Dependencies{Out: out, Hostname: func() (string, error) { return "Build Mac", nil }, Service: service})
+	cmd.SetArgs([]string{"pair"})
+	if err := cmd.Execute(); err != nil {
+		t.Fatal(err)
+	}
+	want := "Pairing code: ABCD-EFGH\nVerify at: https://app.pushman.example/pair\nPaired as Build Mac\n"
+	if got := out.String(); got != want {
+		t.Fatalf("output = %q, want %q", got, want)
+	}
+}
+
 func TestCommandSurface(t *testing.T) {
 	t.Parallel()
 	root := New(Dependencies{})
@@ -122,6 +137,15 @@ func TestExitCode(t *testing.T) {
 type stubService struct {
 	UnconfiguredService
 	pushResult PushResult
+	pairResult PairResult
 }
 
 func (s stubService) Push(context.Context, PushRequest) (PushResult, error) { return s.pushResult, nil }
+func (s stubService) Pair(_ context.Context, request PairRequest) (PairResult, error) {
+	if request.OnChallenge != nil {
+		if err := request.OnChallenge(PairChallenge{UserCode: "ABCD-EFGH", VerificationURL: "https://app.pushman.example/pair"}); err != nil {
+			return PairResult{}, err
+		}
+	}
+	return s.pairResult, nil
+}

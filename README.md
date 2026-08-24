@@ -2,7 +2,7 @@
 
 `pushman` sends push notifications to your own iPhone from terminals, scripts, servers, and CI jobs.
 
-This repository is the first-release CLI scaffold. It contains the complete command tree, deterministic input validation, injectable command I/O, and a typed service boundary. The HTTP transport and credential persistence intentionally remain unimplemented until Pushman's shared OpenAPI contract is accepted.
+This repository contains the first-release command tree, deterministic input validation, a generated OpenAPI client, interactive pairing polling, operating-system credential storage, and HTTP adapters for push, status, rename, logout, devices, history list, usage, and diagnostics. History detail remains a follow-up until its API operation is finalized.
 
 ## Requirements
 
@@ -16,6 +16,14 @@ go test ./...
 go vet ./...
 go run ./cmd/pushman help
 ```
+
+The production hostname has not been selected, so the compiled default remains the non-routable `https://api.pushman.example/v1`. For a local server use an explicit loopback override:
+
+```sh
+PUSHMAN_API_URL=http://127.0.0.1:8080/v1 go run ./cmd/pushman status
+```
+
+Overrides must use HTTPS except for loopback development and must end at `/v1`. Redirects are rejected so credentials cannot be forwarded to another origin.
 
 ## Command surface
 
@@ -46,7 +54,9 @@ Frequently used options include `-t, --title`, `-d, --device`, `--json`, and `--
 
 ## Architecture boundary
 
-Cobra commands depend on the `internal/cli.Service` interface. A later generated API adapter will implement that interface and own HTTPS requests, authentication, and error-code translation. This keeps the CLI's public UX independent from host or path layout decisions and prevents a provisional endpoint shape from becoming a compatibility promise.
+Cobra commands depend on the `internal/cli.Service` interface. The generated-client adapter owns HTTPS requests, authentication, pairing polling, and stable error translation. This keeps the CLI's public UX independent from transport implementation details.
+
+Paired credentials are stored through the operating-system keyring: macOS Keychain, Windows Credential Manager, or Secret Service on Linux. Storage is isolated by an API-base digest so development and production credentials cannot overwrite one another. `PUSHMAN_TOKEN` is process-only, is never persisted, and takes precedence only for `push`.
 
 Release metadata is injected with linker flags into `main.version`, `main.commit`, and `main.date`.
 

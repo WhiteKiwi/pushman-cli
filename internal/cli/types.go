@@ -17,9 +17,14 @@ type VersionInfo struct {
 type PairRequest struct {
 	Platform      string
 	SuggestedName string
+	OnChallenge   func(PairChallenge) error
 }
 
 type PairResult struct {
+	Nickname string
+}
+
+type PairChallenge struct {
 	UserCode        string
 	VerificationURL string
 	ExpiresAt       time.Time
