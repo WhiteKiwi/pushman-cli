@@ -107,7 +107,7 @@ func newHistoryCommand(deps Dependencies) *cobra.Command {
 			return err
 		}
 		for _, item := range items {
-			fmt.Fprintf(cmd.OutOrStdout(), "%s\t%s\t%s\n", item.ID, item.UpdatedAt.Format("2006-01-02T15:04:05Z07:00"), item.Title)
+			fmt.Fprintf(cmd.OutOrStdout(), "%s\t%s\t%s\t%d revision(s)\t%s\n", item.ID, item.UpdatedAt.Format("2006-01-02T15:04:05Z07:00"), item.Title, item.UpdateCount, item.DeliveryState)
 		}
 		return nil
 	}}
@@ -116,7 +116,28 @@ func newHistoryCommand(deps Dependencies) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		fmt.Fprintf(cmd.OutOrStdout(), "%s\n%s\n\n%s\n", detail.ID, detail.Title, detail.Body)
+		fmt.Fprintf(cmd.OutOrStdout(), "Logical message: %s\nRead: %t\n", detail.LogicalMessageID, detail.Read)
+		for index, revision := range detail.Revisions {
+			fmt.Fprintf(cmd.OutOrStdout(), "\nRevision %d/%d: %s\nAccepted: %s\nSender: %s\nTitle: %s\n", index+1, len(detail.Revisions), revision.ID, revision.UpdatedAt.Format("2006-01-02T15:04:05Z07:00"), revision.SenderName, revision.Title)
+			if revision.Subtitle != "" {
+				fmt.Fprintf(cmd.OutOrStdout(), "Subtitle: %s\n", revision.Subtitle)
+			}
+			fmt.Fprintf(cmd.OutOrStdout(), "Sound: %s\nFormat: %s\n", revision.Sound, revision.Format)
+			if revision.URL != "" {
+				fmt.Fprintf(cmd.OutOrStdout(), "URL: %s\n", revision.URL)
+			}
+			if revision.Image != "" {
+				fmt.Fprintf(cmd.OutOrStdout(), "Image: %s\n", revision.Image)
+			}
+			for _, delivery := range revision.Deliveries {
+				fmt.Fprintf(cmd.OutOrStdout(), "Delivery: %s — %s", delivery.DeviceName, delivery.State)
+				if delivery.Failure != "" {
+					fmt.Fprintf(cmd.OutOrStdout(), " (%s)", delivery.Failure)
+				}
+				fmt.Fprintln(cmd.OutOrStdout())
+			}
+			fmt.Fprintf(cmd.OutOrStdout(), "\n%s\n", revision.Body)
+		}
 		return nil
 	}})
 	return cmd

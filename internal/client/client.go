@@ -260,22 +260,64 @@ func (s *Service) History(ctx context.Context) ([]cli.HistoryItem, error) {
 	if err != nil {
 		return nil, err
 	}
-	response, err := s.api.ListOwnMessagesWithResponse(ctx, nil, authorize(token))
-	if err != nil {
-		return nil, transportError(err)
+	var items []cli.HistoryItem
+	var cursor *string
+	limit := 100
+	for page := 0; page < 100; page++ {
+		response, err := s.api.ListOwnMessagesWithResponse(ctx, &api.ListOwnMessagesParams{Cursor: cursor, Limit: &limit}, authorize(token))
+		if err != nil {
+			return nil, transportError(err)
+		}
+		if response.JSON200 == nil {
+			return nil, responseError(response.StatusCode(), response.JSONDefault)
+		}
+		for _, item := range response.JSON200.Items {
+			items = append(items, cli.HistoryItem{ID: item.Id, Title: item.Title, UpdatedAt: item.AcceptedAt,
+				UpdateCount: item.UpdateCount, DeliveryState: string(item.DeliveryState)})
+		}
+		cursor = response.JSON200.NextCursor
+		if cursor == nil || *cursor == "" {
+			return items, nil
+		}
 	}
-	if response.JSON200 == nil {
-		return nil, responseError(response.StatusCode(), response.JSONDefault)
-	}
-	items := make([]cli.HistoryItem, 0, len(response.JSON200.Items))
-	for _, item := range response.JSON200.Items {
-		items = append(items, cli.HistoryItem{ID: item.Id, Title: item.Title, UpdatedAt: item.AcceptedAt})
-	}
-	return items, nil
+	return nil, &cli.ServiceError{Code: "invalid_response", Message: "History pagination did not terminate."}
 }
 
-func (s *Service) HistoryShow(context.Context, string) (cli.HistoryDetail, error) {
-	return cli.HistoryDetail{}, &cli.ServiceError{Code: "not_implemented", Message: "History detail is not implemented yet."}
+func (s *Service) HistoryShow(ctx context.Context, messageID string) (cli.HistoryDetail, error) {
+	token, err := s.pairedToken()
+	if err != nil {
+		return cli.HistoryDetail{}, err
+	}
+	response, err := s.api.GetOwnMessageWithResponse(ctx, messageID, authorize(token))
+	if err != nil {
+		return cli.HistoryDetail{}, transportError(err)
+	}
+	if response.JSON200 == nil {
+		return cli.HistoryDetail{}, responseError(response.StatusCode(), response.JSONDefault)
+	}
+	detail := cli.HistoryDetail{LogicalMessageID: response.JSON200.LogicalMessageId, Read: response.JSON200.Read}
+	for _, item := range response.JSON200.Revisions {
+		revision := cli.HistoryRevision{ID: item.Id, Title: item.Title, Body: item.Body, SenderName: item.SenderName,
+			Sound: string(item.Sound), Format: string(item.Format), UpdatedAt: item.AcceptedAt}
+		if item.Subtitle != nil {
+			revision.Subtitle = *item.Subtitle
+		}
+		if item.Url != nil {
+			revision.URL = *item.Url
+		}
+		if item.Image != nil {
+			revision.Image = *item.Image
+		}
+		for _, value := range item.Deliveries {
+			delivery := cli.HistoryDelivery{DeviceName: value.DeviceName, State: string(value.State)}
+			if value.FailureCode != nil {
+				delivery.Failure = *value.FailureCode
+			}
+			revision.Deliveries = append(revision.Deliveries, delivery)
+		}
+		detail.Revisions = append(detail.Revisions, revision)
+	}
+	return detail, nil
 }
 
 func (s *Service) Usage(ctx context.Context) (cli.UsageResult, error) {

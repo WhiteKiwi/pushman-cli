@@ -113,6 +113,36 @@ func TestUnauthorizedResponseMapsToAuthorizationExit(t *testing.T) {
 	}
 }
 
+func TestHistoryListAndDetailUsePairedCredential(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
+		if request.Header.Get("Authorization") != "Bearer pm_cli_test" {
+			t.Fatal("missing paired authorization")
+		}
+		response.Header().Set("Content-Type", "application/json")
+		switch request.URL.Path {
+		case "/v1/messages":
+			_, _ = response.Write([]byte(`{"items":[{"id":"msg_01K00000000000000000000000","logicalMessageId":"lmsg_01K00000000000000000000000","title":"Deploy","body":"done","senderName":"Build Mac","acceptedAt":"2026-08-25T00:00:00Z","read":false,"updateCount":2,"deliveryState":"sent"}]}`))
+		case "/v1/messages/msg_01K00000000000000000000000":
+			_, _ = response.Write([]byte(`{"logicalMessageId":"lmsg_01K00000000000000000000000","read":false,"revisions":[{"id":"msg_01K00000000000000000000000","title":"Deploy","body":"done","senderName":"Build Mac","acceptedAt":"2026-08-25T00:00:00Z","sound":"none","format":"monospace","deliveries":[{"deviceId":"dev_01K00000000000000000000000","deviceName":"iPhone","state":"sent"}]}]}`))
+		default:
+			http.NotFound(response, request)
+		}
+	}))
+	defer server.Close()
+	service, err := New(server.URL+"/v1", &memoryCredentials{token: "pm_cli_test"}, "", server.Client())
+	if err != nil {
+		t.Fatal(err)
+	}
+	items, err := service.History(context.Background())
+	if err != nil || len(items) != 1 || items[0].UpdateCount != 2 || items[0].DeliveryState != "sent" {
+		t.Fatalf("history = %#v, %v", items, err)
+	}
+	detail, err := service.HistoryShow(context.Background(), items[0].ID)
+	if err != nil || len(detail.Revisions) != 1 || detail.Revisions[0].Format != "monospace" || detail.Revisions[0].Deliveries[0].DeviceName != "iPhone" {
+		t.Fatalf("detail = %#v, %v", detail, err)
+	}
+}
+
 func TestValidateBaseURL(t *testing.T) {
 	tests := []struct {
 		value string

@@ -17,6 +17,27 @@ import (
 	"github.com/oapi-codegen/runtime"
 )
 
+// Defines values for DeliveryState.
+const (
+	Accepted DeliveryState = "accepted"
+	Failed   DeliveryState = "failed"
+	Sent     DeliveryState = "sent"
+)
+
+// Valid indicates whether the value is a known member of the DeliveryState enum.
+func (e DeliveryState) Valid() bool {
+	switch e {
+	case Accepted:
+		return true
+	case Failed:
+		return true
+	case Sent:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for DeviceNotificationStatus.
 const (
 	Disabled DeviceNotificationStatus = "disabled"
@@ -55,16 +76,16 @@ func (e DevicePlatform) Valid() bool {
 
 // Defines values for MessageInputFormat.
 const (
-	Monospace MessageInputFormat = "monospace"
-	Plain     MessageInputFormat = "plain"
+	MessageInputFormatMonospace MessageInputFormat = "monospace"
+	MessageInputFormatPlain     MessageInputFormat = "plain"
 )
 
 // Valid indicates whether the value is a known member of the MessageInputFormat enum.
 func (e MessageInputFormat) Valid() bool {
 	switch e {
-	case Monospace:
+	case MessageInputFormatMonospace:
 		return true
-	case Plain:
+	case MessageInputFormatPlain:
 		return true
 	default:
 		return false
@@ -73,16 +94,52 @@ func (e MessageInputFormat) Valid() bool {
 
 // Defines values for MessageInputSound.
 const (
-	Default MessageInputSound = "default"
-	None    MessageInputSound = "none"
+	MessageInputSoundDefault MessageInputSound = "default"
+	MessageInputSoundNone    MessageInputSound = "none"
 )
 
 // Valid indicates whether the value is a known member of the MessageInputSound enum.
 func (e MessageInputSound) Valid() bool {
 	switch e {
-	case Default:
+	case MessageInputSoundDefault:
 		return true
-	case None:
+	case MessageInputSoundNone:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for MessageRevisionFormat.
+const (
+	MessageRevisionFormatMonospace MessageRevisionFormat = "monospace"
+	MessageRevisionFormatPlain     MessageRevisionFormat = "plain"
+)
+
+// Valid indicates whether the value is a known member of the MessageRevisionFormat enum.
+func (e MessageRevisionFormat) Valid() bool {
+	switch e {
+	case MessageRevisionFormatMonospace:
+		return true
+	case MessageRevisionFormatPlain:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for MessageRevisionSound.
+const (
+	MessageRevisionSoundDefault MessageRevisionSound = "default"
+	MessageRevisionSoundNone    MessageRevisionSound = "none"
+)
+
+// Valid indicates whether the value is a known member of the MessageRevisionSound enum.
+func (e MessageRevisionSound) Valid() bool {
+	switch e {
+	case MessageRevisionSoundDefault:
+		return true
+	case MessageRevisionSoundNone:
 		return true
 	default:
 		return false
@@ -167,6 +224,9 @@ func (e CreatePairingJSONBodyPlatform) Valid() bool {
 	}
 }
 
+// DeliveryState defines model for DeliveryState.
+type DeliveryState string
+
 // Device defines model for Device.
 type Device struct {
 	Eligible           bool                     `json:"eligible"`
@@ -206,12 +266,30 @@ type IssuedCredential struct {
 	Token string `json:"token"`
 }
 
+// LogicalMessageId defines model for LogicalMessageId.
+type LogicalMessageId = string
+
 // MessageAccepted defines model for MessageAccepted.
 type MessageAccepted struct {
 	AcceptedAt       time.Time `json:"acceptedAt"`
 	Id               MessageId `json:"id"`
 	LogicalMessageId string    `json:"logicalMessageId"`
 	TargetCount      int       `json:"targetCount"`
+}
+
+// MessageDelivery defines model for MessageDelivery.
+type MessageDelivery struct {
+	DeviceId    DeviceId      `json:"deviceId"`
+	DeviceName  string        `json:"deviceName"`
+	FailureCode *string       `json:"failureCode,omitempty"`
+	State       DeliveryState `json:"state"`
+}
+
+// MessageDetail defines model for MessageDetail.
+type MessageDetail struct {
+	LogicalMessageId LogicalMessageId  `json:"logicalMessageId"`
+	Read             bool              `json:"read"`
+	Revisions        []MessageRevision `json:"revisions"`
 }
 
 // MessageId defines model for MessageId.
@@ -245,15 +323,40 @@ type MessagePage struct {
 	NextCursor *string          `json:"nextCursor,omitempty"`
 }
 
+// MessageRevision defines model for MessageRevision.
+type MessageRevision struct {
+	AcceptedAt time.Time             `json:"acceptedAt"`
+	Body       string                `json:"body"`
+	Deliveries []MessageDelivery     `json:"deliveries"`
+	Format     MessageRevisionFormat `json:"format"`
+	Group      *RestrictedIdentifier `json:"group,omitempty"`
+	Id         MessageId             `json:"id"`
+	Image      *string               `json:"image,omitempty"`
+	SenderName string                `json:"senderName"`
+	Sound      MessageRevisionSound  `json:"sound"`
+	Subtitle   *string               `json:"subtitle,omitempty"`
+	Title      string                `json:"title"`
+	Url        *string               `json:"url,omitempty"`
+}
+
+// MessageRevisionFormat defines model for MessageRevision.Format.
+type MessageRevisionFormat string
+
+// MessageRevisionSound defines model for MessageRevision.Sound.
+type MessageRevisionSound string
+
 // MessageSummary defines model for MessageSummary.
 type MessageSummary struct {
-	AcceptedAt time.Time `json:"acceptedAt"`
-	Body       string    `json:"body"`
-	Id         MessageId `json:"id"`
-	Read       bool      `json:"read"`
-	SenderName string    `json:"senderName"`
-	Subtitle   *string   `json:"subtitle,omitempty"`
-	Title      string    `json:"title"`
+	AcceptedAt       time.Time        `json:"acceptedAt"`
+	Body             string           `json:"body"`
+	DeliveryState    DeliveryState    `json:"deliveryState"`
+	Id               MessageId        `json:"id"`
+	LogicalMessageId LogicalMessageId `json:"logicalMessageId"`
+	Read             bool             `json:"read"`
+	SenderName       string           `json:"senderName"`
+	Subtitle         *string          `json:"subtitle,omitempty"`
+	Title            string           `json:"title"`
+	UpdateCount      int              `json:"updateCount"`
 }
 
 // Pairing defines model for Pairing.
@@ -457,6 +560,11 @@ type ClientInterface interface {
 	// Corresponds with POST /messages (the `CreateMessage` operationId).
 	CreateMessage(ctx context.Context, body CreateMessageJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// GetOwnMessage Get one logical message and its retained revisions sent by the authenticated paired CLI.
+	//
+	// Corresponds with GET /messages/{messageId} (the `GetOwnMessage` operationId).
+	GetOwnMessage(ctx context.Context, messageId MessageId, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// CreatePairingWithBody Start pairing a CLI.
 	//
 	// Takes any type of body and a specified content type.
@@ -560,6 +668,21 @@ func (c *Client) CreateMessageWithBody(ctx context.Context, contentType string, 
 // Corresponds with POST /messages (the `CreateMessage` operationId).
 func (c *Client) CreateMessage(ctx context.Context, body CreateMessageJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateMessageRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetOwnMessage Get one logical message and its retained revisions sent by the authenticated paired CLI.
+//
+// Corresponds with GET /messages/{messageId} (the `GetOwnMessage` operationId).
+func (c *Client) GetOwnMessage(ctx context.Context, messageId MessageId, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetOwnMessageRequest(c.Server, messageId)
 	if err != nil {
 		return nil, err
 	}
@@ -827,6 +950,40 @@ func NewCreateMessageRequestWithBody(server string, contentType string, body io.
 	}
 
 	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetOwnMessageRequest constructs an http.Request for the GetOwnMessage method
+func NewGetOwnMessageRequest(server string, messageId MessageId) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "messageId", messageId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/messages/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
 
 	return req, nil
 }
@@ -1111,6 +1268,13 @@ type ClientWithResponsesInterface interface {
 	// Corresponds with POST /messages (the `CreateMessage` operationId).
 	CreateMessageWithResponse(ctx context.Context, body CreateMessageJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateMessageResponse, error)
 
+	// GetOwnMessageWithResponse Get one logical message and its retained revisions sent by the authenticated paired CLI.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with GET /messages/{messageId} (the `GetOwnMessage` operationId).
+	GetOwnMessageWithResponse(ctx context.Context, messageId MessageId, reqEditors ...RequestEditorFn) (*GetOwnMessageResponse, error)
+
 	// CreatePairingWithBodyWithResponse Start pairing a CLI.
 	//
 	// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
@@ -1334,6 +1498,62 @@ func (r CreateMessageResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r CreateMessageResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+// GetOwnMessageResponseDefaultHeaders the declared response headers of an HTTP default response for GetOwnMessage
+type GetOwnMessageResponseDefaultHeaders struct {
+	RetryAfter *int
+	XRequestID *string
+}
+
+type GetOwnMessageResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *MessageDetail
+	// JSONDefault the response for an HTTP default `application/json` response
+	JSONDefault *APIError
+	// HeadersDefault the parsed response headers for an HTTP default response
+	HeadersDefault *GetOwnMessageResponseDefaultHeaders
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetOwnMessageResponse) GetJSON200() *MessageDetail {
+	return r.JSON200
+}
+
+// GetJSONDefault returns the response for an HTTP default `application/json` response
+func (r GetOwnMessageResponse) GetJSONDefault() *APIError {
+	return r.JSONDefault
+}
+
+// GetBody returns the raw response body bytes
+func (r GetOwnMessageResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetOwnMessageResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetOwnMessageResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetOwnMessageResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -1721,6 +1941,19 @@ func (c *ClientWithResponses) CreateMessageWithResponse(ctx context.Context, bod
 	return ParseCreateMessageResponse(rsp)
 }
 
+// GetOwnMessageWithResponse Get one logical message and its retained revisions sent by the authenticated paired CLI.
+//
+// Returns a wrapper object for the known response body format(s).
+//
+// Corresponds with GET /messages/{messageId} (the `GetOwnMessage` operationId).
+func (c *ClientWithResponses) GetOwnMessageWithResponse(ctx context.Context, messageId MessageId, reqEditors ...RequestEditorFn) (*GetOwnMessageResponse, error) {
+	rsp, err := c.GetOwnMessage(ctx, messageId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetOwnMessageResponse(rsp)
+}
+
 // CreatePairingWithBodyWithResponse Start pairing a CLI.
 //
 // Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
@@ -1966,6 +2199,59 @@ func ParseCreateMessageResponse(rsp *http.Response) (*CreateMessageResponse, err
 	switch {
 	case true:
 		var headers CreateMessageResponseDefaultHeaders
+		if values := rsp.Header.Values("Retry-After"); len(values) > 0 {
+			var value int
+			if err := runtime.BindStyledParameterWithOptions("simple", "Retry-After", values[0], &value, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationHeader, Explode: false, Required: false, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			}
+			headers.RetryAfter = &value
+		}
+		if values := rsp.Header.Values("X-Request-ID"); len(values) > 0 {
+			var value string
+			if err := runtime.BindStyledParameterWithOptions("simple", "X-Request-ID", values[0], &value, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationHeader, Explode: false, Required: false, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			}
+			headers.XRequestID = &value
+		}
+		response.HeadersDefault = &headers
+	}
+
+	return response, nil
+}
+
+// ParseGetOwnMessageResponse parses an HTTP response from a GetOwnMessageWithResponse call
+func ParseGetOwnMessageResponse(rsp *http.Response) (*GetOwnMessageResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetOwnMessageResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest MessageDetail
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest APIError
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	switch {
+	case true:
+		var headers GetOwnMessageResponseDefaultHeaders
 		if values := rsp.Header.Values("Retry-After"); len(values) > 0 {
 			var value int
 			if err := runtime.BindStyledParameterWithOptions("simple", "Retry-After", values[0], &value, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationHeader, Explode: false, Required: false, Type: "integer", Format: ""}); err != nil {

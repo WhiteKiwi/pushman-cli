@@ -2,7 +2,7 @@
 
 `pushman` sends push notifications to your own iPhone from terminals, scripts, servers, and CI jobs.
 
-This repository contains the first-release command tree, deterministic input validation, a generated OpenAPI client, interactive pairing polling, operating-system credential storage, and HTTP adapters for push, status, rename, logout, devices, history list, usage, and diagnostics. History detail remains a follow-up until its API operation is finalized.
+This repository contains the first-release command tree, deterministic input validation, a generated OpenAPI client, interactive pairing polling, operating-system credential storage, and HTTP adapters for push, status, rename, logout, devices, revision-aware history, usage, and diagnostics.
 
 ## Requirements
 

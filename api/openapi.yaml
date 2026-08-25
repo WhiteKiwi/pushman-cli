@@ -119,6 +119,23 @@ paths:
                 $ref: '#/components/schemas/MessagePage'
         default:
           $ref: '#/components/responses/APIError'
+  /messages/{messageId}:
+    get:
+      tags:
+        - Messages
+      operationId: getOwnMessage
+      summary: Get one logical message and its retained revisions sent by the authenticated paired CLI.
+      parameters:
+        - $ref: '#/components/parameters/MessageId'
+      responses:
+        '200':
+          description: Sent logical message detail.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageDetail'
+        default:
+          $ref: '#/components/responses/APIError'
   /sender-credentials/current:
     get:
       tags:
@@ -223,6 +240,13 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/PairingId'
+    MessageId:
+      name: messageId
+      in: path
+      required: true
+      description: Any retained revision ID in the logical message.
+      schema:
+        $ref: '#/components/schemas/MessageId'
     Cursor:
       name: cursor
       in: query
@@ -363,19 +387,33 @@ components:
     MessageId:
       type: string
       pattern: ^msg_[0-9A-HJKMNP-TV-Z]{26}$
+    LogicalMessageId:
+      type: string
+      pattern: ^lmsg_[0-9A-HJKMNP-TV-Z]{26}$
+    DeliveryState:
+      type: string
+      enum:
+        - accepted
+        - sent
+        - failed
     MessageSummary:
       type: object
       additionalProperties: false
       required:
         - id
+        - logicalMessageId
         - title
         - body
         - senderName
         - acceptedAt
         - read
+        - updateCount
+        - deliveryState
       properties:
         id:
           $ref: '#/components/schemas/MessageId'
+        logicalMessageId:
+          $ref: '#/components/schemas/LogicalMessageId'
         title:
           type: string
         subtitle:
@@ -389,6 +427,11 @@ components:
           format: date-time
         read:
           type: boolean
+        updateCount:
+          type: integer
+          minimum: 1
+        deliveryState:
+          $ref: '#/components/schemas/DeliveryState'
     MessagePage:
       type: object
       additionalProperties: false
@@ -476,6 +519,90 @@ components:
         targetCount:
           type: integer
           minimum: 1
+    DeviceId:
+      type: string
+      pattern: ^dev_[0-9A-HJKMNP-TV-Z]{26}$
+    MessageDelivery:
+      type: object
+      additionalProperties: false
+      required:
+        - deviceId
+        - deviceName
+        - state
+      properties:
+        deviceId:
+          $ref: '#/components/schemas/DeviceId'
+        deviceName:
+          type: string
+        state:
+          $ref: '#/components/schemas/DeliveryState'
+        failureCode:
+          type: string
+    MessageRevision:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - title
+        - body
+        - senderName
+        - acceptedAt
+        - sound
+        - format
+        - deliveries
+      properties:
+        id:
+          $ref: '#/components/schemas/MessageId'
+        title:
+          type: string
+        subtitle:
+          type: string
+        body:
+          type: string
+        senderName:
+          type: string
+        acceptedAt:
+          type: string
+          format: date-time
+        url:
+          type: string
+          format: uri
+        group:
+          $ref: '#/components/schemas/RestrictedIdentifier'
+        image:
+          type: string
+          format: uri
+        sound:
+          type: string
+          enum:
+            - default
+            - none
+        format:
+          type: string
+          enum:
+            - plain
+            - monospace
+        deliveries:
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageDelivery'
+    MessageDetail:
+      type: object
+      additionalProperties: false
+      required:
+        - logicalMessageId
+        - read
+        - revisions
+      properties:
+        logicalMessageId:
+          $ref: '#/components/schemas/LogicalMessageId'
+        read:
+          type: boolean
+        revisions:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/MessageRevision'
     SenderCredential:
       type: object
       additionalProperties: false
@@ -503,9 +630,6 @@ components:
         lastUsedAt:
           type: string
           format: date-time
-    DeviceId:
-      type: string
-      pattern: ^dev_[0-9A-HJKMNP-TV-Z]{26}$
     Device:
       type: object
       additionalProperties: false

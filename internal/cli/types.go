@@ -61,16 +61,37 @@ type PushResult struct {
 }
 
 type HistoryItem struct {
-	ID        string
-	Title     string
-	UpdatedAt time.Time
+	ID            string
+	Title         string
+	UpdatedAt     time.Time
+	UpdateCount   int
+	DeliveryState string
 }
 
 type HistoryDetail struct {
-	ID        string
-	Title     string
-	Body      string
-	UpdatedAt time.Time
+	LogicalMessageID string
+	Read             bool
+	Revisions        []HistoryRevision
+}
+
+type HistoryRevision struct {
+	ID         string
+	Title      string
+	Subtitle   string
+	Body       string
+	SenderName string
+	URL        string
+	Image      string
+	Sound      string
+	Format     string
+	UpdatedAt  time.Time
+	Deliveries []HistoryDelivery
+}
+
+type HistoryDelivery struct {
+	DeviceName string
+	State      string
+	Failure    string
 }
 
 type UsageResult struct {
