@@ -88,9 +88,23 @@ func TestPairOutput(t *testing.T) {
 	if err := cmd.Execute(); err != nil {
 		t.Fatal(err)
 	}
-	want := "Pairing code: ABCD-EFGH\nVerify at: https://app.pushman.example/pair\nPaired as Build Mac\n"
+	want := "Pairing code: ABCD-EFGH\nVerify at: https://app.pushman.example/pair/?code=ABCD-EFGH\nPaired as Build Mac\n"
 	if got := out.String(); got != want {
 		t.Fatalf("output = %q, want %q", got, want)
+	}
+}
+
+func TestPairingVerificationURL(t *testing.T) {
+	t.Parallel()
+	got, err := pairingVerificationURL("https://app.pushman.example/pair/?source=cli#ignored", "ABCD-EFGH")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want := "https://app.pushman.example/pair/?code=ABCD-EFGH&source=cli"; got != want {
+		t.Fatalf("URL = %q, want %q", got, want)
+	}
+	if _, err := pairingVerificationURL("/pair", "ABCD-EFGH"); err == nil {
+		t.Fatal("relative verification URL accepted")
 	}
 }
 

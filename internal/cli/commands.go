@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"net/url"
 	"runtime"
 	"strings"
 	"unicode/utf8"
@@ -23,7 +24,11 @@ func newPairCommand(deps Dependencies) *cobra.Command {
 		result, err := deps.Service.Pair(cmd.Context(), PairRequest{
 			Platform: runtime.GOOS, SuggestedName: suggestedName,
 			OnChallenge: func(challenge PairChallenge) error {
-				_, err := fmt.Fprintf(cmd.OutOrStdout(), "Pairing code: %s\nVerify at: %s\n", challenge.UserCode, challenge.VerificationURL)
+				verificationURL, err := pairingVerificationURL(challenge.VerificationURL, challenge.UserCode)
+				if err != nil {
+					return err
+				}
+				_, err = fmt.Fprintf(cmd.OutOrStdout(), "Pairing code: %s\nVerify at: %s\n", challenge.UserCode, verificationURL)
 				return err
 			},
 		})
@@ -34,6 +39,21 @@ func newPairCommand(deps Dependencies) *cobra.Command {
 		return nil
 	}}
 	return cmd
+}
+
+func pairingVerificationURL(rawURL, code string) (string, error) {
+	parsed, err := url.Parse(rawURL)
+	if err != nil || !parsed.IsAbs() || parsed.Host == "" {
+		return "", fmt.Errorf("invalid pairing verification URL")
+	}
+	query := parsed.Query()
+	query.Set("code", code)
+	if parsed.Path == "/pair" {
+		parsed.Path = "/pair/"
+	}
+	parsed.RawQuery = query.Encode()
+	parsed.Fragment = ""
+	return parsed.String(), nil
 }
 
 func normalizeSuggestedName(value string) (string, error) {
