@@ -4,6 +4,10 @@ Notable changes to Pushman CLI will be documented here. This project follows [Se
 
 ## [Unreleased]
 
+### Added
+
+- Serve seven typed notification, device, history, usage, status, and diagnostic tools over stdio with `pushman mcp`.
+
 ## [0.1.0-beta.3] - 2026-08-25
 
 ### Added

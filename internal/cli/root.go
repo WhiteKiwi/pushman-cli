@@ -45,6 +45,7 @@ func New(deps Dependencies) *cobra.Command {
 		newHistoryCommand(deps),
 		newUsageCommand(deps),
 		newDoctorCommand(deps),
+		newMCPCommand(deps),
 		newVersionCommand(deps),
 	)
 	root.InitDefaultHelpCmd()

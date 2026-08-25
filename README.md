@@ -33,6 +33,7 @@ Pushman is a small, script-friendly companion for getting your own operational m
 - Seven-day history plus usage and delivery diagnostics
 - Native credential storage through macOS Keychain, Windows Credential Manager, or Secret Service
 - Stable JSON output and exit codes for automation
+- A local stdio MCP server for Codex, Claude Code, and other compatible clients
 - Signed GitHub release provenance and published SHA-256 checksums
 
 ## Install
@@ -87,7 +88,20 @@ Use `pushman help push` to see every notification field and output option.
 | `pushman status` | Show pairing and account state |
 | `pushman rename <nickname>` | Rename this CLI |
 | `pushman doctor` | Diagnose configuration and connectivity |
+| `pushman mcp` | Serve Pushman's MCP tools over stdio |
 | `pushman logout` | Remove the local pairing credential |
+
+## AI clients and MCP
+
+`pushman mcp` lets a local AI client send notifications and inspect devices, seven-day history, usage, pairing state, and diagnostics through the same credential and API client as the CLI.
+
+```sh
+codex mcp add pushman -- pushman mcp
+# or
+claude mcp add --scope user pushman -- pushman mcp
+```
+
+Pair with `pushman pair` before connecting. Sending consumes quota and changes external state, so clients should ask for confirmation unless you already gave a direct instruction containing the exact notification. See the [MCP Guide](docs/MCP.md) for every tool, generic client configuration, permissions, and troubleshooting.
 
 ## Automation
 
@@ -122,6 +136,7 @@ go generate ./internal/api
 go test -race ./...
 go vet ./...
 go run ./cmd/pushman help
+go run ./cmd/pushman mcp
 ```
 
 `api/openapi.yaml` is a bundled snapshot of the authoritative public contract. After updating it, run `go generate ./internal/api` and commit the generated client. CI rejects stale generated code.
