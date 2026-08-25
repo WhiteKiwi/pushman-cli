@@ -1,0 +1,81 @@
+# Installing Pushman CLI
+
+Homebrew is the recommended installation method on macOS and Linux. Go and verified release archives are supported when Homebrew is unavailable or inappropriate for the environment.
+
+Pushman for iPhone is currently in private beta. Installing the CLI does not install the iPhone app, create an account, pair automatically, start a background service, or send a notification.
+
+## Homebrew
+
+Install the fully qualified Formula:
+
+```sh
+brew install whitekiwi/tap/pushman
+pushman version
+```
+
+Homebrew adds `whitekiwi/tap` automatically and trusts only the Pushman Formula. You do not need to trust every package in the tap.
+
+Update an existing installation:
+
+```sh
+brew update
+brew upgrade pushman
+```
+
+To remove Pushman and revoke this CLI's server credential:
+
+```sh
+pushman logout
+brew uninstall pushman
+```
+
+Uninstalling without `pushman logout` removes the executable but intentionally leaves its Keychain or credential-store entry and server authorization intact. Reinstalling the CLI can use that pairing again.
+
+## Go
+
+Go 1.27 or newer can install the latest tagged version from source:
+
+```sh
+go install github.com/WhiteKiwi/pushman-cli/cmd/pushman@latest
+pushman version
+```
+
+The binary is normally written to `GOBIN`, or to the `bin` directory under `GOPATH` when `GOBIN` is empty. Add that directory to `PATH` if the shell cannot find `pushman`.
+
+Update by running the same `go install` command. Before deleting a Go-installed binary, run `pushman logout` if you also want to revoke the pairing.
+
+## Release archives
+
+The [GitHub Releases](https://github.com/WhiteKiwi/pushman-cli/releases) page provides prebuilt archives for macOS, Linux, and Windows on arm64 and x86_64. Every release includes `checksums.txt`, and every archive has GitHub build provenance.
+
+Download the archive for the machine together with `checksums.txt`, then verify both before extracting it:
+
+```sh
+release_asset=pushman_<version>_<platform>_<arch>.<archive>
+awk -v name="$release_asset" '$2 == name' checksums.txt | shasum -a 256 -c -
+gh attestation verify "$release_asset" -R WhiteKiwi/pushman-cli
+```
+
+Move the extracted `pushman` or `pushman.exe` into a directory already on `PATH`. The archive does not modify shell startup files or require administrator access.
+
+## Ask Claude Code
+
+Claude Code can choose a supported method, verify the installed version, and walk through pairing:
+
+```sh
+claude "Install Pushman CLI from https://github.com/WhiteKiwi/pushman-cli using the safest supported method for this machine, verify it, then guide me through pairing. Ask before sending a test notification."
+```
+
+Review and approve each proposed command. The agent should not need a Pushman token, Apple credential, Google credential, or Keychain export. Pairing still requires approval from the signed-in Pushman iPhone app.
+
+## Pair and verify
+
+After installation:
+
+```sh
+pushman version
+pushman pair
+pushman status
+```
+
+Run `pushman doctor` if pairing, local credential storage, or service connectivity fails. Never paste a pairing credential, `PUSHMAN_TOKEN`, OAuth assertion, or unredacted diagnostic output into an issue or agent conversation. Follow [SECURITY.md](../SECURITY.md) for suspected vulnerabilities and [SUPPORT.md](../SUPPORT.md) for bug-report guidance.

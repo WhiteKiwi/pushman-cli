@@ -37,28 +37,24 @@ Pushman is a small, script-friendly companion for getting your own operational m
 
 ## Install
 
-Install with Homebrew on macOS or Linux:
+**Homebrew (macOS and Linux):**
 
 ```sh
 brew install whitekiwi/tap/pushman
 ```
 
-The fully qualified command automatically adds the tap and trusts only the Pushman Formula. Update later with `brew upgrade pushman`.
-
-Or install the latest tagged version with Go:
+**Or ask Claude Code:**
 
 ```sh
-go install github.com/WhiteKiwi/pushman-cli/cmd/pushman@latest
+claude "Install Pushman CLI from https://github.com/WhiteKiwi/pushman-cli using the safest supported method for this machine, verify it, then guide me through pairing. Ask before sending a test notification."
 ```
 
-This requires Go 1.27 or newer. Prebuilt binaries for macOS, Linux, and Windows are available on the [Releases](https://github.com/WhiteKiwi/pushman-cli/releases) page.
+Review and approve each command it proposes. See the [Installation Guide](docs/INSTALL.md) for Go installs, verified release archives, updates, uninstalling, and troubleshooting.
 
-To verify a downloaded release asset:
+Then pair with your iPhone:
 
 ```sh
-release_asset=pushman_<version>_<platform>_<arch>.<archive>
-awk -v name="$release_asset" '$2 == name' checksums.txt | shasum -a 256 -c -
-gh attestation verify "$release_asset" -R WhiteKiwi/pushman-cli
+pushman pair
 ```
 
 ## Quick start
