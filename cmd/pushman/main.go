@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"runtime/debug"
+	"strings"
 
 	"github.com/WhiteKiwi/pushman-cli/internal/cli"
 	pushclient "github.com/WhiteKiwi/pushman-cli/internal/client"
@@ -37,6 +39,7 @@ func main() {
 		os.Exit(cli.ExitCode(err))
 	}
 
+	resolvedVersion, resolvedCommit, resolvedDate := resolveVersionInfo(version, commit, date, readBuildInfo())
 	app := cli.New(cli.Dependencies{
 		In:         os.Stdin,
 		Out:        os.Stdout,
@@ -44,9 +47,9 @@ func main() {
 		IsTerminal: cli.IsTerminalFile(os.Stdin),
 		Service:    service,
 		Version: cli.VersionInfo{
-			Version: version,
-			Commit:  commit,
-			Date:    date,
+			Version: resolvedVersion,
+			Commit:  resolvedCommit,
+			Date:    resolvedDate,
 		},
 	})
 
@@ -54,4 +57,34 @@ func main() {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(cli.ExitCode(err))
 	}
+}
+
+func readBuildInfo() *debug.BuildInfo {
+	info, ok := debug.ReadBuildInfo()
+	if !ok {
+		return nil
+	}
+	return info
+}
+
+func resolveVersionInfo(version, commit, date string, info *debug.BuildInfo) (string, string, string) {
+	if info == nil {
+		return version, commit, date
+	}
+	if version == "dev" && info.Main.Version != "" && info.Main.Version != "(devel)" {
+		version = strings.TrimPrefix(info.Main.Version, "v")
+	}
+	for _, setting := range info.Settings {
+		switch setting.Key {
+		case "vcs.revision":
+			if commit == "none" && setting.Value != "" {
+				commit = setting.Value
+			}
+		case "vcs.time":
+			if date == "unknown" && setting.Value != "" {
+				date = setting.Value
+			}
+		}
+	}
+	return version, commit, date
 }
