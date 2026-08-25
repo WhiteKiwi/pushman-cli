@@ -8,6 +8,18 @@ This repository contains the first-release command tree, deterministic input val
 
 - Go 1.27 or newer
 
+## Install a release
+
+Download the archive for your platform plus `checksums.txt` from the matching GitHub Release. Verify both the digest and GitHub build provenance before installing:
+
+```sh
+release_asset=pushman_<version>_<platform>_<arch>.<archive>
+awk -v name="$release_asset" '$2 == name' checksums.txt | shasum -a 256 -c -
+gh attestation verify "$release_asset" -R WhiteKiwi/pushman-cli
+```
+
+Extract the archive and move `pushman` (or `pushman.exe`) to a directory already on `PATH`. On macOS, a typical per-user location is `$HOME/.local/bin`; the installer never requires administrator access or modifies shell startup files. Homebrew packaging is intentionally deferred until the command contract stabilizes.
+
 ## Develop
 
 ```sh
