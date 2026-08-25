@@ -1,0 +1,58 @@
+name: Bug report
+description: Report reproducible incorrect behavior in Pushman CLI.
+title: "bug: "
+labels: [bug, triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. Never include tokens, notification contents, private hostnames, or unredacted logs. Report vulnerabilities through GitHub private vulnerability reporting.
+  - type: input
+    id: version
+    attributes:
+      label: Pushman version
+      description: Output of `pushman version`.
+      placeholder: v0.1.0
+    validations:
+      required: true
+  - type: input
+    id: operating-system
+    attributes:
+      label: Operating system
+      placeholder: macOS 26.5 arm64
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Use placeholder values and redact all private data.
+      placeholder: |
+        1. Run `pushman ...`
+        2. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include only redacted output.
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Safety checks
+      options:
+        - label: I searched existing issues.
+          required: true
+        - label: I removed credentials, notification content, private hostnames, and personal data.
+          required: true
+        - label: This is not a security vulnerability.
+          required: true

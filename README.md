@@ -1,16 +1,51 @@
-# Pushman CLI
+<p align="center">
+  <img src="docs/assets/pushman-icon.png" alt="Pushman" width="128" height="128">
+</p>
 
-`pushman` sends push notifications to your own iPhone from terminals, scripts, servers, and CI jobs.
+<h1 align="center">Pushman CLI</h1>
 
-This repository contains the first-release command tree, deterministic input validation, a generated OpenAPI client, interactive pairing polling, operating-system credential storage, and HTTP adapters for push, status, rename, logout, devices, revision-aware history, usage, and diagnostics.
+<p align="center">
+  Send push notifications to your iPhone from any terminal, script, server, or CI job.
+</p>
 
-## Requirements
+<p align="center">
+  <a href="https://github.com/WhiteKiwi/pushman-cli/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/WhiteKiwi/pushman-cli/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://go.dev/"><img alt="Go 1.27+" src="https://img.shields.io/badge/Go-1.27%2B-00ADD8?logo=go&logoColor=white"></a>
+  <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-151515"></a>
+  <a href="https://github.com/WhiteKiwi/pushman-cli/releases"><img alt="GitHub release" src="https://img.shields.io/github/v/release/WhiteKiwi/pushman-cli?display_name=tag&include_prereleases"></a>
+</p>
 
-- Go 1.27 or newer
+```console
+$ pushman push "Production deploy finished" --title "Acme API"
+Accepted msg_01M0W2RDPVGEVX7D6ZWFK907B2 for 1 device
+```
 
-## Install a release
+Pushman is a small, script-friendly companion for getting your own operational messages onto your iPhone. Pair once, then use the same command interactively or in automation. Credentials live in the operating-system keyring, not a plaintext config file.
 
-Download the archive for your platform plus `checksums.txt` from the matching GitHub Release. Verify both the digest and GitHub build provenance before installing:
+> [!NOTE]
+> Pushman for iPhone is currently in private beta. The App Store link will be added here when the public listing is available.
+
+## Highlights
+
+- One command for terminals, shell scripts, servers, and CI
+- Rich notifications with title, subtitle, URL, image, sound, group, and update key
+- Multiple receiving devices and explicit device targeting
+- Seven-day history plus usage and delivery diagnostics
+- Native credential storage through macOS Keychain, Windows Credential Manager, or Secret Service
+- Stable JSON output and exit codes for automation
+- Signed GitHub release provenance and published SHA-256 checksums
+
+## Install
+
+Until the first tagged release, install directly from source:
+
+```sh
+go install github.com/WhiteKiwi/pushman-cli/cmd/pushman@latest
+```
+
+This requires Go 1.27 or newer. Tagged binaries for macOS, Linux, and Windows will appear on the [Releases](https://github.com/WhiteKiwi/pushman-cli/releases) page.
+
+To verify a downloaded release asset:
 
 ```sh
 release_asset=pushman_<version>_<platform>_<arch>.<archive>
@@ -18,68 +53,77 @@ awk -v name="$release_asset" '$2 == name' checksums.txt | shasum -a 256 -c -
 gh attestation verify "$release_asset" -R WhiteKiwi/pushman-cli
 ```
 
-Extract the archive and move `pushman` (or `pushman.exe`) to a directory already on `PATH`. On macOS, a typical per-user location is `$HOME/.local/bin`; the installer never requires administrator access or modifies shell startup files. Homebrew packaging is intentionally deferred until the command contract stabilizes.
+## Quick start
 
-## Develop
+Pair the CLI with Pushman on your iPhone:
 
 ```sh
-go mod download
-go test ./...
-go vet ./...
-go run ./cmd/pushman help
+pushman pair
 ```
 
-The compiled default is `https://api.pushman.whitekiwi.link/v1`. For a local server use an explicit loopback override:
+Then send a notification:
+
+```sh
+pushman push "Database backup completed"
+pushman push "Deploy completed" --title "Production" --url "https://example.com/runs/42"
+printf '%s\n' "Build failed" | pushman push --title "CI"
+```
+
+Use `pushman help push` to see every notification field and output option.
+
+## Commands
+
+| Command | Purpose |
+| --- | --- |
+| `pushman pair` | Pair this CLI and assign its default nickname |
+| `pushman push <body>` | Send a notification |
+| `pushman devices` | List receiving devices |
+| `pushman history` | Show recent messages |
+| `pushman usage` | Show the current monthly allowance |
+| `pushman status` | Show pairing and account state |
+| `pushman rename <nickname>` | Rename this CLI |
+| `pushman doctor` | Diagnose configuration and connectivity |
+| `pushman logout` | Remove the local pairing credential |
+
+## Automation
+
+Pass reusable automation credentials only through `PUSHMAN_TOKEN`. Never place a token in command arguments, logs, or source control.
+
+```sh
+export PUSHMAN_TOKEN="..."
+pushman push "Release $GITHUB_REF_NAME is live" --title "Deploy" --json
+```
+
+Successful command output is written to stdout; errors and diagnostics are written to stderr. Use `--json` for machine-readable output and `--quiet` when only the exit status matters.
+
+## Service and future plans
+
+The CLI source is MIT licensed. The hosted Pushman service, iPhone app, monthly allowance, and any future paid plan are separate from the source-code license. During beta, an account can submit up to 200 accepted push requests per month. The CLI discovers service capabilities at runtime so future plan and quota changes do not require embedding billing logic or secrets in this repository.
+
+## Configuration
+
+The production API is `https://api.pushman.whitekiwi.link/v1`. For local development, an explicit loopback override is supported:
 
 ```sh
 PUSHMAN_API_URL=http://127.0.0.1:8080/v1 go run ./cmd/pushman status
 ```
 
-Overrides must use HTTPS except for loopback development and must end at `/v1`. Redirects are rejected so credentials cannot be forwarded to another origin.
+Overrides must use HTTPS except for loopback development and must end in `/v1`. Redirects are rejected to prevent credentials from being forwarded to another origin.
 
-## Command surface
-
-```text
-pushman pair
-pushman status
-pushman rename <nickname>
-pushman logout
-pushman push <body>
-pushman devices
-pushman history
-pushman history show <message-id>
-pushman usage
-pushman doctor
-pushman version
-pushman help [command]
-```
-
-The `push` command accepts one positional body or standard input:
+## Development
 
 ```sh
-pushman push "Deployment finished"
-printf '%s\n' "Deployment finished" | pushman push
-pushman push - < message.txt
+go mod download
+go generate ./internal/api
+go test -race ./...
+go vet ./...
+go run ./cmd/pushman help
 ```
 
-Frequently used options include `-t, --title`, `-d, --device`, `--json`, and `--quiet`. Run `pushman help push` for the full set. Automation credentials will be read only from `PUSHMAN_TOKEN`; never place reusable tokens in command arguments.
+`api/openapi.yaml` is a bundled snapshot of the authoritative public contract. After updating it, run `go generate ./internal/api` and commit the generated client. CI rejects stale generated code.
 
-## Architecture boundary
-
-Cobra commands depend on the `internal/cli.Service` interface. The generated-client adapter owns HTTPS requests, authentication, pairing polling, and stable error translation. This keeps the CLI's public UX independent from transport implementation details.
-
-Paired credentials are stored through the operating-system keyring: macOS Keychain, Windows Credential Manager, or Secret Service on Linux. Storage is isolated by an API-base digest so development and production credentials cannot overwrite one another. `PUSHMAN_TOKEN` is process-only, is never persisted, and takes precedence only for `push`.
-
-Release metadata is injected with linker flags into `main.version`, `main.commit`, and `main.date`.
-
-Pushing a `v*` tag runs the full test suite and publishes reproducible archives for macOS, Linux, and Windows with a SHA-256 checksum manifest. Public GitHub artifact attestations bind those archives to the exact release workflow and commit; consumers can verify them with `gh attestation verify <archive> -R WhiteKiwi/pushman-cli`.
-
-`api/openapi.yaml` is a bundled snapshot of the authoritative public contract in `WhiteKiwi/pushman`. After updating that snapshot, run `go generate ./internal/api` and commit the generated client. CI rejects stale generated code.
-
-## Product contract
-
-The source of truth for first-release behavior is the frozen specification in the adjacent private planning repository at `../pushman/docs/SPEC.md`. Public API documentation and generated clients will move to a shared public contract once its repository boundary is finalized.
+See [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. For help, read [SUPPORT.md](SUPPORT.md). Please report vulnerabilities according to [SECURITY.md](SECURITY.md), never in a public issue.
 
 ## License
 
-License selection is pending before publication.
+Pushman CLI is available under the [MIT License](LICENSE).
