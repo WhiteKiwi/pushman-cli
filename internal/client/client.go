@@ -17,7 +17,7 @@ import (
 	"github.com/WhiteKiwi/pushman-cli/internal/credential"
 )
 
-const DefaultBaseURL = "https://api.pushman.example/v1"
+const DefaultBaseURL = "https://api.pushman.whitekiwi.link/v1"
 
 type WaitFunc func(context.Context, time.Duration) error
 

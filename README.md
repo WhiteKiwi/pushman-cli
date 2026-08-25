@@ -17,7 +17,7 @@ go vet ./...
 go run ./cmd/pushman help
 ```
 
-The production hostname has not been selected, so the compiled default remains the non-routable `https://api.pushman.example/v1`. For a local server use an explicit loopback override:
+The compiled default is `https://api.pushman.whitekiwi.link/v1`. For a local server use an explicit loopback override:
 
 ```sh
 PUSHMAN_API_URL=http://127.0.0.1:8080/v1 go run ./cmd/pushman status

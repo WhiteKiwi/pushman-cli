@@ -4,8 +4,8 @@ info:
   version: 1.0.0
   description: Supported API for the Pushman CLI and developer automation.
 servers:
-  - url: https://api.pushman.example/v1
-    description: Placeholder until the production domain is selected.
+  - url: https://api.pushman.whitekiwi.link/v1
+    description: Production API origin.
 security:
   - bearerAuth: []
 tags:
