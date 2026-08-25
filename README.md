@@ -37,13 +37,13 @@ Pushman is a small, script-friendly companion for getting your own operational m
 
 ## Install
 
-Until the first tagged release, install directly from source:
+Install the latest tagged version with Go:
 
 ```sh
 go install github.com/WhiteKiwi/pushman-cli/cmd/pushman@latest
 ```
 
-This requires Go 1.27 or newer. Tagged binaries for macOS, Linux, and Windows will appear on the [Releases](https://github.com/WhiteKiwi/pushman-cli/releases) page.
+This requires Go 1.27 or newer. Prebuilt binaries for macOS, Linux, and Windows are available on the [Releases](https://github.com/WhiteKiwi/pushman-cli/releases) page.
 
 To verify a downloaded release asset:
 
