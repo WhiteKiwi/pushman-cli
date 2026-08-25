@@ -37,7 +37,15 @@ Pushman is a small, script-friendly companion for getting your own operational m
 
 ## Install
 
-Install the latest tagged version with Go:
+Install with Homebrew on macOS or Linux:
+
+```sh
+brew install whitekiwi/tap/pushman
+```
+
+The fully qualified command automatically adds the tap and trusts only the Pushman Formula. Update later with `brew upgrade pushman`.
+
+Or install the latest tagged version with Go:
 
 ```sh
 go install github.com/WhiteKiwi/pushman-cli/cmd/pushman@latest

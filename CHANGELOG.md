@@ -4,6 +4,13 @@ Notable changes to Pushman CLI will be documented here. This project follows [Se
 
 ## [Unreleased]
 
+## [0.1.0-beta.3] - 2026-08-25
+
+### Added
+
+- Install and upgrade Pushman through `whitekiwi/tap` on macOS and Linux.
+- Publish future Homebrew Formula updates from the release workflow with a tap-scoped deploy key.
+
 ## [0.1.0-beta.2] - 2026-08-25
 
 ### Fixed
@@ -20,6 +27,7 @@ Notable changes to Pushman CLI will be documented here. This project follows [Se
 - Stable JSON output and environment-only automation credentials.
 - Checksummed macOS, Linux, and Windows archives with GitHub artifact attestations.
 
-[Unreleased]: https://github.com/WhiteKiwi/pushman-cli/compare/v0.1.0-beta.2...HEAD
+[Unreleased]: https://github.com/WhiteKiwi/pushman-cli/compare/v0.1.0-beta.3...HEAD
+[0.1.0-beta.3]: https://github.com/WhiteKiwi/pushman-cli/compare/v0.1.0-beta.2...v0.1.0-beta.3
 [0.1.0-beta.2]: https://github.com/WhiteKiwi/pushman-cli/compare/v0.1.0-beta.1...v0.1.0-beta.2
 [0.1.0-beta.1]: https://github.com/WhiteKiwi/pushman-cli/releases/tag/v0.1.0-beta.1

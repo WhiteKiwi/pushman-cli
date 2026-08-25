@@ -41,3 +41,40 @@ jobs:
         uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
         with:
           subject-checksums: dist/checksums.txt
+      - name: Update Homebrew tap
+        if: env.TAP_DEPLOY_KEY != ''
+        env:
+          TAP_DEPLOY_KEY: ${{ secrets.TAP_DEPLOY_KEY }}
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          ARM64_MACOS_SHA=$(sha256sum "dist/pushman_${VERSION}_macOS_arm64.tar.gz" | awk '{print $1}')
+          X86_MACOS_SHA=$(sha256sum "dist/pushman_${VERSION}_macOS_x86_64.tar.gz" | awk '{print $1}')
+          ARM64_LINUX_SHA=$(sha256sum "dist/pushman_${VERSION}_linux_arm64.tar.gz" | awk '{print $1}')
+          X86_LINUX_SHA=$(sha256sum "dist/pushman_${VERSION}_linux_x86_64.tar.gz" | awk '{print $1}')
+
+          install -m 700 -d "$HOME/.ssh"
+          printf '%s\n' "$TAP_DEPLOY_KEY" > "$HOME/.ssh/pushman-homebrew-tap"
+          chmod 600 "$HOME/.ssh/pushman-homebrew-tap"
+          printf '%s\n' 'github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl' > "$HOME/.ssh/known_hosts"
+          export GIT_SSH_COMMAND="ssh -i $HOME/.ssh/pushman-homebrew-tap -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes"
+
+          git clone git@github.com:WhiteKiwi/homebrew-tap.git tap-repo
+          sh scripts/render-homebrew-formula.sh \
+            "$VERSION" \
+            "$ARM64_MACOS_SHA" \
+            "$X86_MACOS_SHA" \
+            "$ARM64_LINUX_SHA" \
+            "$X86_LINUX_SHA" \
+            > tap-repo/Formula/pushman.rb
+          ruby -c tap-repo/Formula/pushman.rb
+
+          cd tap-repo
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Formula/pushman.rb
+          if git diff --staged --quiet; then
+            echo "Formula is already up-to-date"
+          else
+            git commit -m "bump: update pushman to ${VERSION}"
+            git push origin main
+          fi

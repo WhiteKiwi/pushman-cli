@@ -28,6 +28,10 @@ jobs:
         run: |
           go generate ./internal/api
           git diff --exit-code -- internal/api/api.gen.go
+      - name: Test Homebrew Formula renderer
+        run: sh scripts/test-render-homebrew-formula.sh
+      - name: Lint release scripts
+        run: shellcheck scripts/render-homebrew-formula.sh scripts/test-render-homebrew-formula.sh
       - name: Test
         run: go test -race -coverprofile=coverage.out ./...
       - name: Vet
