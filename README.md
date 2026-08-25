@@ -60,6 +60,8 @@ Paired credentials are stored through the operating-system keyring: macOS Keycha
 
 Release metadata is injected with linker flags into `main.version`, `main.commit`, and `main.date`.
 
+Pushing a `v*` tag runs the full test suite and publishes reproducible archives for macOS, Linux, and Windows with a SHA-256 checksum manifest. Public GitHub artifact attestations bind those archives to the exact release workflow and commit; consumers can verify them with `gh attestation verify <archive> -R WhiteKiwi/pushman-cli`.
+
 `api/openapi.yaml` is a bundled snapshot of the authoritative public contract in `WhiteKiwi/pushman`. After updating that snapshot, run `go generate ./internal/api` and commit the generated client. CI rejects stale generated code.
 
 ## Product contract
