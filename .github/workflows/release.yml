@@ -3,6 +3,12 @@ name: Release
 on:
   push:
     tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag to publish
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -23,10 +29,17 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version-file: go.mod
           cache: true
+      - name: Validate release tag
+        env:
+          RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+        run: |
+          printf '%s\n' "$RELEASE_TAG" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$'
+          test "$(git describe --exact-match --tags HEAD)" = "$RELEASE_TAG"
       - name: Test release commit
         run: go test -race ./...
       - name: Build and publish release
@@ -45,8 +58,9 @@ jobs:
         if: env.TAP_DEPLOY_KEY != ''
         env:
           TAP_DEPLOY_KEY: ${{ secrets.TAP_DEPLOY_KEY }}
+          RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
         run: |
-          VERSION="${GITHUB_REF_NAME#v}"
+          VERSION="${RELEASE_TAG#v}"
           ARM64_MACOS_SHA=$(sha256sum "dist/pushman_${VERSION}_macOS_arm64.tar.gz" | awk '{print $1}')
           X86_MACOS_SHA=$(sha256sum "dist/pushman_${VERSION}_macOS_x86_64.tar.gz" | awk '{print $1}')
           ARM64_LINUX_SHA=$(sha256sum "dist/pushman_${VERSION}_linux_arm64.tar.gz" | awk '{print $1}')
