@@ -4,6 +4,8 @@ Notable changes to Pushman CLI will be documented here. This project follows [Se
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-08-27
+
 ### Changed
 
 - Move the canonical repository and Go module to `github.com/pushmanhq/pushman-cli`; existing GitHub repository and release URLs continue to redirect from the former owner.
@@ -54,7 +56,8 @@ Notable changes to Pushman CLI will be documented here. This project follows [Se
 - Stable JSON output and environment-only automation credentials.
 - Checksummed macOS, Linux, and Windows archives with GitHub artifact attestations.
 
-[Unreleased]: https://github.com/pushmanhq/pushman-cli/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/pushmanhq/pushman-cli/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/pushmanhq/pushman-cli/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/pushmanhq/pushman-cli/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/pushmanhq/pushman-cli/compare/v0.1.0-beta.4...v0.1.0
 [0.1.0-beta.4]: https://github.com/pushmanhq/pushman-cli/compare/v0.1.0-beta.3...v0.1.0-beta.4
