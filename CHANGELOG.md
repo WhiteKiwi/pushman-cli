@@ -4,6 +4,8 @@ Notable changes to Pushman CLI will be documented here. This project follows [Se
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-08-26
+
 ### Added
 
 - Authorize the CLI with Google or Apple through the OAuth Device Authorization Grant using `pushman login`.
@@ -42,7 +44,8 @@ Notable changes to Pushman CLI will be documented here. This project follows [Se
 - Stable JSON output and environment-only automation credentials.
 - Checksummed macOS, Linux, and Windows archives with GitHub artifact attestations.
 
-[Unreleased]: https://github.com/WhiteKiwi/pushman-cli/compare/v0.1.0-beta.4...HEAD
+[Unreleased]: https://github.com/WhiteKiwi/pushman-cli/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/WhiteKiwi/pushman-cli/compare/v0.1.0-beta.4...v0.1.0
 [0.1.0-beta.4]: https://github.com/WhiteKiwi/pushman-cli/compare/v0.1.0-beta.3...v0.1.0-beta.4
 [0.1.0-beta.3]: https://github.com/WhiteKiwi/pushman-cli/compare/v0.1.0-beta.2...v0.1.0-beta.3
 [0.1.0-beta.2]: https://github.com/WhiteKiwi/pushman-cli/compare/v0.1.0-beta.1...v0.1.0-beta.2
