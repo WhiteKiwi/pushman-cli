@@ -9,10 +9,10 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/WhiteKiwi/pushman-cli/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/WhiteKiwi/pushman-cli/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://github.com/pushmanhq/pushman-cli/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/pushmanhq/pushman-cli/actions/workflows/ci.yml/badge.svg"></a>
   <a href="https://go.dev/"><img alt="Go 1.27+" src="https://img.shields.io/badge/Go-1.27%2B-00ADD8?logo=go&logoColor=white"></a>
   <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-151515"></a>
-  <a href="https://github.com/WhiteKiwi/pushman-cli/releases"><img alt="GitHub release" src="https://img.shields.io/github/v/release/WhiteKiwi/pushman-cli?display_name=tag&include_prereleases"></a>
+  <a href="https://github.com/pushmanhq/pushman-cli/releases"><img alt="GitHub release" src="https://img.shields.io/github/v/release/pushmanhq/pushman-cli?display_name=tag&include_prereleases"></a>
 </p>
 
 ```console
@@ -49,7 +49,7 @@ brew install whitekiwi/tap/pushman
 **Or ask Claude Code:**
 
 ```sh
-claude "Install Pushman CLI from https://github.com/WhiteKiwi/pushman-cli using the safest supported method for this machine, verify it, then guide me through login. Ask before sending a test notification."
+claude "Install Pushman CLI from https://github.com/pushmanhq/pushman-cli using the safest supported method for this machine, verify it, then guide me through login. Ask before sending a test notification."
 ```
 
 Review and approve each command it proposes. See the [Installation Guide](docs/INSTALL.md) for Go installs, verified release archives, updates, uninstalling, and troubleshooting.

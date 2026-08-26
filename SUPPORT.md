@@ -10,7 +10,7 @@ pushman status
 pushman help
 ```
 
-Search existing [issues](https://github.com/WhiteKiwi/pushman-cli/issues) before opening a new one. Use the provided bug-report form and include the CLI version, operating system, command shape, expected result, and redacted output.
+Search existing [issues](https://github.com/pushmanhq/pushman-cli/issues) before opening a new one. Use the provided bug-report form and include the CLI version, operating system, command shape, expected result, and redacted output.
 
 This repository supports the open-source CLI. Account, iPhone app, billing, quota, and hosted-service support channels will be documented separately as those products become publicly available.
 

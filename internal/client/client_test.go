@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/WhiteKiwi/pushman-cli/internal/cli"
-	"github.com/WhiteKiwi/pushman-cli/internal/credential"
+	"github.com/pushmanhq/pushman-cli/internal/cli"
+	"github.com/pushmanhq/pushman-cli/internal/credential"
 )
 
 type memoryCredentials struct{ token string }

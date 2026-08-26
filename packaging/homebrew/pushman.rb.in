@@ -1,24 +1,24 @@
 class Pushman < Formula
   desc "Send push notifications to your iPhone from the command-line"
-  homepage "https://github.com/WhiteKiwi/pushman-cli"
+  homepage "https://github.com/pushmanhq/pushman-cli"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/WhiteKiwi/pushman-cli/releases/download/v@VERSION@/pushman_@VERSION@_macOS_arm64.tar.gz"
+      url "https://github.com/pushmanhq/pushman-cli/releases/download/v@VERSION@/pushman_@VERSION@_macOS_arm64.tar.gz"
       sha256 "@ARM64_MACOS_SHA@"
     else
-      url "https://github.com/WhiteKiwi/pushman-cli/releases/download/v@VERSION@/pushman_@VERSION@_macOS_x86_64.tar.gz"
+      url "https://github.com/pushmanhq/pushman-cli/releases/download/v@VERSION@/pushman_@VERSION@_macOS_x86_64.tar.gz"
       sha256 "@X86_MACOS_SHA@"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
-      url "https://github.com/WhiteKiwi/pushman-cli/releases/download/v@VERSION@/pushman_@VERSION@_linux_arm64.tar.gz"
+      url "https://github.com/pushmanhq/pushman-cli/releases/download/v@VERSION@/pushman_@VERSION@_linux_arm64.tar.gz"
       sha256 "@ARM64_LINUX_SHA@"
     else
-      url "https://github.com/WhiteKiwi/pushman-cli/releases/download/v@VERSION@/pushman_@VERSION@_linux_x86_64.tar.gz"
+      url "https://github.com/pushmanhq/pushman-cli/releases/download/v@VERSION@/pushman_@VERSION@_linux_x86_64.tar.gz"
       sha256 "@X86_LINUX_SHA@"
     end
   end

@@ -37,9 +37,11 @@ Uninstalling without `pushman logout` removes the executable but intentionally l
 Go 1.27 or newer can install the latest tagged version from source:
 
 ```sh
-go install github.com/WhiteKiwi/pushman-cli/cmd/pushman@latest
+go install github.com/pushmanhq/pushman-cli/cmd/pushman@latest
 pushman version
 ```
+
+The canonical Go module moved to `github.com/pushmanhq/pushman-cli` before v1.0. Existing version-pinned installs from the former owner continue to resolve through GitHub's repository redirect, but new installs and upgrades should use the command above.
 
 The binary is normally written to `GOBIN`, or to the `bin` directory under `GOPATH` when `GOBIN` is empty. Add that directory to `PATH` if the shell cannot find `pushman`.
 
@@ -47,14 +49,14 @@ Update by running the same `go install` command. Before deleting a Go-installed 
 
 ## Release archives
 
-The [GitHub Releases](https://github.com/WhiteKiwi/pushman-cli/releases) page provides prebuilt archives for macOS, Linux, and Windows on arm64 and x86_64. Every release includes `checksums.txt`, and every archive has GitHub build provenance.
+The [GitHub Releases](https://github.com/pushmanhq/pushman-cli/releases) page provides prebuilt archives for macOS, Linux, and Windows on arm64 and x86_64. Every release includes `checksums.txt`, and every archive has GitHub build provenance.
 
 Download the archive for the machine together with `checksums.txt`, then verify both before extracting it:
 
 ```sh
 release_asset=pushman_<version>_<platform>_<arch>.<archive>
 awk -v name="$release_asset" '$2 == name' checksums.txt | shasum -a 256 -c -
-gh attestation verify "$release_asset" -R WhiteKiwi/pushman-cli
+gh attestation verify "$release_asset" -R pushmanhq/pushman-cli
 ```
 
 Move the extracted `pushman` or `pushman.exe` into a directory already on `PATH`. The archive does not modify shell startup files or require administrator access.
@@ -64,7 +66,7 @@ Move the extracted `pushman` or `pushman.exe` into a directory already on `PATH`
 Claude Code can choose a supported method, verify the installed version, and walk through login:
 
 ```sh
-claude "Install Pushman CLI from https://github.com/WhiteKiwi/pushman-cli using the safest supported method for this machine, verify it, then guide me through login. Ask before sending a test notification."
+claude "Install Pushman CLI from https://github.com/pushmanhq/pushman-cli using the safest supported method for this machine, verify it, then guide me through login. Ask before sending a test notification."
 ```
 
 Review and approve each proposed command. The agent should not need a Pushman token, Apple credential, Google credential, or Keychain export. Browser login keeps provider credentials in the provider page; app pairing still requires approval from the signed-in Pushman iPhone app.

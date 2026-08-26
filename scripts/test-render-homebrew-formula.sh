@@ -14,10 +14,10 @@ d_sha=$(printf '%064s' '' | tr ' ' d)
 
 sh "$renderer" 1.2.3-beta.4 "$a_sha" "$b_sha" "$c_sha" "$d_sha" > "$formula"
 
-grep -Fqx '      url "https://github.com/WhiteKiwi/pushman-cli/releases/download/v1.2.3-beta.4/pushman_1.2.3-beta.4_macOS_arm64.tar.gz"' "$formula"
-grep -Fqx '      url "https://github.com/WhiteKiwi/pushman-cli/releases/download/v1.2.3-beta.4/pushman_1.2.3-beta.4_macOS_x86_64.tar.gz"' "$formula"
-grep -Fqx '      url "https://github.com/WhiteKiwi/pushman-cli/releases/download/v1.2.3-beta.4/pushman_1.2.3-beta.4_linux_arm64.tar.gz"' "$formula"
-grep -Fqx '      url "https://github.com/WhiteKiwi/pushman-cli/releases/download/v1.2.3-beta.4/pushman_1.2.3-beta.4_linux_x86_64.tar.gz"' "$formula"
+grep -Fqx '      url "https://github.com/pushmanhq/pushman-cli/releases/download/v1.2.3-beta.4/pushman_1.2.3-beta.4_macOS_arm64.tar.gz"' "$formula"
+grep -Fqx '      url "https://github.com/pushmanhq/pushman-cli/releases/download/v1.2.3-beta.4/pushman_1.2.3-beta.4_macOS_x86_64.tar.gz"' "$formula"
+grep -Fqx '      url "https://github.com/pushmanhq/pushman-cli/releases/download/v1.2.3-beta.4/pushman_1.2.3-beta.4_linux_arm64.tar.gz"' "$formula"
+grep -Fqx '      url "https://github.com/pushmanhq/pushman-cli/releases/download/v1.2.3-beta.4/pushman_1.2.3-beta.4_linux_x86_64.tar.gz"' "$formula"
 grep -Fqx "      sha256 \"$a_sha\"" "$formula"
 grep -Fqx "      sha256 \"$b_sha\"" "$formula"
 grep -Fqx "      sha256 \"$c_sha\"" "$formula"

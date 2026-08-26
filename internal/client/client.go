@@ -12,9 +12,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/WhiteKiwi/pushman-cli/internal/api"
-	"github.com/WhiteKiwi/pushman-cli/internal/cli"
-	"github.com/WhiteKiwi/pushman-cli/internal/credential"
+	"github.com/pushmanhq/pushman-cli/internal/api"
+	"github.com/pushmanhq/pushman-cli/internal/cli"
+	"github.com/pushmanhq/pushman-cli/internal/credential"
 )
 
 const DefaultBaseURL = "https://api.pushman.whitekiwi.link/v1"

@@ -55,7 +55,7 @@ func newMCPServer(deps Dependencies) *mcp.Server {
 		Title:       "Pushman",
 		Description: "Send and inspect Pushman notifications using the locally configured CLI credential.",
 		Version:     version,
-		WebsiteURL:  "https://github.com/WhiteKiwi/pushman-cli",
+		WebsiteURL:  "https://github.com/pushmanhq/pushman-cli",
 	}, &mcp.ServerOptions{
 		Instructions: mcpServerInstructions,
 		Capabilities: &mcp.ServerCapabilities{Tools: &mcp.ToolCapabilities{}},

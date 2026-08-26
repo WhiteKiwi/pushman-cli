@@ -16,7 +16,7 @@ For a substantial feature or public command change, open a proposal first. The h
 Pushman CLI requires Go 1.27 or newer.
 
 ```sh
-git clone https://github.com/WhiteKiwi/pushman-cli.git
+git clone https://github.com/pushmanhq/pushman-cli.git
 cd pushman-cli
 go mod download
 go generate ./internal/api

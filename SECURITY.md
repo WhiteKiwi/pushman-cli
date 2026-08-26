@@ -6,7 +6,7 @@ Pushman CLI is currently in private beta and has no supported public release lin
 
 ## Report a vulnerability
 
-Use [GitHub private vulnerability reporting](https://github.com/WhiteKiwi/pushman-cli/security/advisories/new) to report a suspected vulnerability. Do not open a public issue, discussion, or pull request.
+Use [GitHub private vulnerability reporting](https://github.com/pushmanhq/pushman-cli/security/advisories/new) to report a suspected vulnerability. Do not open a public issue, discussion, or pull request.
 
 Include a concise description, affected version or commit, reproduction steps, impact, and any suggested mitigation. Remove all real credentials, message contents, private hostnames, and personal data. You can expect an initial acknowledgement within seven days. We will coordinate remediation and disclosure through the private advisory.
 

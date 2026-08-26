@@ -1,4 +1,4 @@
-module github.com/WhiteKiwi/pushman-cli
+module github.com/pushmanhq/pushman-cli
 
 go 1.27.0
 

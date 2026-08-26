@@ -8,11 +8,11 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/WhiteKiwi/pushman-cli/internal/browser"
-	"github.com/WhiteKiwi/pushman-cli/internal/cli"
-	pushclient "github.com/WhiteKiwi/pushman-cli/internal/client"
-	"github.com/WhiteKiwi/pushman-cli/internal/credential"
-	"github.com/WhiteKiwi/pushman-cli/internal/selfupdate"
+	"github.com/pushmanhq/pushman-cli/internal/browser"
+	"github.com/pushmanhq/pushman-cli/internal/cli"
+	pushclient "github.com/pushmanhq/pushman-cli/internal/client"
+	"github.com/pushmanhq/pushman-cli/internal/credential"
+	"github.com/pushmanhq/pushman-cli/internal/selfupdate"
 )
 
 var (
