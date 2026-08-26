@@ -3,6 +3,7 @@ package cli
 import (
 	"bytes"
 	"context"
+	"errors"
 	"strings"
 	"testing"
 	"time"
@@ -159,13 +160,43 @@ func TestPairingVerificationURL(t *testing.T) {
 func TestCommandSurface(t *testing.T) {
 	t.Parallel()
 	root := New(Dependencies{})
-	for _, path := range [][]string{{"pair"}, {"login"}, {"status"}, {"rename"}, {"logout"}, {"push"}, {"devices"}, {"history"}, {"history", "show"}, {"usage"}, {"doctor"}, {"mcp"}, {"version"}, {"help"}} {
+	for _, path := range [][]string{{"pair"}, {"login"}, {"status"}, {"rename"}, {"logout"}, {"push"}, {"devices"}, {"history"}, {"history", "show"}, {"usage"}, {"doctor"}, {"mcp"}, {"self-update"}, {"version"}, {"help"}} {
 		if _, _, err := root.Find(path); err != nil {
 			t.Errorf("command %q missing: %v", strings.Join(path, " "), err)
 		}
 	}
 	if command, _, err := root.Find([]string{"completion"}); err == nil && command.Name() == "completion" {
 		t.Fatal("unexpected completion command")
+	}
+}
+
+func TestSelfUpdateOutput(t *testing.T) {
+	t.Parallel()
+	out := new(bytes.Buffer)
+	cmd := New(Dependencies{
+		Out: out,
+		SelfUpdate: func(context.Context) (string, error) {
+			return "Pushman is already up to date.", nil
+		},
+	})
+	cmd.SetArgs([]string{"self-update"})
+	if err := cmd.Execute(); err != nil {
+		t.Fatal(err)
+	}
+	if got, want := out.String(), "Pushman is already up to date.\n"; got != want {
+		t.Fatalf("output = %q, want %q", got, want)
+	}
+}
+
+func TestSelfUpdateError(t *testing.T) {
+	t.Parallel()
+	want := errors.New("upgrade failed")
+	cmd := New(Dependencies{
+		SelfUpdate: func(context.Context) (string, error) { return "", want },
+	})
+	cmd.SetArgs([]string{"self-update"})
+	if err := cmd.Execute(); !errors.Is(err, want) {
+		t.Fatalf("error = %v, want %v", err, want)
 	}
 }
 

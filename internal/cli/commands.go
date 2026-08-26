@@ -235,6 +235,24 @@ func newDoctorCommand(deps Dependencies) *cobra.Command {
 	}}
 }
 
+func newSelfUpdateCommand(deps Dependencies) *cobra.Command {
+	return &cobra.Command{
+		Use:   "self-update",
+		Short: "Update Pushman through Homebrew",
+		Args:  func(_ *cobra.Command, args []string) error { return noArgs(args) },
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			output, err := deps.SelfUpdate(cmd.Context())
+			if err != nil {
+				return err
+			}
+			if output != "" {
+				fmt.Fprintln(cmd.OutOrStdout(), output)
+			}
+			return nil
+		},
+	}
+}
+
 func newVersionCommand(deps Dependencies) *cobra.Command {
 	return &cobra.Command{Use: "version", Short: "Print version information", Args: func(_ *cobra.Command, args []string) error { return noArgs(args) }, RunE: func(cmd *cobra.Command, _ []string) error {
 		fmt.Fprintf(cmd.OutOrStdout(), "pushman %s (commit %s, built %s)\n", deps.Version.Version, deps.Version.Commit, deps.Version.Date)

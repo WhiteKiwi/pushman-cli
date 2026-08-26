@@ -35,6 +35,7 @@ Pushman is a small, script-friendly companion for getting your own operational m
 - Browser-assisted account login for local terminals and headless machines
 - Stable JSON output and exit codes for automation
 - A local stdio MCP server for Codex, Claude Code, and other compatible clients
+- Safe in-place updates for Homebrew-managed installations
 - Signed GitHub release provenance and published SHA-256 checksums
 
 ## Install
@@ -93,6 +94,7 @@ Use `pushman help push` to see every notification field and output option.
 | `pushman rename <nickname>` | Rename this CLI |
 | `pushman doctor` | Diagnose configuration and connectivity |
 | `pushman mcp` | Serve Pushman's MCP tools over stdio |
+| `pushman self-update` | Update a Homebrew-managed installation |
 | `pushman logout` | Revoke and remove the local CLI credential |
 
 ## AI clients and MCP

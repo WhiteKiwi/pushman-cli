@@ -12,6 +12,7 @@ import (
 	"github.com/WhiteKiwi/pushman-cli/internal/cli"
 	pushclient "github.com/WhiteKiwi/pushman-cli/internal/client"
 	"github.com/WhiteKiwi/pushman-cli/internal/credential"
+	"github.com/WhiteKiwi/pushman-cli/internal/selfupdate"
 )
 
 var (
@@ -41,12 +42,14 @@ func main() {
 	}
 
 	resolvedVersion, resolvedCommit, resolvedDate := resolveVersionInfo(version, commit, date, readBuildInfo())
+	updater := selfupdate.New()
 	app := cli.New(cli.Dependencies{
 		In:          os.Stdin,
 		Out:         os.Stdout,
 		ErrOut:      os.Stderr,
 		IsTerminal:  cli.IsTerminalFile(os.Stdin),
 		OpenBrowser: browser.Open,
+		SelfUpdate:  updater.Update,
 		Service:     service,
 		Version: cli.VersionInfo{
 			Version: resolvedVersion,

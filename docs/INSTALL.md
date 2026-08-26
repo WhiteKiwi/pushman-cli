@@ -18,9 +18,10 @@ Homebrew adds `whitekiwi/tap` automatically and trusts only the Pushman Formula.
 Update an existing installation:
 
 ```sh
-brew update
-brew upgrade pushman
+pushman self-update
 ```
+
+`pushman self-update` verifies that the running executable belongs to the Pushman Homebrew Formula before asking Homebrew to upgrade it. It refuses Go installs, release archives, and other unowned executables; update those with their original installation method. Installations older than v0.1.1 need one manual `brew upgrade whitekiwi/tap/pushman` to gain this command.
 
 To remove Pushman and revoke this CLI's server credential:
 

@@ -4,6 +4,12 @@ Notable changes to Pushman CLI will be documented here. This project follows [Se
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-08-26
+
+### Added
+
+- Update Homebrew-managed installations safely with `pushman self-update`.
+
 ## [0.1.0] - 2026-08-26
 
 ### Added
@@ -44,7 +50,8 @@ Notable changes to Pushman CLI will be documented here. This project follows [Se
 - Stable JSON output and environment-only automation credentials.
 - Checksummed macOS, Linux, and Windows archives with GitHub artifact attestations.
 
-[Unreleased]: https://github.com/WhiteKiwi/pushman-cli/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/WhiteKiwi/pushman-cli/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/WhiteKiwi/pushman-cli/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/WhiteKiwi/pushman-cli/compare/v0.1.0-beta.4...v0.1.0
 [0.1.0-beta.4]: https://github.com/WhiteKiwi/pushman-cli/compare/v0.1.0-beta.3...v0.1.0-beta.4
 [0.1.0-beta.3]: https://github.com/WhiteKiwi/pushman-cli/compare/v0.1.0-beta.2...v0.1.0-beta.3

@@ -1,6 +1,8 @@
 package cli
 
 import (
+	"context"
+	"fmt"
 	"io"
 	"os"
 
@@ -14,6 +16,7 @@ type Dependencies struct {
 	IsTerminal  func() bool
 	Hostname    func() (string, error)
 	OpenBrowser func(string) error
+	SelfUpdate  func(context.Context) (string, error)
 	Service     Service
 	Version     VersionInfo
 }
@@ -48,6 +51,7 @@ func New(deps Dependencies) *cobra.Command {
 		newUsageCommand(deps),
 		newDoctorCommand(deps),
 		newMCPCommand(deps),
+		newSelfUpdateCommand(deps),
 		newVersionCommand(deps),
 	)
 	root.InitDefaultHelpCmd()
@@ -72,6 +76,11 @@ func withDefaults(deps Dependencies) Dependencies {
 	}
 	if deps.OpenBrowser == nil {
 		deps.OpenBrowser = func(string) error { return nil }
+	}
+	if deps.SelfUpdate == nil {
+		deps.SelfUpdate = func(context.Context) (string, error) {
+			return "", fmt.Errorf("self-update is not configured")
+		}
 	}
 	if deps.Service == nil {
 		deps.Service = UnconfiguredService{}
