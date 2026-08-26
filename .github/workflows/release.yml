@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   release:
-    if: github.repository == 'WhiteKiwi/pushman-cli'
+    if: github.event.repository.name == 'pushman-cli'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
