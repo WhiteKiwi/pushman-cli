@@ -75,6 +75,6 @@ jobs:
           if git diff --staged --quiet; then
             echo "Formula is already up-to-date"
           else
-            git commit -m "bump: update pushman to ${VERSION}"
+            git commit -m "bump: update pushman to ${VERSION} [skip ci]"
             git push origin main
           fi
