@@ -3,6 +3,7 @@ package selfupdate
 import (
 	"context"
 	"errors"
+	"path/filepath"
 	"reflect"
 	"strings"
 	"testing"
@@ -10,6 +11,7 @@ import (
 
 func TestUpdateUsesHomebrewForTheRunningFormula(t *testing.T) {
 	var calls [][]string
+	prefix := filepath.Join(t.TempDir(), "opt", "pushman")
 	updater := &Updater{
 		goos:       "darwin",
 		executable: func() (string, error) { return "/opt/homebrew/bin/pushman", nil },
@@ -20,7 +22,7 @@ func TestUpdateUsesHomebrewForTheRunningFormula(t *testing.T) {
 		run: func(_ context.Context, name string, args ...string) (string, error) {
 			calls = append(calls, append([]string{name}, args...))
 			if reflect.DeepEqual(args, []string{"--prefix", formula}) {
-				return "/opt/homebrew/opt/pushman\n", nil
+				return prefix + "\n", nil
 			}
 			return "upgraded pushman", nil
 		},
@@ -43,19 +45,21 @@ func TestUpdateUsesHomebrewForTheRunningFormula(t *testing.T) {
 }
 
 func TestUpdateRefusesAnUnmanagedExecutable(t *testing.T) {
+	prefix := filepath.Join(t.TempDir(), "opt", "pushman")
+	executable := filepath.Join(t.TempDir(), "bin", "pushman")
 	updater := &Updater{
 		goos:       "linux",
-		executable: func() (string, error) { return "/usr/local/bin/pushman", nil },
+		executable: func() (string, error) { return executable, nil },
 		lookPath:   func(string) (string, error) { return "/home/linuxbrew/.linuxbrew/bin/brew", nil },
 		evalSymlinks: func(path string) (string, error) {
-			if path == "/usr/local/bin/pushman" {
+			if path == executable {
 				return path, nil
 			}
 			return "/home/linuxbrew/.linuxbrew/Cellar/pushman/0.1.0/bin/pushman", nil
 		},
 		run: func(_ context.Context, _ string, args ...string) (string, error) {
 			if reflect.DeepEqual(args, []string{"--prefix", formula}) {
-				return "/home/linuxbrew/.linuxbrew/opt/pushman", nil
+				return prefix, nil
 			}
 			t.Fatal("upgrade ran for an unmanaged executable")
 			return "", nil
