@@ -16,4 +16,4 @@ This repository supports the open-source CLI. Account, iPhone app, billing, quot
 
 ## Protect your data
 
-Never share a `PUSHMAN_TOKEN`, pairing credential, OAuth assertion, notification content, private hostname, or unredacted diagnostic output. If you believe you found a security issue, follow [SECURITY.md](SECURITY.md).
+Never share a `PUSHMAN_TOKEN`, account CLI credential, OAuth assertion, notification content, private hostname, or unredacted diagnostic output. If you believe you found a security issue, follow [SECURITY.md](SECURITY.md).

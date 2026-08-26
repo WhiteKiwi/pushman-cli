@@ -10,7 +10,7 @@ Use [GitHub private vulnerability reporting](https://github.com/WhiteKiwi/pushma
 
 Include a concise description, affected version or commit, reproduction steps, impact, and any suggested mitigation. Remove all real credentials, message contents, private hostnames, and personal data. You can expect an initial acknowledgement within seven days. We will coordinate remediation and disclosure through the private advisory.
 
-Never submit a real `PUSHMAN_TOKEN`, paired credential, OAuth assertion, signing material, production configuration, or unredacted diagnostic output.
+Never submit a real `PUSHMAN_TOKEN`, account CLI credential, OAuth assertion, signing material, production configuration, or unredacted diagnostic output.
 
 ## Scope
 

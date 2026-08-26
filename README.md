@@ -97,7 +97,7 @@ Use `pushman help push` to see every notification field and output option.
 
 ## AI clients and MCP
 
-`pushman mcp` lets a local AI client send notifications and inspect devices, seven-day history, usage, pairing state, and diagnostics through the same credential and API client as the CLI.
+`pushman mcp` lets a local AI client send notifications and inspect devices, seven-day history, usage, authorization state, and diagnostics through the same credential and API client as the CLI.
 
 ```sh
 codex mcp add pushman -- pushman mcp
