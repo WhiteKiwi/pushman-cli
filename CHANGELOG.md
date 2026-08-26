@@ -4,6 +4,15 @@ Notable changes to Pushman CLI will be documented here. This project follows [Se
 
 ## [Unreleased]
 
+### Added
+
+- Authorize the CLI with Google or Apple through the OAuth Device Authorization Grant using `pushman login`.
+- Keep SSH and headless login browser-free with `pushman login --no-browser`.
+
+### Changed
+
+- Report whether the current account CLI credential came from browser login or app pairing.
+
 ## [0.1.0-beta.4] - 2026-08-25
 
 ### Added

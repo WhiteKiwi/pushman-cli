@@ -41,6 +41,42 @@ func newPairCommand(deps Dependencies) *cobra.Command {
 	return cmd
 }
 
+func newLoginCommand(deps Dependencies) *cobra.Command {
+	var noBrowser bool
+	cmd := &cobra.Command{Use: "login", Short: "Log this CLI into a Pushman account", Args: func(_ *cobra.Command, args []string) error { return noArgs(args) }, RunE: func(cmd *cobra.Command, _ []string) error {
+		hostname, err := deps.Hostname()
+		if err != nil {
+			return fmt.Errorf("read hostname for login: %w", err)
+		}
+		suggestedName, err := normalizeSuggestedName(hostname)
+		if err != nil {
+			return err
+		}
+		result, err := deps.Service.Login(cmd.Context(), LoginRequest{
+			Platform: runtime.GOOS, SuggestedName: suggestedName,
+			OnChallenge: func(challenge LoginChallenge) error {
+				if _, err := fmt.Fprintf(cmd.OutOrStdout(), "Login code: %s\nVerify at: %s\n", challenge.UserCode, challenge.VerificationURL); err != nil {
+					return err
+				}
+				if noBrowser || !deps.IsTerminal() {
+					return nil
+				}
+				if err := deps.OpenBrowser(challenge.CompleteURL); err != nil {
+					fmt.Fprintf(cmd.ErrOrStderr(), "Could not open a browser; use the URL above: %v\n", err)
+				}
+				return nil
+			},
+		})
+		if err != nil {
+			return err
+		}
+		fmt.Fprintf(cmd.OutOrStdout(), "Logged in as %s\n", result.Nickname)
+		return nil
+	}}
+	cmd.Flags().BoolVar(&noBrowser, "no-browser", false, "Do not open the verification page")
+	return cmd
+}
+
 func pairingVerificationURL(rawURL, code string) (string, error) {
 	parsed, err := url.Parse(rawURL)
 	if err != nil || !parsed.IsAbs() || parsed.Host == "" {
@@ -78,7 +114,15 @@ func newStatusCommand(deps Dependencies) *cobra.Command {
 			fmt.Fprintln(cmd.OutOrStdout(), "Not paired")
 			return nil
 		}
-		fmt.Fprintf(cmd.OutOrStdout(), "Paired as %s\n", result.Nickname)
+		method := result.Method
+		if method == "web_login" {
+			method = "web login"
+		} else if method == "app_pair" {
+			method = "app pairing"
+		} else {
+			method = "account authorization"
+		}
+		fmt.Fprintf(cmd.OutOrStdout(), "Authorized as %s (%s)\n", result.Nickname, method)
 		return nil
 	}}
 }

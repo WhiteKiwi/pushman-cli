@@ -8,6 +8,7 @@ import (
 	"runtime/debug"
 	"strings"
 
+	"github.com/WhiteKiwi/pushman-cli/internal/browser"
 	"github.com/WhiteKiwi/pushman-cli/internal/cli"
 	pushclient "github.com/WhiteKiwi/pushman-cli/internal/client"
 	"github.com/WhiteKiwi/pushman-cli/internal/credential"
@@ -41,11 +42,12 @@ func main() {
 
 	resolvedVersion, resolvedCommit, resolvedDate := resolveVersionInfo(version, commit, date, readBuildInfo())
 	app := cli.New(cli.Dependencies{
-		In:         os.Stdin,
-		Out:        os.Stdout,
-		ErrOut:     os.Stderr,
-		IsTerminal: cli.IsTerminalFile(os.Stdin),
-		Service:    service,
+		In:          os.Stdin,
+		Out:         os.Stdout,
+		ErrOut:      os.Stderr,
+		IsTerminal:  cli.IsTerminalFile(os.Stdin),
+		OpenBrowser: browser.Open,
+		Service:     service,
 		Version: cli.VersionInfo{
 			Version: resolvedVersion,
 			Commit:  resolvedCommit,

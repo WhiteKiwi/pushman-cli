@@ -8,13 +8,14 @@ import (
 )
 
 type Dependencies struct {
-	In         io.Reader
-	Out        io.Writer
-	ErrOut     io.Writer
-	IsTerminal func() bool
-	Hostname   func() (string, error)
-	Service    Service
-	Version    VersionInfo
+	In          io.Reader
+	Out         io.Writer
+	ErrOut      io.Writer
+	IsTerminal  func() bool
+	Hostname    func() (string, error)
+	OpenBrowser func(string) error
+	Service     Service
+	Version     VersionInfo
 }
 
 func New(deps Dependencies) *cobra.Command {
@@ -37,6 +38,7 @@ func New(deps Dependencies) *cobra.Command {
 	})
 	root.AddCommand(
 		newPairCommand(deps),
+		newLoginCommand(deps),
 		newStatusCommand(deps),
 		newRenameCommand(deps),
 		newLogoutCommand(deps),
@@ -67,6 +69,9 @@ func withDefaults(deps Dependencies) Dependencies {
 	}
 	if deps.Hostname == nil {
 		deps.Hostname = os.Hostname
+	}
+	if deps.OpenBrowser == nil {
+		deps.OpenBrowser = func(string) error { return nil }
 	}
 	if deps.Service == nil {
 		deps.Service = UnconfiguredService{}

@@ -24,6 +24,19 @@ type PairResult struct {
 	Nickname string
 }
 
+type LoginRequest struct {
+	Platform      string
+	SuggestedName string
+	OnChallenge   func(LoginChallenge) error
+}
+
+type LoginChallenge struct {
+	UserCode        string
+	VerificationURL string
+	CompleteURL     string
+	ExpiresIn       time.Duration
+}
+
 type PairChallenge struct {
 	UserCode        string
 	VerificationURL string
@@ -33,6 +46,7 @@ type PairChallenge struct {
 type StatusResult struct {
 	Paired   bool
 	Nickname string
+	Method   string
 }
 
 type Device struct {
@@ -110,6 +124,7 @@ type DoctorCheck struct {
 // credential store. Its concrete HTTP implementation follows the shared OpenAPI contract.
 type Service interface {
 	Pair(context.Context, PairRequest) (PairResult, error)
+	Login(context.Context, LoginRequest) (PairResult, error)
 	Status(context.Context) (StatusResult, error)
 	Rename(context.Context, string) error
 	Logout(context.Context) error
@@ -124,6 +139,9 @@ type Service interface {
 type UnconfiguredService struct{}
 
 func (UnconfiguredService) Pair(context.Context, PairRequest) (PairResult, error) {
+	return PairResult{}, ErrServiceUnconfigured
+}
+func (UnconfiguredService) Login(context.Context, LoginRequest) (PairResult, error) {
 	return PairResult{}, ErrServiceUnconfigured
 }
 func (UnconfiguredService) Status(context.Context) (StatusResult, error) {

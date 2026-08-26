@@ -132,6 +132,75 @@ func (s *Service) Pair(ctx context.Context, request cli.PairRequest) (cli.PairRe
 	return cli.PairResult{}, &cli.ServiceError{Code: "pairing_expired", Message: "Pairing expired; run pushman pair again."}
 }
 
+func (s *Service) Login(ctx context.Context, request cli.LoginRequest) (cli.PairResult, error) {
+	if _, err := s.credentials.Get(); err == nil {
+		return cli.PairResult{}, &cli.ServiceError{Code: "already_authenticated", Message: "This CLI is already authorized; run pushman logout first."}
+	} else if !errors.Is(err, credential.ErrNotFound) {
+		return cli.PairResult{}, err
+	}
+	clientID := api.CreateDeviceAuthorizationFormdataBodyClientIdPushmanCli
+	platform := api.CreateDeviceAuthorizationFormdataBodyPlatform(request.Platform)
+	response, err := s.api.CreateDeviceAuthorizationWithFormdataBodyWithResponse(ctx, api.CreateDeviceAuthorizationFormdataRequestBody{
+		ClientId: clientID, Platform: platform, SuggestedName: request.SuggestedName,
+	})
+	if err != nil {
+		return cli.PairResult{}, transportError(err)
+	}
+	if response.JSON200 == nil {
+		return cli.PairResult{}, responseError(response.StatusCode(), response.JSONDefault)
+	}
+	created := response.JSON200
+	if request.OnChallenge != nil {
+		if err := request.OnChallenge(cli.LoginChallenge{
+			UserCode: created.UserCode, VerificationURL: created.VerificationUri,
+			CompleteURL: created.VerificationUriComplete, ExpiresIn: time.Duration(created.ExpiresIn) * time.Second,
+		}); err != nil {
+			return cli.PairResult{}, err
+		}
+	}
+	interval := time.Duration(created.Interval) * time.Second
+	deadline := s.clock().Add(time.Duration(created.ExpiresIn) * time.Second)
+	for s.clock().Before(deadline) {
+		if err := s.wait(ctx, interval); err != nil {
+			return cli.PairResult{}, err
+		}
+		tokenResponse, err := s.api.ExchangeDeviceCodeWithFormdataBodyWithResponse(ctx, api.ExchangeDeviceCodeFormdataRequestBody{
+			ClientId:   api.ExchangeDeviceCodeFormdataBodyClientIdPushmanCli,
+			DeviceCode: created.DeviceCode,
+			GrantType:  api.UrnIetfParamsOauthGrantTypeDeviceCode,
+		})
+		if err != nil {
+			return cli.PairResult{}, transportError(err)
+		}
+		if tokenResponse.JSON200 != nil {
+			if tokenResponse.JSON200.AccessToken == "" {
+				return cli.PairResult{}, &cli.ServiceError{Code: "invalid_response", Message: "Login approval did not include a credential."}
+			}
+			if err := s.credentials.Set(tokenResponse.JSON200.AccessToken); err != nil {
+				return cli.PairResult{}, err
+			}
+			return cli.PairResult{Nickname: tokenResponse.JSON200.SenderName}, nil
+		}
+		if tokenResponse.JSON400 == nil {
+			return cli.PairResult{}, responseError(tokenResponse.StatusCode(), tokenResponse.JSONDefault)
+		}
+		switch tokenResponse.JSON400.Error {
+		case api.AuthorizationPending:
+			continue
+		case api.SlowDown:
+			interval += 5 * time.Second
+			continue
+		case api.AccessDenied:
+			return cli.PairResult{}, &cli.ServiceError{Code: "login_denied", Message: "Login was denied."}
+		case api.ExpiredToken:
+			return cli.PairResult{}, &cli.ServiceError{Code: "login_expired", Message: "Login expired; run pushman login again."}
+		default:
+			return cli.PairResult{}, &cli.ServiceError{Code: "login_failed", Message: "The login request is no longer valid."}
+		}
+	}
+	return cli.PairResult{}, &cli.ServiceError{Code: "login_expired", Message: "Login expired; run pushman login again."}
+}
+
 func (s *Service) Status(ctx context.Context) (cli.StatusResult, error) {
 	token, err := s.credentials.Get()
 	if errors.Is(err, credential.ErrNotFound) {
@@ -147,7 +216,11 @@ func (s *Service) Status(ctx context.Context) (cli.StatusResult, error) {
 	if response.JSON200 == nil {
 		return cli.StatusResult{}, responseError(response.StatusCode(), response.JSONDefault)
 	}
-	return cli.StatusResult{Paired: true, Nickname: response.JSON200.Name}, nil
+	method := ""
+	if response.JSON200.AuthorizationMethod != nil {
+		method = string(*response.JSON200.AuthorizationMethod)
+	}
+	return cli.StatusResult{Paired: true, Nickname: response.JSON200.Name, Method: method}, nil
 }
 
 func (s *Service) Rename(ctx context.Context, name string) error {
@@ -354,7 +427,7 @@ func (s *Service) Doctor(ctx context.Context) ([]cli.DoctorCheck, error) {
 func (s *Service) pairedToken() (string, error) {
 	token, err := s.credentials.Get()
 	if errors.Is(err, credential.ErrNotFound) {
-		return "", &cli.AuthorizationError{Err: fmt.Errorf("not paired; run pushman pair")}
+		return "", &cli.AuthorizationError{Err: fmt.Errorf("not authorized; run pushman login or pushman pair")}
 	}
 	return token, err
 }

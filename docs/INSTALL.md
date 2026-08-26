@@ -2,7 +2,7 @@
 
 Homebrew is the recommended installation method on macOS and Linux. Go and verified release archives are supported when Homebrew is unavailable or inappropriate for the environment.
 
-Pushman for iPhone is currently in private beta. Installing the CLI does not install the iPhone app, create an account, pair automatically, start a background service, or send a notification.
+Pushman for iPhone is currently in private beta. Installing the CLI does not install the iPhone app, create an account, authorize automatically, start a background service, or send a notification.
 
 ## Homebrew
 
@@ -29,7 +29,7 @@ pushman logout
 brew uninstall pushman
 ```
 
-Uninstalling without `pushman logout` removes the executable but intentionally leaves its Keychain or credential-store entry and server authorization intact. Reinstalling the CLI can use that pairing again.
+Uninstalling without `pushman logout` removes the executable but intentionally leaves its Keychain or credential-store entry and server authorization intact. Reinstalling the CLI can use that authorization again.
 
 ## Go
 
@@ -42,7 +42,7 @@ pushman version
 
 The binary is normally written to `GOBIN`, or to the `bin` directory under `GOPATH` when `GOBIN` is empty. Add that directory to `PATH` if the shell cannot find `pushman`.
 
-Update by running the same `go install` command. Before deleting a Go-installed binary, run `pushman logout` if you also want to revoke the pairing.
+Update by running the same `go install` command. Before deleting a Go-installed binary, run `pushman logout` if you also want to revoke the authorization.
 
 ## Release archives
 
@@ -60,22 +60,24 @@ Move the extracted `pushman` or `pushman.exe` into a directory already on `PATH`
 
 ## Ask Claude Code
 
-Claude Code can choose a supported method, verify the installed version, and walk through pairing:
+Claude Code can choose a supported method, verify the installed version, and walk through login:
 
 ```sh
-claude "Install Pushman CLI from https://github.com/WhiteKiwi/pushman-cli using the safest supported method for this machine, verify it, then guide me through pairing. Ask before sending a test notification."
+claude "Install Pushman CLI from https://github.com/WhiteKiwi/pushman-cli using the safest supported method for this machine, verify it, then guide me through login. Ask before sending a test notification."
 ```
 
-Review and approve each proposed command. The agent should not need a Pushman token, Apple credential, Google credential, or Keychain export. Pairing still requires approval from the signed-in Pushman iPhone app.
+Review and approve each proposed command. The agent should not need a Pushman token, Apple credential, Google credential, or Keychain export. Browser login keeps provider credentials in the provider page; app pairing still requires approval from the signed-in Pushman iPhone app.
 
-## Pair and verify
+## Authorize and verify
 
 After installation:
 
 ```sh
 pushman version
-pushman pair
+pushman login
 pushman status
 ```
 
-Run `pushman doctor` if pairing, local credential storage, or service connectivity fails. Never paste a pairing credential, `PUSHMAN_TOKEN`, OAuth assertion, or unredacted diagnostic output into an issue or agent conversation. Follow [SECURITY.md](../SECURITY.md) for suspected vulnerabilities and [SUPPORT.md](../SUPPORT.md) for bug-report guidance.
+`pushman login --no-browser` prints a code and URL without launching a browser, which is useful over SSH. `pushman pair` remains available when you prefer approval in the signed-in iPhone app. Both methods create the same account-scoped CLI authorization.
+
+Run `pushman doctor` if authorization, local credential storage, or service connectivity fails. Never paste a CLI credential, `PUSHMAN_TOKEN`, OAuth assertion, or unredacted diagnostic output into an issue or agent conversation. Follow [SECURITY.md](../SECURITY.md) for suspected vulnerabilities and [SUPPORT.md](../SUPPORT.md) for bug-report guidance.

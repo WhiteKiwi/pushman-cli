@@ -20,7 +20,7 @@ $ pushman push "Production deploy finished" --title "Acme API"
 Accepted msg_01M0W2RDPVGEVX7D6ZWFK907B2 for 1 device
 ```
 
-Pushman is a small, script-friendly companion for getting your own operational messages onto your iPhone. Pair once, then use the same command interactively or in automation. Credentials live in the operating-system keyring, not a plaintext config file.
+Pushman is a small, script-friendly companion for getting your own operational messages onto your iPhone. Authorize once through a browser or the iPhone app, then use the same command interactively or in automation. Credentials live in the operating-system keyring, not a plaintext config file.
 
 > [!NOTE]
 > Pushman for iPhone is currently in private beta. The App Store link will be added here when the public listing is available.
@@ -32,6 +32,7 @@ Pushman is a small, script-friendly companion for getting your own operational m
 - Multiple receiving devices and explicit device targeting
 - Seven-day history plus usage and delivery diagnostics
 - Native credential storage through macOS Keychain, Windows Credential Manager, or Secret Service
+- Browser-assisted account login for local terminals and headless machines
 - Stable JSON output and exit codes for automation
 - A local stdio MCP server for Codex, Claude Code, and other compatible clients
 - Signed GitHub release provenance and published SHA-256 checksums
@@ -47,24 +48,26 @@ brew install whitekiwi/tap/pushman
 **Or ask Claude Code:**
 
 ```sh
-claude "Install Pushman CLI from https://github.com/WhiteKiwi/pushman-cli using the safest supported method for this machine, verify it, then guide me through pairing. Ask before sending a test notification."
+claude "Install Pushman CLI from https://github.com/WhiteKiwi/pushman-cli using the safest supported method for this machine, verify it, then guide me through login. Ask before sending a test notification."
 ```
 
 Review and approve each command it proposes. See the [Installation Guide](docs/INSTALL.md) for Go installs, verified release archives, updates, uninstalling, and troubleshooting.
 
-Then pair with your iPhone:
+Then authorize the CLI in a browser:
 
 ```sh
-pushman pair
+pushman login
 ```
 
 ## Quick start
 
-Pair the CLI with Pushman on your iPhone:
+Authorize the CLI with Google or Apple in your browser:
 
 ```sh
-pushman pair
+pushman login
 ```
+
+Use `pushman pair` instead when you want to approve from the signed-in iPhone app.
 
 Then send a notification:
 
@@ -80,16 +83,17 @@ Use `pushman help push` to see every notification field and output option.
 
 | Command | Purpose |
 | --- | --- |
+| `pushman login` | Authorize this CLI through a browser |
 | `pushman pair` | Pair this CLI and assign its default nickname |
 | `pushman push <body>` | Send a notification |
 | `pushman devices` | List receiving devices |
 | `pushman history` | Show recent messages |
 | `pushman usage` | Show the current monthly allowance |
-| `pushman status` | Show pairing and account state |
+| `pushman status` | Show authorization and account state |
 | `pushman rename <nickname>` | Rename this CLI |
 | `pushman doctor` | Diagnose configuration and connectivity |
 | `pushman mcp` | Serve Pushman's MCP tools over stdio |
-| `pushman logout` | Remove the local pairing credential |
+| `pushman logout` | Revoke and remove the local CLI credential |
 
 ## AI clients and MCP
 
@@ -101,7 +105,7 @@ codex mcp add pushman -- pushman mcp
 claude mcp add --scope user pushman -- pushman mcp
 ```
 
-Pair with `pushman pair` before connecting. Sending consumes quota and changes external state, so clients should ask for confirmation unless you already gave a direct instruction containing the exact notification. See the [MCP Guide](docs/MCP.md) for every tool, generic client configuration, permissions, and troubleshooting.
+Authorize with `pushman login` or `pushman pair` before connecting. Sending consumes quota and changes external state, so clients should ask for confirmation unless you already gave a direct instruction containing the exact notification. See the [MCP Guide](docs/MCP.md) for every tool, generic client configuration, permissions, and troubleshooting.
 
 ## Automation
 

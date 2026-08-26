@@ -9,6 +9,8 @@ servers:
 security:
   - bearerAuth: []
 tags:
+  - name: Authorization
+    description: Browser-assisted CLI account authorization.
   - name: Pairing
     description: Interactive CLI authorization.
   - name: Messages
@@ -20,6 +22,93 @@ tags:
   - name: Sender
     description: The authenticated paired CLI credential.
 paths:
+  /device-authorizations:
+    post:
+      tags:
+        - Authorization
+      operationId: createDeviceAuthorization
+      summary: Start browser-assisted CLI account authorization.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+                - client_id
+                - suggested_name
+                - platform
+              properties:
+                client_id:
+                  type: string
+                  const: pushman-cli
+                scope:
+                  type: string
+                  const: push devices:read history:read usage:read
+                  default: push devices:read history:read usage:read
+                suggested_name:
+                  type: string
+                  minLength: 1
+                  maxLength: 64
+                platform:
+                  type: string
+                  enum:
+                    - darwin
+                    - linux
+                    - windows
+      responses:
+        '200':
+          description: Device authorization created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceAuthorization'
+        default:
+          $ref: '#/components/responses/APIError'
+  /oauth/token:
+    post:
+      tags:
+        - Authorization
+      operationId: exchangeDeviceCode
+      summary: Exchange an approved device code for a CLI credential.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+                - grant_type
+                - device_code
+                - client_id
+              properties:
+                grant_type:
+                  type: string
+                  const: urn:ietf:params:oauth:grant-type:device_code
+                device_code:
+                  type: string
+                client_id:
+                  type: string
+                  const: pushman-cli
+      responses:
+        '200':
+          description: CLI credential issued once.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceToken'
+        '400':
+          description: Authorization is pending, denied, expired, slowed down, or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthError'
+        default:
+          $ref: '#/components/responses/APIError'
   /pairings:
     post:
       tags:
@@ -302,6 +391,73 @@ components:
       properties:
         error:
           $ref: '#/components/schemas/Error'
+    DeviceAuthorization:
+      type: object
+      additionalProperties: false
+      required:
+        - device_code
+        - user_code
+        - verification_uri
+        - verification_uri_complete
+        - expires_in
+        - interval
+      properties:
+        device_code:
+          type: string
+          description: High-entropy polling secret that must never be displayed or put in a URL.
+        user_code:
+          type: string
+          pattern: ^[A-Z0-9]{4}-[A-Z0-9]{4}$
+        verification_uri:
+          type: string
+          format: uri
+        verification_uri_complete:
+          type: string
+          format: uri
+        expires_in:
+          type: integer
+          minimum: 1
+        interval:
+          type: integer
+          minimum: 1
+    DeviceToken:
+      type: object
+      additionalProperties: false
+      required:
+        - access_token
+        - token_type
+        - scope
+        - sender_name
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+          const: Bearer
+        scope:
+          type: string
+          const: push devices:read history:read usage:read
+        sender_name:
+          type: string
+          minLength: 1
+          maxLength: 64
+    OAuthError:
+      type: object
+      additionalProperties: false
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          enum:
+            - authorization_pending
+            - slow_down
+            - access_denied
+            - expired_token
+            - invalid_grant
+            - invalid_request
+        error_description:
+          type: string
     PairingId:
       type: string
       pattern: ^pair_[0-9A-HJKMNP-TV-Z]{26}$
@@ -624,6 +780,12 @@ components:
           enum:
             - paired_cli
             - automation
+        authorizationMethod:
+          type: string
+          enum:
+            - app_pair
+            - web_login
+          description: Approval path for CLI credentials; omitted for automation tokens.
         createdAt:
           type: string
           format: date-time

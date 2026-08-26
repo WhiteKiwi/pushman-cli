@@ -7,11 +7,10 @@ No additional daemon, remote MCP endpoint, MCP account, or plaintext token file 
 ## Prerequisites
 
 1. Install a release containing `pushman mcp`.
-2. Install and sign in to Pushman on iPhone.
-3. Run `pushman pair` in a terminal and approve the pairing in the app.
-4. Confirm `pushman status` and `pushman devices` work before adding the MCP server.
+2. Run `pushman login` and authorize the CLI with Google or Apple in a browser, or use `pushman pair` with the signed-in iPhone app.
+3. Confirm `pushman status` and `pushman devices` work before adding the MCP server.
 
-Pairing is preferred because it supports every MCP tool and stores the credential in the native operating-system keyring. A process-scoped `PUSHMAN_TOKEN` can send notifications but intentionally cannot read devices, history, usage, status, or diagnostics. Never paste a token into a checked-in MCP configuration.
+Browser login and app pairing issue the same account CLI permission set, support every MCP tool, and store the credential in the native operating-system keyring. A process-scoped `PUSHMAN_TOKEN` can send notifications but intentionally cannot read devices, history, usage, status, or diagnostics. Never paste a token into a checked-in MCP configuration.
 
 ## Connect a client
 
@@ -50,13 +49,13 @@ The server is a long-running stdio subprocess. Do not start it manually and expe
 
 | Tool | Effect | Authentication |
 | --- | --- | --- |
-| `pushman_send_notification` | Sends one notification and consumes one accepted-send allowance | Paired credential or `PUSHMAN_TOKEN` |
-| `pushman_list_devices` | Reads receiving device names and eligibility states | Paired credential |
-| `pushman_list_history` | Reads the paired sender's retained seven-day history | Paired credential |
-| `pushman_get_message` | Reads one retained message, revisions, and delivery states | Paired credential |
-| `pushman_get_usage` | Reads monthly usage, limit, and reset time | Paired credential |
-| `pushman_get_status` | Reads local pairing state and sender nickname | Paired credential |
-| `pushman_doctor` | Runs non-mutating credential and service connectivity checks | Paired credential |
+| `pushman_send_notification` | Sends one notification and consumes one accepted-send allowance | Account CLI credential or `PUSHMAN_TOKEN` |
+| `pushman_list_devices` | Reads receiving device names and eligibility states | Account CLI credential |
+| `pushman_list_history` | Reads the sender's retained seven-day history | Account CLI credential |
+| `pushman_get_message` | Reads one retained message, revisions, and delivery states | Account CLI credential |
+| `pushman_get_usage` | Reads monthly usage, limit, and reset time | Account CLI credential |
+| `pushman_get_status` | Reads local authorization state and sender nickname | Account CLI credential |
+| `pushman_doctor` | Runs non-mutating credential and service connectivity checks | Account CLI credential |
 
 The send tool is explicitly described to clients as non-read-only, non-idempotent, non-destructive/additive, and open-world. All other tools are read-only and open-world because they contact the hosted Pushman service. Tool annotations are safety hints, not an authorization boundary; the hosted API still enforces the credential's capabilities and account quota.
 
@@ -85,7 +84,7 @@ pushman devices
 pushman doctor
 ```
 
-If the client reports that `pushman` cannot be found, configure the absolute path printed by `command -v pushman`. If read tools report an authorization error, pair the CLI rather than supplying an automation token. On macOS, approve a Keychain access prompt if the MCP host causes one to appear.
+If the client reports that `pushman` cannot be found, configure the absolute path printed by `command -v pushman`. If read tools report an authorization error, run `pushman login` or `pushman pair` rather than supplying an automation token. On macOS, approve a Keychain access prompt if the MCP host causes one to appear.
 
 Closing the client's stdio connection stops the server cleanly. `Ctrl-C` or client cancellation also stops it. Protocol or tool errors are returned to the MCP client; Pushman does not upload CLI crash reports or MCP telemetry.
 

@@ -94,6 +94,54 @@ func TestPairOutput(t *testing.T) {
 	}
 }
 
+func TestLoginOpensCompleteURLOnlyForInteractiveTerminal(t *testing.T) {
+	t.Parallel()
+	service := stubService{loginResult: PairResult{Nickname: "Build Mac"}}
+	out, errOut := new(bytes.Buffer), new(bytes.Buffer)
+	var opened string
+	cmd := New(Dependencies{
+		Out: out, ErrOut: errOut, IsTerminal: func() bool { return true },
+		Hostname: func() (string, error) { return "Build Mac", nil }, Service: service,
+		OpenBrowser: func(value string) error { opened = value; return nil },
+	})
+	cmd.SetArgs([]string{"login"})
+	if err := cmd.Execute(); err != nil {
+		t.Fatal(err)
+	}
+	want := "Login code: ABCD-EFGH\nVerify at: https://app.pushman.example/activate/\nLogged in as Build Mac\n"
+	if out.String() != want || opened != "https://app.pushman.example/activate/?user_code=ABCD-EFGH" {
+		t.Fatalf("output/opened = %q / %q", out.String(), opened)
+	}
+}
+
+func TestLoginDoesNotOpenBrowserWhenDisabledOrNonInteractive(t *testing.T) {
+	for _, test := range []struct {
+		name     string
+		terminal bool
+		args     []string
+	}{
+		{name: "disabled", terminal: true, args: []string{"login", "--no-browser"}},
+		{name: "non-interactive", terminal: false, args: []string{"login"}},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			opened := false
+			cmd := New(Dependencies{
+				Out: new(bytes.Buffer), IsTerminal: func() bool { return test.terminal },
+				Hostname:    func() (string, error) { return "Build Mac", nil },
+				Service:     stubService{loginResult: PairResult{Nickname: "Build Mac"}},
+				OpenBrowser: func(string) error { opened = true; return nil },
+			})
+			cmd.SetArgs(test.args)
+			if err := cmd.Execute(); err != nil {
+				t.Fatal(err)
+			}
+			if opened {
+				t.Fatal("browser was opened")
+			}
+		})
+	}
+}
+
 func TestPairingVerificationURL(t *testing.T) {
 	t.Parallel()
 	got, err := pairingVerificationURL("https://app.pushman.example/pair/?source=cli#ignored", "ABCD-EFGH")
@@ -111,7 +159,7 @@ func TestPairingVerificationURL(t *testing.T) {
 func TestCommandSurface(t *testing.T) {
 	t.Parallel()
 	root := New(Dependencies{})
-	for _, path := range [][]string{{"pair"}, {"status"}, {"rename"}, {"logout"}, {"push"}, {"devices"}, {"history"}, {"history", "show"}, {"usage"}, {"doctor"}, {"mcp"}, {"version"}, {"help"}} {
+	for _, path := range [][]string{{"pair"}, {"login"}, {"status"}, {"rename"}, {"logout"}, {"push"}, {"devices"}, {"history"}, {"history", "show"}, {"usage"}, {"doctor"}, {"mcp"}, {"version"}, {"help"}} {
 		if _, _, err := root.Find(path); err != nil {
 			t.Errorf("command %q missing: %v", strings.Join(path, " "), err)
 		}
@@ -150,8 +198,21 @@ func TestExitCode(t *testing.T) {
 
 type stubService struct {
 	UnconfiguredService
-	pushResult PushResult
-	pairResult PairResult
+	pushResult  PushResult
+	pairResult  PairResult
+	loginResult PairResult
+}
+
+func (s stubService) Login(_ context.Context, request LoginRequest) (PairResult, error) {
+	if request.OnChallenge != nil {
+		if err := request.OnChallenge(LoginChallenge{
+			UserCode: "ABCD-EFGH", VerificationURL: "https://app.pushman.example/activate/",
+			CompleteURL: "https://app.pushman.example/activate/?user_code=ABCD-EFGH",
+		}); err != nil {
+			return PairResult{}, err
+		}
+	}
+	return s.loginResult, nil
 }
 
 func (s stubService) Push(context.Context, PushRequest) (PushResult, error) { return s.pushResult, nil }

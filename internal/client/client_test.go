@@ -72,6 +72,59 @@ func TestPairStoresCredentialOnlyAfterApproval(t *testing.T) {
 	}
 }
 
+func TestLoginPollsDeviceFlowAndStoresCredential(t *testing.T) {
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
+		response.Header().Set("Content-Type", "application/json")
+		switch {
+		case request.Method == http.MethodPost && request.URL.Path == "/v1/device-authorizations":
+			if err := request.ParseForm(); err != nil {
+				t.Fatal(err)
+			}
+			if request.Form.Get("client_id") != "pushman-cli" || request.Form.Get("platform") != "darwin" || request.Form.Get("suggested_name") != "Build Mac" {
+				t.Fatalf("authorization form = %v", request.Form)
+			}
+			_, _ = response.Write([]byte(`{"device_code":"device-secret","user_code":"ABCD-EFGH","verification_uri":"https://app.pushman.example/activate/","verification_uri_complete":"https://app.pushman.example/activate/?user_code=ABCD-EFGH","expires_in":600,"interval":5}`))
+		case request.Method == http.MethodPost && request.URL.Path == "/v1/oauth/token":
+			requests++
+			if err := request.ParseForm(); err != nil {
+				t.Fatal(err)
+			}
+			if request.Form.Get("device_code") != "device-secret" || request.Form.Get("grant_type") != "urn:ietf:params:oauth:grant-type:device_code" {
+				t.Fatalf("token form = %v", request.Form)
+			}
+			if requests == 1 {
+				response.WriteHeader(http.StatusBadRequest)
+				_, _ = response.Write([]byte(`{"error":"authorization_pending"}`))
+				return
+			}
+			_, _ = response.Write([]byte(`{"access_token":"pm_cli_web","token_type":"Bearer","scope":"push devices:read history:read usage:read","sender_name":"Build Mac"}`))
+		default:
+			http.NotFound(response, request)
+		}
+	}))
+	defer server.Close()
+
+	credentials := new(memoryCredentials)
+	service, err := New(server.URL+"/v1", credentials, "", server.Client())
+	if err != nil {
+		t.Fatal(err)
+	}
+	service.wait = func(context.Context, time.Duration) error { return nil }
+	var challenge cli.LoginChallenge
+	result, err := service.Login(context.Background(), cli.LoginRequest{
+		Platform: "darwin", SuggestedName: "Build Mac",
+		OnChallenge: func(value cli.LoginChallenge) error { challenge = value; return nil },
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if requests != 2 || challenge.UserCode != "ABCD-EFGH" || challenge.CompleteURL == "" ||
+		result.Nickname != "Build Mac" || credentials.token != "pm_cli_web" {
+		t.Fatalf("requests/challenge/result/token = %d / %#v / %#v / %q", requests, challenge, result, credentials.token)
+	}
+}
+
 func TestPushPrefersAutomationToken(t *testing.T) {
 	var authorization string
 	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {

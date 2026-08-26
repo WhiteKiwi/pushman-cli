@@ -74,6 +74,36 @@ func (e DevicePlatform) Valid() bool {
 	}
 }
 
+// Defines values for DeviceTokenScope.
+const (
+	DeviceTokenScopePushDevicesReadHistoryReadUsageRead DeviceTokenScope = "push devices:read history:read usage:read"
+)
+
+// Valid indicates whether the value is a known member of the DeviceTokenScope enum.
+func (e DeviceTokenScope) Valid() bool {
+	switch e {
+	case DeviceTokenScopePushDevicesReadHistoryReadUsageRead:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for DeviceTokenTokenType.
+const (
+	Bearer DeviceTokenTokenType = "Bearer"
+)
+
+// Valid indicates whether the value is a known member of the DeviceTokenTokenType enum.
+func (e DeviceTokenTokenType) Valid() bool {
+	switch e {
+	case Bearer:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for MessageInputFormat.
 const (
 	MessageInputFormatMonospace MessageInputFormat = "monospace"
@@ -146,6 +176,36 @@ func (e MessageRevisionSound) Valid() bool {
 	}
 }
 
+// Defines values for OAuthErrorError.
+const (
+	AccessDenied         OAuthErrorError = "access_denied"
+	AuthorizationPending OAuthErrorError = "authorization_pending"
+	ExpiredToken         OAuthErrorError = "expired_token"
+	InvalidGrant         OAuthErrorError = "invalid_grant"
+	InvalidRequest       OAuthErrorError = "invalid_request"
+	SlowDown             OAuthErrorError = "slow_down"
+)
+
+// Valid indicates whether the value is a known member of the OAuthErrorError enum.
+func (e OAuthErrorError) Valid() bool {
+	switch e {
+	case AccessDenied:
+		return true
+	case AuthorizationPending:
+		return true
+	case ExpiredToken:
+		return true
+	case InvalidGrant:
+		return true
+	case InvalidRequest:
+		return true
+	case SlowDown:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for PairingStatus.
 const (
 	PairingStatusApproved PairingStatus = "approved"
@@ -185,6 +245,24 @@ func (e PairingCreatedStatus) Valid() bool {
 	}
 }
 
+// Defines values for SenderCredentialAuthorizationMethod.
+const (
+	AppPair  SenderCredentialAuthorizationMethod = "app_pair"
+	WebLogin SenderCredentialAuthorizationMethod = "web_login"
+)
+
+// Valid indicates whether the value is a known member of the SenderCredentialAuthorizationMethod enum.
+func (e SenderCredentialAuthorizationMethod) Valid() bool {
+	switch e {
+	case AppPair:
+		return true
+	case WebLogin:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for SenderCredentialKind.
 const (
 	Automation SenderCredentialKind = "automation"
@@ -203,21 +281,102 @@ func (e SenderCredentialKind) Valid() bool {
 	}
 }
 
+// Defines values for CreateDeviceAuthorizationFormdataBodyClientId.
+const (
+	CreateDeviceAuthorizationFormdataBodyClientIdPushmanCli CreateDeviceAuthorizationFormdataBodyClientId = "pushman-cli"
+)
+
+// Valid indicates whether the value is a known member of the CreateDeviceAuthorizationFormdataBodyClientId enum.
+func (e CreateDeviceAuthorizationFormdataBodyClientId) Valid() bool {
+	switch e {
+	case CreateDeviceAuthorizationFormdataBodyClientIdPushmanCli:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateDeviceAuthorizationFormdataBodyPlatform.
+const (
+	CreateDeviceAuthorizationFormdataBodyPlatformDarwin  CreateDeviceAuthorizationFormdataBodyPlatform = "darwin"
+	CreateDeviceAuthorizationFormdataBodyPlatformLinux   CreateDeviceAuthorizationFormdataBodyPlatform = "linux"
+	CreateDeviceAuthorizationFormdataBodyPlatformWindows CreateDeviceAuthorizationFormdataBodyPlatform = "windows"
+)
+
+// Valid indicates whether the value is a known member of the CreateDeviceAuthorizationFormdataBodyPlatform enum.
+func (e CreateDeviceAuthorizationFormdataBodyPlatform) Valid() bool {
+	switch e {
+	case CreateDeviceAuthorizationFormdataBodyPlatformDarwin:
+		return true
+	case CreateDeviceAuthorizationFormdataBodyPlatformLinux:
+		return true
+	case CreateDeviceAuthorizationFormdataBodyPlatformWindows:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateDeviceAuthorizationFormdataBodyScope.
+const (
+	CreateDeviceAuthorizationFormdataBodyScopePushDevicesReadHistoryReadUsageRead CreateDeviceAuthorizationFormdataBodyScope = "push devices:read history:read usage:read"
+)
+
+// Valid indicates whether the value is a known member of the CreateDeviceAuthorizationFormdataBodyScope enum.
+func (e CreateDeviceAuthorizationFormdataBodyScope) Valid() bool {
+	switch e {
+	case CreateDeviceAuthorizationFormdataBodyScopePushDevicesReadHistoryReadUsageRead:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ExchangeDeviceCodeFormdataBodyClientId.
+const (
+	ExchangeDeviceCodeFormdataBodyClientIdPushmanCli ExchangeDeviceCodeFormdataBodyClientId = "pushman-cli"
+)
+
+// Valid indicates whether the value is a known member of the ExchangeDeviceCodeFormdataBodyClientId enum.
+func (e ExchangeDeviceCodeFormdataBodyClientId) Valid() bool {
+	switch e {
+	case ExchangeDeviceCodeFormdataBodyClientIdPushmanCli:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ExchangeDeviceCodeFormdataBodyGrantType.
+const (
+	UrnIetfParamsOauthGrantTypeDeviceCode ExchangeDeviceCodeFormdataBodyGrantType = "urn:ietf:params:oauth:grant-type:device_code"
+)
+
+// Valid indicates whether the value is a known member of the ExchangeDeviceCodeFormdataBodyGrantType enum.
+func (e ExchangeDeviceCodeFormdataBodyGrantType) Valid() bool {
+	switch e {
+	case UrnIetfParamsOauthGrantTypeDeviceCode:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for CreatePairingJSONBodyPlatform.
 const (
-	Darwin  CreatePairingJSONBodyPlatform = "darwin"
-	Linux   CreatePairingJSONBodyPlatform = "linux"
-	Windows CreatePairingJSONBodyPlatform = "windows"
+	CreatePairingJSONBodyPlatformDarwin  CreatePairingJSONBodyPlatform = "darwin"
+	CreatePairingJSONBodyPlatformLinux   CreatePairingJSONBodyPlatform = "linux"
+	CreatePairingJSONBodyPlatformWindows CreatePairingJSONBodyPlatform = "windows"
 )
 
 // Valid indicates whether the value is a known member of the CreatePairingJSONBodyPlatform enum.
 func (e CreatePairingJSONBodyPlatform) Valid() bool {
 	switch e {
-	case Darwin:
+	case CreatePairingJSONBodyPlatformDarwin:
 		return true
-	case Linux:
+	case CreatePairingJSONBodyPlatformLinux:
 		return true
-	case Windows:
+	case CreatePairingJSONBodyPlatformWindows:
 		return true
 	default:
 		return false
@@ -242,8 +401,33 @@ type DeviceNotificationStatus string
 // DevicePlatform defines model for Device.Platform.
 type DevicePlatform string
 
+// DeviceAuthorization defines model for DeviceAuthorization.
+type DeviceAuthorization struct {
+	// DeviceCode High-entropy polling secret that must never be displayed or put in a URL.
+	DeviceCode              string `json:"device_code"`
+	ExpiresIn               int    `json:"expires_in"`
+	Interval                int    `json:"interval"`
+	UserCode                string `json:"user_code"`
+	VerificationUri         string `json:"verification_uri"`
+	VerificationUriComplete string `json:"verification_uri_complete"`
+}
+
 // DeviceId defines model for DeviceId.
 type DeviceId = string
+
+// DeviceToken defines model for DeviceToken.
+type DeviceToken struct {
+	AccessToken string               `json:"access_token"`
+	Scope       DeviceTokenScope     `json:"scope"`
+	SenderName  string               `json:"sender_name"`
+	TokenType   DeviceTokenTokenType `json:"token_type"`
+}
+
+// DeviceTokenScope defines model for DeviceToken.Scope.
+type DeviceTokenScope string
+
+// DeviceTokenTokenType defines model for DeviceToken.TokenType.
+type DeviceTokenTokenType string
 
 // Error defines model for Error.
 type Error struct {
@@ -359,6 +543,15 @@ type MessageSummary struct {
 	UpdateCount      int              `json:"updateCount"`
 }
 
+// OAuthError defines model for OAuthError.
+type OAuthError struct {
+	Error            OAuthErrorError `json:"error"`
+	ErrorDescription *string         `json:"error_description,omitempty"`
+}
+
+// OAuthErrorError defines model for OAuthError.Error.
+type OAuthErrorError string
+
 // Pairing defines model for Pairing.
 type Pairing struct {
 	// Credential Returned once after pairing approval or token creation.
@@ -400,12 +593,17 @@ type RestrictedIdentifier = string
 
 // SenderCredential defines model for SenderCredential.
 type SenderCredential struct {
-	CreatedAt  time.Time            `json:"createdAt"`
-	Id         string               `json:"id"`
-	Kind       SenderCredentialKind `json:"kind"`
-	LastUsedAt *time.Time           `json:"lastUsedAt,omitempty"`
-	Name       string               `json:"name"`
+	// AuthorizationMethod Approval path for CLI credentials; omitted for automation tokens.
+	AuthorizationMethod *SenderCredentialAuthorizationMethod `json:"authorizationMethod,omitempty"`
+	CreatedAt           time.Time                            `json:"createdAt"`
+	Id                  string                               `json:"id"`
+	Kind                SenderCredentialKind                 `json:"kind"`
+	LastUsedAt          *time.Time                           `json:"lastUsedAt,omitempty"`
+	Name                string                               `json:"name"`
 }
+
+// SenderCredentialAuthorizationMethod Approval path for CLI credentials; omitted for automation tokens.
+type SenderCredentialAuthorizationMethod string
 
 // SenderCredentialKind defines model for SenderCredential.Kind.
 type SenderCredentialKind string
@@ -427,11 +625,41 @@ type Limit = int
 // APIError defines model for APIError.
 type APIError = ErrorResponse
 
+// CreateDeviceAuthorizationFormdataBody defines parameters for CreateDeviceAuthorization.
+type CreateDeviceAuthorizationFormdataBody struct {
+	ClientId      CreateDeviceAuthorizationFormdataBodyClientId `form:"client_id" json:"client_id"`
+	Platform      CreateDeviceAuthorizationFormdataBodyPlatform `form:"platform" json:"platform"`
+	Scope         *CreateDeviceAuthorizationFormdataBodyScope   `form:"scope,omitempty" json:"scope,omitempty"`
+	SuggestedName string                                        `form:"suggested_name" json:"suggested_name"`
+}
+
+// CreateDeviceAuthorizationFormdataBodyClientId defines parameters for CreateDeviceAuthorization.
+type CreateDeviceAuthorizationFormdataBodyClientId string
+
+// CreateDeviceAuthorizationFormdataBodyPlatform defines parameters for CreateDeviceAuthorization.
+type CreateDeviceAuthorizationFormdataBodyPlatform string
+
+// CreateDeviceAuthorizationFormdataBodyScope defines parameters for CreateDeviceAuthorization.
+type CreateDeviceAuthorizationFormdataBodyScope string
+
 // ListOwnMessagesParams defines parameters for ListOwnMessages.
 type ListOwnMessagesParams struct {
 	Cursor *Cursor `form:"cursor,omitempty" json:"cursor,omitempty"`
 	Limit  *Limit  `form:"limit,omitempty" json:"limit,omitempty"`
 }
+
+// ExchangeDeviceCodeFormdataBody defines parameters for ExchangeDeviceCode.
+type ExchangeDeviceCodeFormdataBody struct {
+	ClientId   ExchangeDeviceCodeFormdataBodyClientId  `form:"client_id" json:"client_id"`
+	DeviceCode string                                  `form:"device_code" json:"device_code"`
+	GrantType  ExchangeDeviceCodeFormdataBodyGrantType `form:"grant_type" json:"grant_type"`
+}
+
+// ExchangeDeviceCodeFormdataBodyClientId defines parameters for ExchangeDeviceCode.
+type ExchangeDeviceCodeFormdataBodyClientId string
+
+// ExchangeDeviceCodeFormdataBodyGrantType defines parameters for ExchangeDeviceCode.
+type ExchangeDeviceCodeFormdataBodyGrantType string
 
 // CreatePairingJSONBody defines parameters for CreatePairing.
 type CreatePairingJSONBody struct {
@@ -453,8 +681,14 @@ type UpdateCurrentSenderCredentialJSONBody struct {
 	Name string `json:"name"`
 }
 
+// CreateDeviceAuthorizationFormdataRequestBody defines body for CreateDeviceAuthorization for application/x-www-form-urlencoded ContentType.
+type CreateDeviceAuthorizationFormdataRequestBody CreateDeviceAuthorizationFormdataBody
+
 // CreateMessageJSONRequestBody defines body for CreateMessage for application/json ContentType.
 type CreateMessageJSONRequestBody = MessageInput
+
+// ExchangeDeviceCodeFormdataRequestBody defines body for ExchangeDeviceCode for application/x-www-form-urlencoded ContentType.
+type ExchangeDeviceCodeFormdataRequestBody ExchangeDeviceCodeFormdataBody
 
 // CreatePairingJSONRequestBody defines body for CreatePairing for application/json ContentType.
 type CreatePairingJSONRequestBody CreatePairingJSONBody
@@ -536,6 +770,20 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 // The interface specification for the client above.
 type ClientInterface interface {
 
+	// CreateDeviceAuthorizationWithBody Start browser-assisted CLI account authorization.
+	//
+	// Takes any type of body and a specified content type.
+	//
+	// Corresponds with POST /device-authorizations (the `CreateDeviceAuthorization` operationId).
+	CreateDeviceAuthorizationWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateDeviceAuthorizationWithFormdataBody Start browser-assisted CLI account authorization.
+	//
+	// Takes a body of the `application/x-www-form-urlencoded` content type.
+	//
+	// Corresponds with POST /device-authorizations (the `CreateDeviceAuthorization` operationId).
+	CreateDeviceAuthorizationWithFormdataBody(ctx context.Context, body CreateDeviceAuthorizationFormdataRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// ListDevices List receiving devices visible to the sender.
 	//
 	// Corresponds with GET /devices (the `ListDevices` operationId).
@@ -564,6 +812,20 @@ type ClientInterface interface {
 	//
 	// Corresponds with GET /messages/{messageId} (the `GetOwnMessage` operationId).
 	GetOwnMessage(ctx context.Context, messageId MessageId, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ExchangeDeviceCodeWithBody Exchange an approved device code for a CLI credential.
+	//
+	// Takes any type of body and a specified content type.
+	//
+	// Corresponds with POST /oauth/token (the `ExchangeDeviceCode` operationId).
+	ExchangeDeviceCodeWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ExchangeDeviceCodeWithFormdataBody Exchange an approved device code for a CLI credential.
+	//
+	// Takes a body of the `application/x-www-form-urlencoded` content type.
+	//
+	// Corresponds with POST /oauth/token (the `ExchangeDeviceCode` operationId).
+	ExchangeDeviceCodeWithFormdataBody(ctx context.Context, body ExchangeDeviceCodeFormdataRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// CreatePairingWithBody Start pairing a CLI.
 	//
@@ -612,6 +874,40 @@ type ClientInterface interface {
 	//
 	// Corresponds with GET /usage (the `GetUsage` operationId).
 	GetUsage(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+}
+
+// CreateDeviceAuthorizationWithBody Start browser-assisted CLI account authorization.
+//
+// Takes any type of body and a specified content type.
+//
+// Corresponds with POST /device-authorizations (the `CreateDeviceAuthorization` operationId).
+func (c *Client) CreateDeviceAuthorizationWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateDeviceAuthorizationRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreateDeviceAuthorizationWithFormdataBody Start browser-assisted CLI account authorization.
+//
+// Takes a body of the `application/x-www-form-urlencoded` content type.
+//
+// Corresponds with POST /device-authorizations (the `CreateDeviceAuthorization` operationId).
+func (c *Client) CreateDeviceAuthorizationWithFormdataBody(ctx context.Context, body CreateDeviceAuthorizationFormdataRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateDeviceAuthorizationRequestWithFormdataBody(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
 }
 
 // ListDevices List receiving devices visible to the sender.
@@ -683,6 +979,40 @@ func (c *Client) CreateMessage(ctx context.Context, body CreateMessageJSONReques
 // Corresponds with GET /messages/{messageId} (the `GetOwnMessage` operationId).
 func (c *Client) GetOwnMessage(ctx context.Context, messageId MessageId, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetOwnMessageRequest(c.Server, messageId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// ExchangeDeviceCodeWithBody Exchange an approved device code for a CLI credential.
+//
+// Takes any type of body and a specified content type.
+//
+// Corresponds with POST /oauth/token (the `ExchangeDeviceCode` operationId).
+func (c *Client) ExchangeDeviceCodeWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewExchangeDeviceCodeRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// ExchangeDeviceCodeWithFormdataBody Exchange an approved device code for a CLI credential.
+//
+// Takes a body of the `application/x-www-form-urlencoded` content type.
+//
+// Corresponds with POST /oauth/token (the `ExchangeDeviceCode` operationId).
+func (c *Client) ExchangeDeviceCodeWithFormdataBody(ctx context.Context, body ExchangeDeviceCodeFormdataRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewExchangeDeviceCodeRequestWithFormdataBody(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -819,6 +1149,46 @@ func (c *Client) GetUsage(ctx context.Context, reqEditors ...RequestEditorFn) (*
 		return nil, err
 	}
 	return c.Client.Do(req)
+}
+
+// NewCreateDeviceAuthorizationRequestWithFormdataBody calls the generic CreateDeviceAuthorization builder with application/x-www-form-urlencoded body
+func NewCreateDeviceAuthorizationRequestWithFormdataBody(server string, body CreateDeviceAuthorizationFormdataRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	bodyStr, err := runtime.MarshalForm(body, nil)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = strings.NewReader(bodyStr.Encode())
+	return NewCreateDeviceAuthorizationRequestWithBody(server, "application/x-www-form-urlencoded", bodyReader)
+}
+
+// NewCreateDeviceAuthorizationRequestWithBody constructs an http.Request for the CreateDeviceAuthorization method, with any body, and a specified content type
+func NewCreateDeviceAuthorizationRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/device-authorizations")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
 }
 
 // NewListDevicesRequest constructs an http.Request for the ListDevices method
@@ -984,6 +1354,46 @@ func NewGetOwnMessageRequest(server string, messageId MessageId) (*http.Request,
 	if err != nil {
 		return nil, err
 	}
+
+	return req, nil
+}
+
+// NewExchangeDeviceCodeRequestWithFormdataBody calls the generic ExchangeDeviceCode builder with application/x-www-form-urlencoded body
+func NewExchangeDeviceCodeRequestWithFormdataBody(server string, body ExchangeDeviceCodeFormdataRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	bodyStr, err := runtime.MarshalForm(body, nil)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = strings.NewReader(bodyStr.Encode())
+	return NewExchangeDeviceCodeRequestWithBody(server, "application/x-www-form-urlencoded", bodyReader)
+}
+
+// NewExchangeDeviceCodeRequestWithBody constructs an http.Request for the ExchangeDeviceCode method, with any body, and a specified content type
+func NewExchangeDeviceCodeRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/oauth/token")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
 
 	return req, nil
 }
@@ -1240,6 +1650,20 @@ func WithBaseURL(baseURL string) ClientOption {
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
 
+	// CreateDeviceAuthorizationWithBodyWithResponse Start browser-assisted CLI account authorization.
+	//
+	// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with POST /device-authorizations (the `CreateDeviceAuthorization` operationId).
+	CreateDeviceAuthorizationWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateDeviceAuthorizationResponse, error)
+
+	// CreateDeviceAuthorizationWithFormdataBodyWithResponse Start browser-assisted CLI account authorization.
+	//
+	// Takes a body of the `application/x-www-form-urlencoded` content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with POST /device-authorizations (the `CreateDeviceAuthorization` operationId).
+	CreateDeviceAuthorizationWithFormdataBodyWithResponse(ctx context.Context, body CreateDeviceAuthorizationFormdataRequestBody, reqEditors ...RequestEditorFn) (*CreateDeviceAuthorizationResponse, error)
+
 	// ListDevicesWithResponse List receiving devices visible to the sender.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -1274,6 +1698,20 @@ type ClientWithResponsesInterface interface {
 	//
 	// Corresponds with GET /messages/{messageId} (the `GetOwnMessage` operationId).
 	GetOwnMessageWithResponse(ctx context.Context, messageId MessageId, reqEditors ...RequestEditorFn) (*GetOwnMessageResponse, error)
+
+	// ExchangeDeviceCodeWithBodyWithResponse Exchange an approved device code for a CLI credential.
+	//
+	// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with POST /oauth/token (the `ExchangeDeviceCode` operationId).
+	ExchangeDeviceCodeWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ExchangeDeviceCodeResponse, error)
+
+	// ExchangeDeviceCodeWithFormdataBodyWithResponse Exchange an approved device code for a CLI credential.
+	//
+	// Takes a body of the `application/x-www-form-urlencoded` content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with POST /oauth/token (the `ExchangeDeviceCode` operationId).
+	ExchangeDeviceCodeWithFormdataBodyWithResponse(ctx context.Context, body ExchangeDeviceCodeFormdataRequestBody, reqEditors ...RequestEditorFn) (*ExchangeDeviceCodeResponse, error)
 
 	// CreatePairingWithBodyWithResponse Start pairing a CLI.
 	//
@@ -1330,6 +1768,62 @@ type ClientWithResponsesInterface interface {
 	//
 	// Corresponds with GET /usage (the `GetUsage` operationId).
 	GetUsageWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetUsageResponse, error)
+}
+
+// CreateDeviceAuthorizationResponseDefaultHeaders the declared response headers of an HTTP default response for CreateDeviceAuthorization
+type CreateDeviceAuthorizationResponseDefaultHeaders struct {
+	RetryAfter *int
+	XRequestID *string
+}
+
+type CreateDeviceAuthorizationResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *DeviceAuthorization
+	// JSONDefault the response for an HTTP default `application/json` response
+	JSONDefault *APIError
+	// HeadersDefault the parsed response headers for an HTTP default response
+	HeadersDefault *CreateDeviceAuthorizationResponseDefaultHeaders
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r CreateDeviceAuthorizationResponse) GetJSON200() *DeviceAuthorization {
+	return r.JSON200
+}
+
+// GetJSONDefault returns the response for an HTTP default `application/json` response
+func (r CreateDeviceAuthorizationResponse) GetJSONDefault() *APIError {
+	return r.JSONDefault
+}
+
+// GetBody returns the raw response body bytes
+func (r CreateDeviceAuthorizationResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateDeviceAuthorizationResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateDeviceAuthorizationResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r CreateDeviceAuthorizationResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
 }
 
 // ListDevicesResponseDefaultHeaders the declared response headers of an HTTP default response for ListDevices
@@ -1554,6 +2048,69 @@ func (r GetOwnMessageResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r GetOwnMessageResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+// ExchangeDeviceCodeResponseDefaultHeaders the declared response headers of an HTTP default response for ExchangeDeviceCode
+type ExchangeDeviceCodeResponseDefaultHeaders struct {
+	RetryAfter *int
+	XRequestID *string
+}
+
+type ExchangeDeviceCodeResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *DeviceToken
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *OAuthError
+	// JSONDefault the response for an HTTP default `application/json` response
+	JSONDefault *APIError
+	// HeadersDefault the parsed response headers for an HTTP default response
+	HeadersDefault *ExchangeDeviceCodeResponseDefaultHeaders
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ExchangeDeviceCodeResponse) GetJSON200() *DeviceToken {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r ExchangeDeviceCodeResponse) GetJSON400() *OAuthError {
+	return r.JSON400
+}
+
+// GetJSONDefault returns the response for an HTTP default `application/json` response
+func (r ExchangeDeviceCodeResponse) GetJSONDefault() *APIError {
+	return r.JSONDefault
+}
+
+// GetBody returns the raw response body bytes
+func (r ExchangeDeviceCodeResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ExchangeDeviceCodeResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ExchangeDeviceCodeResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ExchangeDeviceCodeResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -1889,6 +2446,32 @@ func (r GetUsageResponse) ContentType() string {
 	return ""
 }
 
+// CreateDeviceAuthorizationWithBodyWithResponse Start browser-assisted CLI account authorization.
+//
+// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
+//
+// Corresponds with POST /device-authorizations (the `CreateDeviceAuthorization` operationId).
+func (c *ClientWithResponses) CreateDeviceAuthorizationWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateDeviceAuthorizationResponse, error) {
+	rsp, err := c.CreateDeviceAuthorizationWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateDeviceAuthorizationResponse(rsp)
+}
+
+// CreateDeviceAuthorizationWithFormdataBodyWithResponse Start browser-assisted CLI account authorization.
+//
+// Takes a body of the `application/x-www-form-urlencoded` content type, and returns a wrapper object for the known response body format(s).
+//
+// Corresponds with POST /device-authorizations (the `CreateDeviceAuthorization` operationId).
+func (c *ClientWithResponses) CreateDeviceAuthorizationWithFormdataBodyWithResponse(ctx context.Context, body CreateDeviceAuthorizationFormdataRequestBody, reqEditors ...RequestEditorFn) (*CreateDeviceAuthorizationResponse, error) {
+	rsp, err := c.CreateDeviceAuthorizationWithFormdataBody(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateDeviceAuthorizationResponse(rsp)
+}
+
 // ListDevicesWithResponse List receiving devices visible to the sender.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -1952,6 +2535,32 @@ func (c *ClientWithResponses) GetOwnMessageWithResponse(ctx context.Context, mes
 		return nil, err
 	}
 	return ParseGetOwnMessageResponse(rsp)
+}
+
+// ExchangeDeviceCodeWithBodyWithResponse Exchange an approved device code for a CLI credential.
+//
+// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
+//
+// Corresponds with POST /oauth/token (the `ExchangeDeviceCode` operationId).
+func (c *ClientWithResponses) ExchangeDeviceCodeWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ExchangeDeviceCodeResponse, error) {
+	rsp, err := c.ExchangeDeviceCodeWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseExchangeDeviceCodeResponse(rsp)
+}
+
+// ExchangeDeviceCodeWithFormdataBodyWithResponse Exchange an approved device code for a CLI credential.
+//
+// Takes a body of the `application/x-www-form-urlencoded` content type, and returns a wrapper object for the known response body format(s).
+//
+// Corresponds with POST /oauth/token (the `ExchangeDeviceCode` operationId).
+func (c *ClientWithResponses) ExchangeDeviceCodeWithFormdataBodyWithResponse(ctx context.Context, body ExchangeDeviceCodeFormdataRequestBody, reqEditors ...RequestEditorFn) (*ExchangeDeviceCodeResponse, error) {
+	rsp, err := c.ExchangeDeviceCodeWithFormdataBody(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseExchangeDeviceCodeResponse(rsp)
 }
 
 // CreatePairingWithBodyWithResponse Start pairing a CLI.
@@ -2056,6 +2665,59 @@ func (c *ClientWithResponses) GetUsageWithResponse(ctx context.Context, reqEdito
 		return nil, err
 	}
 	return ParseGetUsageResponse(rsp)
+}
+
+// ParseCreateDeviceAuthorizationResponse parses an HTTP response from a CreateDeviceAuthorizationWithResponse call
+func ParseCreateDeviceAuthorizationResponse(rsp *http.Response) (*CreateDeviceAuthorizationResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateDeviceAuthorizationResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest DeviceAuthorization
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest APIError
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	switch {
+	case true:
+		var headers CreateDeviceAuthorizationResponseDefaultHeaders
+		if values := rsp.Header.Values("Retry-After"); len(values) > 0 {
+			var value int
+			if err := runtime.BindStyledParameterWithOptions("simple", "Retry-After", values[0], &value, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationHeader, Explode: false, Required: false, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			}
+			headers.RetryAfter = &value
+		}
+		if values := rsp.Header.Values("X-Request-ID"); len(values) > 0 {
+			var value string
+			if err := runtime.BindStyledParameterWithOptions("simple", "X-Request-ID", values[0], &value, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationHeader, Explode: false, Required: false, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			}
+			headers.XRequestID = &value
+		}
+		response.HeadersDefault = &headers
+	}
+
+	return response, nil
 }
 
 // ParseListDevicesResponse parses an HTTP response from a ListDevicesWithResponse call
@@ -2252,6 +2914,66 @@ func ParseGetOwnMessageResponse(rsp *http.Response) (*GetOwnMessageResponse, err
 	switch {
 	case true:
 		var headers GetOwnMessageResponseDefaultHeaders
+		if values := rsp.Header.Values("Retry-After"); len(values) > 0 {
+			var value int
+			if err := runtime.BindStyledParameterWithOptions("simple", "Retry-After", values[0], &value, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationHeader, Explode: false, Required: false, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			}
+			headers.RetryAfter = &value
+		}
+		if values := rsp.Header.Values("X-Request-ID"); len(values) > 0 {
+			var value string
+			if err := runtime.BindStyledParameterWithOptions("simple", "X-Request-ID", values[0], &value, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationHeader, Explode: false, Required: false, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			}
+			headers.XRequestID = &value
+		}
+		response.HeadersDefault = &headers
+	}
+
+	return response, nil
+}
+
+// ParseExchangeDeviceCodeResponse parses an HTTP response from a ExchangeDeviceCodeWithResponse call
+func ParseExchangeDeviceCodeResponse(rsp *http.Response) (*ExchangeDeviceCodeResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ExchangeDeviceCodeResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest DeviceToken
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest OAuthError
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest APIError
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	switch {
+	case true:
+		var headers ExchangeDeviceCodeResponseDefaultHeaders
 		if values := rsp.Header.Values("Retry-After"); len(values) > 0 {
 			var value int
 			if err := runtime.BindStyledParameterWithOptions("simple", "Retry-After", values[0], &value, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationHeader, Explode: false, Required: false, Type: "integer", Format: ""}); err != nil {
