@@ -388,11 +388,12 @@ type DeliveryState string
 
 // Device defines model for Device.
 type Device struct {
-	Eligible           bool                     `json:"eligible"`
-	Id                 DeviceId                 `json:"id"`
-	Name               string                   `json:"name"`
-	NotificationStatus DeviceNotificationStatus `json:"notificationStatus"`
-	Platform           DevicePlatform           `json:"platform"`
+	Eligible             bool                     `json:"eligible"`
+	Id                   DeviceId                 `json:"id"`
+	Name                 string                   `json:"name"`
+	NotificationStatus   DeviceNotificationStatus `json:"notificationStatus"`
+	Platform             DevicePlatform           `json:"platform"`
+	AdditionalProperties map[string]interface{}   `json:"-"`
 }
 
 // DeviceNotificationStatus defines model for Device.NotificationStatus.
@@ -404,12 +405,13 @@ type DevicePlatform string
 // DeviceAuthorization defines model for DeviceAuthorization.
 type DeviceAuthorization struct {
 	// DeviceCode High-entropy polling secret that must never be displayed or put in a URL.
-	DeviceCode              string `json:"device_code"`
-	ExpiresIn               int    `json:"expires_in"`
-	Interval                int    `json:"interval"`
-	UserCode                string `json:"user_code"`
-	VerificationUri         string `json:"verification_uri"`
-	VerificationUriComplete string `json:"verification_uri_complete"`
+	DeviceCode              string                 `json:"device_code"`
+	ExpiresIn               int                    `json:"expires_in"`
+	Interval                int                    `json:"interval"`
+	UserCode                string                 `json:"user_code"`
+	VerificationUri         string                 `json:"verification_uri"`
+	VerificationUriComplete string                 `json:"verification_uri_complete"`
+	AdditionalProperties    map[string]interface{} `json:"-"`
 }
 
 // DeviceId defines model for DeviceId.
@@ -417,10 +419,11 @@ type DeviceId = string
 
 // DeviceToken defines model for DeviceToken.
 type DeviceToken struct {
-	AccessToken string               `json:"access_token"`
-	Scope       DeviceTokenScope     `json:"scope"`
-	SenderName  string               `json:"sender_name"`
-	TokenType   DeviceTokenTokenType `json:"token_type"`
+	AccessToken          string                 `json:"access_token"`
+	Scope                DeviceTokenScope       `json:"scope"`
+	SenderName           string                 `json:"sender_name"`
+	TokenType            DeviceTokenTokenType   `json:"token_type"`
+	AdditionalProperties map[string]interface{} `json:"-"`
 }
 
 // DeviceTokenScope defines model for DeviceToken.Scope.
@@ -436,18 +439,21 @@ type Error struct {
 	RequestId string `json:"requestId"`
 
 	// RetryAfter Seconds until a retry is permitted.
-	RetryAfter *int `json:"retryAfter,omitempty"`
+	RetryAfter           *int                   `json:"retryAfter,omitempty"`
+	AdditionalProperties map[string]interface{} `json:"-"`
 }
 
 // ErrorResponse defines model for ErrorResponse.
 type ErrorResponse struct {
-	Error Error `json:"error"`
+	Error                Error                  `json:"error"`
+	AdditionalProperties map[string]interface{} `json:"-"`
 }
 
 // IssuedCredential Returned once after pairing approval or token creation.
 type IssuedCredential struct {
-	Name  string `json:"name"`
-	Token string `json:"token"`
+	Name                 string                 `json:"name"`
+	Token                string                 `json:"token"`
+	AdditionalProperties map[string]interface{} `json:"-"`
 }
 
 // LogicalMessageId defines model for LogicalMessageId.
@@ -455,25 +461,28 @@ type LogicalMessageId = string
 
 // MessageAccepted defines model for MessageAccepted.
 type MessageAccepted struct {
-	AcceptedAt       time.Time `json:"acceptedAt"`
-	Id               MessageId `json:"id"`
-	LogicalMessageId string    `json:"logicalMessageId"`
-	TargetCount      int       `json:"targetCount"`
+	AcceptedAt           time.Time              `json:"acceptedAt"`
+	Id                   MessageId              `json:"id"`
+	LogicalMessageId     string                 `json:"logicalMessageId"`
+	TargetCount          int                    `json:"targetCount"`
+	AdditionalProperties map[string]interface{} `json:"-"`
 }
 
 // MessageDelivery defines model for MessageDelivery.
 type MessageDelivery struct {
-	DeviceId    DeviceId      `json:"deviceId"`
-	DeviceName  string        `json:"deviceName"`
-	FailureCode *string       `json:"failureCode,omitempty"`
-	State       DeliveryState `json:"state"`
+	DeviceId             DeviceId               `json:"deviceId"`
+	DeviceName           string                 `json:"deviceName"`
+	FailureCode          *string                `json:"failureCode,omitempty"`
+	State                DeliveryState          `json:"state"`
+	AdditionalProperties map[string]interface{} `json:"-"`
 }
 
 // MessageDetail defines model for MessageDetail.
 type MessageDetail struct {
-	LogicalMessageId LogicalMessageId  `json:"logicalMessageId"`
-	Read             bool              `json:"read"`
-	Revisions        []MessageRevision `json:"revisions"`
+	LogicalMessageId     LogicalMessageId       `json:"logicalMessageId"`
+	Read                 bool                   `json:"read"`
+	Revisions            []MessageRevision      `json:"revisions"`
+	AdditionalProperties map[string]interface{} `json:"-"`
 }
 
 // MessageId defines model for MessageId.
@@ -503,24 +512,26 @@ type MessageInputSound string
 
 // MessagePage defines model for MessagePage.
 type MessagePage struct {
-	Items      []MessageSummary `json:"items"`
-	NextCursor *string          `json:"nextCursor,omitempty"`
+	Items                []MessageSummary       `json:"items"`
+	NextCursor           *string                `json:"nextCursor,omitempty"`
+	AdditionalProperties map[string]interface{} `json:"-"`
 }
 
 // MessageRevision defines model for MessageRevision.
 type MessageRevision struct {
-	AcceptedAt time.Time             `json:"acceptedAt"`
-	Body       string                `json:"body"`
-	Deliveries []MessageDelivery     `json:"deliveries"`
-	Format     MessageRevisionFormat `json:"format"`
-	Group      *RestrictedIdentifier `json:"group,omitempty"`
-	Id         MessageId             `json:"id"`
-	Image      *string               `json:"image,omitempty"`
-	SenderName string                `json:"senderName"`
-	Sound      MessageRevisionSound  `json:"sound"`
-	Subtitle   *string               `json:"subtitle,omitempty"`
-	Title      string                `json:"title"`
-	Url        *string               `json:"url,omitempty"`
+	AcceptedAt           time.Time              `json:"acceptedAt"`
+	Body                 string                 `json:"body"`
+	Deliveries           []MessageDelivery      `json:"deliveries"`
+	Format               MessageRevisionFormat  `json:"format"`
+	Group                *RestrictedIdentifier  `json:"group,omitempty"`
+	Id                   MessageId              `json:"id"`
+	Image                *string                `json:"image,omitempty"`
+	SenderName           string                 `json:"senderName"`
+	Sound                MessageRevisionSound   `json:"sound"`
+	Subtitle             *string                `json:"subtitle,omitempty"`
+	Title                string                 `json:"title"`
+	Url                  *string                `json:"url,omitempty"`
+	AdditionalProperties map[string]interface{} `json:"-"`
 }
 
 // MessageRevisionFormat defines model for MessageRevision.Format.
@@ -531,22 +542,24 @@ type MessageRevisionSound string
 
 // MessageSummary defines model for MessageSummary.
 type MessageSummary struct {
-	AcceptedAt       time.Time        `json:"acceptedAt"`
-	Body             string           `json:"body"`
-	DeliveryState    DeliveryState    `json:"deliveryState"`
-	Id               MessageId        `json:"id"`
-	LogicalMessageId LogicalMessageId `json:"logicalMessageId"`
-	Read             bool             `json:"read"`
-	SenderName       string           `json:"senderName"`
-	Subtitle         *string          `json:"subtitle,omitempty"`
-	Title            string           `json:"title"`
-	UpdateCount      int              `json:"updateCount"`
+	AcceptedAt           time.Time              `json:"acceptedAt"`
+	Body                 string                 `json:"body"`
+	DeliveryState        DeliveryState          `json:"deliveryState"`
+	Id                   MessageId              `json:"id"`
+	LogicalMessageId     LogicalMessageId       `json:"logicalMessageId"`
+	Read                 bool                   `json:"read"`
+	SenderName           string                 `json:"senderName"`
+	Subtitle             *string                `json:"subtitle,omitempty"`
+	Title                string                 `json:"title"`
+	UpdateCount          int                    `json:"updateCount"`
+	AdditionalProperties map[string]interface{} `json:"-"`
 }
 
 // OAuthError defines model for OAuthError.
 type OAuthError struct {
-	Error            OAuthErrorError `json:"error"`
-	ErrorDescription *string         `json:"error_description,omitempty"`
+	Error                OAuthErrorError        `json:"error"`
+	ErrorDescription     *string                `json:"error_description,omitempty"`
+	AdditionalProperties map[string]interface{} `json:"-"`
 }
 
 // OAuthErrorError defines model for OAuthError.Error.
@@ -560,10 +573,11 @@ type Pairing struct {
 	Id         PairingId         `json:"id"`
 
 	// Interval Minimum polling interval in seconds.
-	Interval        int           `json:"interval"`
-	Status          PairingStatus `json:"status"`
-	UserCode        string        `json:"userCode"`
-	VerificationUri string        `json:"verificationUri"`
+	Interval             int                    `json:"interval"`
+	Status               PairingStatus          `json:"status"`
+	UserCode             string                 `json:"userCode"`
+	VerificationUri      string                 `json:"verificationUri"`
+	AdditionalProperties map[string]interface{} `json:"-"`
 }
 
 // PairingStatus defines model for Pairing.Status.
@@ -576,10 +590,11 @@ type PairingCreated struct {
 	Interval  int       `json:"interval"`
 
 	// PairingSecret One-time polling secret; never put it in a URL.
-	PairingSecret   string               `json:"pairingSecret"`
-	Status          PairingCreatedStatus `json:"status"`
-	UserCode        string               `json:"userCode"`
-	VerificationUri string               `json:"verificationUri"`
+	PairingSecret        string                 `json:"pairingSecret"`
+	Status               PairingCreatedStatus   `json:"status"`
+	UserCode             string                 `json:"userCode"`
+	VerificationUri      string                 `json:"verificationUri"`
+	AdditionalProperties map[string]interface{} `json:"-"`
 }
 
 // PairingCreatedStatus defines model for PairingCreated.Status.
@@ -594,12 +609,13 @@ type RestrictedIdentifier = string
 // SenderCredential defines model for SenderCredential.
 type SenderCredential struct {
 	// AuthorizationMethod Approval path for CLI credentials; omitted for automation tokens.
-	AuthorizationMethod *SenderCredentialAuthorizationMethod `json:"authorizationMethod,omitempty"`
-	CreatedAt           time.Time                            `json:"createdAt"`
-	Id                  string                               `json:"id"`
-	Kind                SenderCredentialKind                 `json:"kind"`
-	LastUsedAt          *time.Time                           `json:"lastUsedAt,omitempty"`
-	Name                string                               `json:"name"`
+	AuthorizationMethod  *SenderCredentialAuthorizationMethod `json:"authorizationMethod,omitempty"`
+	CreatedAt            time.Time                            `json:"createdAt"`
+	Id                   string                               `json:"id"`
+	Kind                 SenderCredentialKind                 `json:"kind"`
+	LastUsedAt           *time.Time                           `json:"lastUsedAt,omitempty"`
+	Name                 string                               `json:"name"`
+	AdditionalProperties map[string]interface{}               `json:"-"`
 }
 
 // SenderCredentialAuthorizationMethod Approval path for CLI credentials; omitted for automation tokens.
@@ -610,10 +626,11 @@ type SenderCredentialKind string
 
 // Usage defines model for Usage.
 type Usage struct {
-	Limit       int       `json:"limit"`
-	PeriodEnd   time.Time `json:"periodEnd"`
-	PeriodStart time.Time `json:"periodStart"`
-	Used        int       `json:"used"`
+	Limit                int                    `json:"limit"`
+	PeriodEnd            time.Time              `json:"periodEnd"`
+	PeriodStart          time.Time              `json:"periodStart"`
+	Used                 int                    `json:"used"`
+	AdditionalProperties map[string]interface{} `json:"-"`
 }
 
 // Cursor defines model for Cursor.
@@ -695,6 +712,2016 @@ type CreatePairingJSONRequestBody CreatePairingJSONBody
 
 // UpdateCurrentSenderCredentialJSONRequestBody defines body for UpdateCurrentSenderCredential for application/json ContentType.
 type UpdateCurrentSenderCredentialJSONRequestBody UpdateCurrentSenderCredentialJSONBody
+
+// Getter for additional properties for Device. Returns the specified
+// element and whether it was found
+func (a Device) Get(fieldName string) (value interface{}, found bool) {
+	if a.AdditionalProperties != nil {
+		value, found = a.AdditionalProperties[fieldName]
+	}
+	return
+}
+
+// Setter for additional properties for Device
+func (a *Device) Set(fieldName string, value interface{}) {
+	if a.AdditionalProperties == nil {
+		a.AdditionalProperties = make(map[string]interface{})
+	}
+	a.AdditionalProperties[fieldName] = value
+}
+
+// Override default JSON handling for Device to handle AdditionalProperties
+func (a *Device) UnmarshalJSON(b []byte) error {
+	object := make(map[string]json.RawMessage)
+	err := json.Unmarshal(b, &object)
+	if err != nil {
+		return err
+	}
+
+	if raw, found := object["eligible"]; found {
+		err = json.Unmarshal(raw, &a.Eligible)
+		if err != nil {
+			return fmt.Errorf("error reading 'eligible': %w", err)
+		}
+		delete(object, "eligible")
+	}
+
+	if raw, found := object["id"]; found {
+		err = json.Unmarshal(raw, &a.Id)
+		if err != nil {
+			return fmt.Errorf("error reading 'id': %w", err)
+		}
+		delete(object, "id")
+	}
+
+	if raw, found := object["name"]; found {
+		err = json.Unmarshal(raw, &a.Name)
+		if err != nil {
+			return fmt.Errorf("error reading 'name': %w", err)
+		}
+		delete(object, "name")
+	}
+
+	if raw, found := object["notificationStatus"]; found {
+		err = json.Unmarshal(raw, &a.NotificationStatus)
+		if err != nil {
+			return fmt.Errorf("error reading 'notificationStatus': %w", err)
+		}
+		delete(object, "notificationStatus")
+	}
+
+	if raw, found := object["platform"]; found {
+		err = json.Unmarshal(raw, &a.Platform)
+		if err != nil {
+			return fmt.Errorf("error reading 'platform': %w", err)
+		}
+		delete(object, "platform")
+	}
+
+	if len(object) != 0 {
+		a.AdditionalProperties = make(map[string]interface{})
+		for fieldName, fieldBuf := range object {
+			var fieldVal interface{}
+			err := json.Unmarshal(fieldBuf, &fieldVal)
+			if err != nil {
+				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+			}
+			a.AdditionalProperties[fieldName] = fieldVal
+		}
+	}
+	return nil
+}
+
+// Override default JSON handling for Device to handle AdditionalProperties
+func (a Device) MarshalJSON() ([]byte, error) {
+	var err error
+	object := make(map[string]json.RawMessage)
+
+	object["eligible"], err = json.Marshal(a.Eligible)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'eligible': %w", err)
+	}
+
+	object["id"], err = json.Marshal(a.Id)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'id': %w", err)
+	}
+
+	object["name"], err = json.Marshal(a.Name)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'name': %w", err)
+	}
+
+	object["notificationStatus"], err = json.Marshal(a.NotificationStatus)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'notificationStatus': %w", err)
+	}
+
+	object["platform"], err = json.Marshal(a.Platform)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'platform': %w", err)
+	}
+
+	for fieldName, field := range a.AdditionalProperties {
+		object[fieldName], err = json.Marshal(field)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling '%s': %w", fieldName, err)
+		}
+	}
+	return json.Marshal(object)
+}
+
+// Getter for additional properties for DeviceAuthorization. Returns the specified
+// element and whether it was found
+func (a DeviceAuthorization) Get(fieldName string) (value interface{}, found bool) {
+	if a.AdditionalProperties != nil {
+		value, found = a.AdditionalProperties[fieldName]
+	}
+	return
+}
+
+// Setter for additional properties for DeviceAuthorization
+func (a *DeviceAuthorization) Set(fieldName string, value interface{}) {
+	if a.AdditionalProperties == nil {
+		a.AdditionalProperties = make(map[string]interface{})
+	}
+	a.AdditionalProperties[fieldName] = value
+}
+
+// Override default JSON handling for DeviceAuthorization to handle AdditionalProperties
+func (a *DeviceAuthorization) UnmarshalJSON(b []byte) error {
+	object := make(map[string]json.RawMessage)
+	err := json.Unmarshal(b, &object)
+	if err != nil {
+		return err
+	}
+
+	if raw, found := object["device_code"]; found {
+		err = json.Unmarshal(raw, &a.DeviceCode)
+		if err != nil {
+			return fmt.Errorf("error reading 'device_code': %w", err)
+		}
+		delete(object, "device_code")
+	}
+
+	if raw, found := object["expires_in"]; found {
+		err = json.Unmarshal(raw, &a.ExpiresIn)
+		if err != nil {
+			return fmt.Errorf("error reading 'expires_in': %w", err)
+		}
+		delete(object, "expires_in")
+	}
+
+	if raw, found := object["interval"]; found {
+		err = json.Unmarshal(raw, &a.Interval)
+		if err != nil {
+			return fmt.Errorf("error reading 'interval': %w", err)
+		}
+		delete(object, "interval")
+	}
+
+	if raw, found := object["user_code"]; found {
+		err = json.Unmarshal(raw, &a.UserCode)
+		if err != nil {
+			return fmt.Errorf("error reading 'user_code': %w", err)
+		}
+		delete(object, "user_code")
+	}
+
+	if raw, found := object["verification_uri"]; found {
+		err = json.Unmarshal(raw, &a.VerificationUri)
+		if err != nil {
+			return fmt.Errorf("error reading 'verification_uri': %w", err)
+		}
+		delete(object, "verification_uri")
+	}
+
+	if raw, found := object["verification_uri_complete"]; found {
+		err = json.Unmarshal(raw, &a.VerificationUriComplete)
+		if err != nil {
+			return fmt.Errorf("error reading 'verification_uri_complete': %w", err)
+		}
+		delete(object, "verification_uri_complete")
+	}
+
+	if len(object) != 0 {
+		a.AdditionalProperties = make(map[string]interface{})
+		for fieldName, fieldBuf := range object {
+			var fieldVal interface{}
+			err := json.Unmarshal(fieldBuf, &fieldVal)
+			if err != nil {
+				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+			}
+			a.AdditionalProperties[fieldName] = fieldVal
+		}
+	}
+	return nil
+}
+
+// Override default JSON handling for DeviceAuthorization to handle AdditionalProperties
+func (a DeviceAuthorization) MarshalJSON() ([]byte, error) {
+	var err error
+	object := make(map[string]json.RawMessage)
+
+	object["device_code"], err = json.Marshal(a.DeviceCode)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'device_code': %w", err)
+	}
+
+	object["expires_in"], err = json.Marshal(a.ExpiresIn)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'expires_in': %w", err)
+	}
+
+	object["interval"], err = json.Marshal(a.Interval)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'interval': %w", err)
+	}
+
+	object["user_code"], err = json.Marshal(a.UserCode)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'user_code': %w", err)
+	}
+
+	object["verification_uri"], err = json.Marshal(a.VerificationUri)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'verification_uri': %w", err)
+	}
+
+	object["verification_uri_complete"], err = json.Marshal(a.VerificationUriComplete)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'verification_uri_complete': %w", err)
+	}
+
+	for fieldName, field := range a.AdditionalProperties {
+		object[fieldName], err = json.Marshal(field)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling '%s': %w", fieldName, err)
+		}
+	}
+	return json.Marshal(object)
+}
+
+// Getter for additional properties for DeviceToken. Returns the specified
+// element and whether it was found
+func (a DeviceToken) Get(fieldName string) (value interface{}, found bool) {
+	if a.AdditionalProperties != nil {
+		value, found = a.AdditionalProperties[fieldName]
+	}
+	return
+}
+
+// Setter for additional properties for DeviceToken
+func (a *DeviceToken) Set(fieldName string, value interface{}) {
+	if a.AdditionalProperties == nil {
+		a.AdditionalProperties = make(map[string]interface{})
+	}
+	a.AdditionalProperties[fieldName] = value
+}
+
+// Override default JSON handling for DeviceToken to handle AdditionalProperties
+func (a *DeviceToken) UnmarshalJSON(b []byte) error {
+	object := make(map[string]json.RawMessage)
+	err := json.Unmarshal(b, &object)
+	if err != nil {
+		return err
+	}
+
+	if raw, found := object["access_token"]; found {
+		err = json.Unmarshal(raw, &a.AccessToken)
+		if err != nil {
+			return fmt.Errorf("error reading 'access_token': %w", err)
+		}
+		delete(object, "access_token")
+	}
+
+	if raw, found := object["scope"]; found {
+		err = json.Unmarshal(raw, &a.Scope)
+		if err != nil {
+			return fmt.Errorf("error reading 'scope': %w", err)
+		}
+		delete(object, "scope")
+	}
+
+	if raw, found := object["sender_name"]; found {
+		err = json.Unmarshal(raw, &a.SenderName)
+		if err != nil {
+			return fmt.Errorf("error reading 'sender_name': %w", err)
+		}
+		delete(object, "sender_name")
+	}
+
+	if raw, found := object["token_type"]; found {
+		err = json.Unmarshal(raw, &a.TokenType)
+		if err != nil {
+			return fmt.Errorf("error reading 'token_type': %w", err)
+		}
+		delete(object, "token_type")
+	}
+
+	if len(object) != 0 {
+		a.AdditionalProperties = make(map[string]interface{})
+		for fieldName, fieldBuf := range object {
+			var fieldVal interface{}
+			err := json.Unmarshal(fieldBuf, &fieldVal)
+			if err != nil {
+				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+			}
+			a.AdditionalProperties[fieldName] = fieldVal
+		}
+	}
+	return nil
+}
+
+// Override default JSON handling for DeviceToken to handle AdditionalProperties
+func (a DeviceToken) MarshalJSON() ([]byte, error) {
+	var err error
+	object := make(map[string]json.RawMessage)
+
+	object["access_token"], err = json.Marshal(a.AccessToken)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'access_token': %w", err)
+	}
+
+	object["scope"], err = json.Marshal(a.Scope)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'scope': %w", err)
+	}
+
+	object["sender_name"], err = json.Marshal(a.SenderName)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'sender_name': %w", err)
+	}
+
+	object["token_type"], err = json.Marshal(a.TokenType)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'token_type': %w", err)
+	}
+
+	for fieldName, field := range a.AdditionalProperties {
+		object[fieldName], err = json.Marshal(field)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling '%s': %w", fieldName, err)
+		}
+	}
+	return json.Marshal(object)
+}
+
+// Getter for additional properties for Error. Returns the specified
+// element and whether it was found
+func (a Error) Get(fieldName string) (value interface{}, found bool) {
+	if a.AdditionalProperties != nil {
+		value, found = a.AdditionalProperties[fieldName]
+	}
+	return
+}
+
+// Setter for additional properties for Error
+func (a *Error) Set(fieldName string, value interface{}) {
+	if a.AdditionalProperties == nil {
+		a.AdditionalProperties = make(map[string]interface{})
+	}
+	a.AdditionalProperties[fieldName] = value
+}
+
+// Override default JSON handling for Error to handle AdditionalProperties
+func (a *Error) UnmarshalJSON(b []byte) error {
+	object := make(map[string]json.RawMessage)
+	err := json.Unmarshal(b, &object)
+	if err != nil {
+		return err
+	}
+
+	if raw, found := object["code"]; found {
+		err = json.Unmarshal(raw, &a.Code)
+		if err != nil {
+			return fmt.Errorf("error reading 'code': %w", err)
+		}
+		delete(object, "code")
+	}
+
+	if raw, found := object["message"]; found {
+		err = json.Unmarshal(raw, &a.Message)
+		if err != nil {
+			return fmt.Errorf("error reading 'message': %w", err)
+		}
+		delete(object, "message")
+	}
+
+	if raw, found := object["requestId"]; found {
+		err = json.Unmarshal(raw, &a.RequestId)
+		if err != nil {
+			return fmt.Errorf("error reading 'requestId': %w", err)
+		}
+		delete(object, "requestId")
+	}
+
+	if raw, found := object["retryAfter"]; found {
+		err = json.Unmarshal(raw, &a.RetryAfter)
+		if err != nil {
+			return fmt.Errorf("error reading 'retryAfter': %w", err)
+		}
+		delete(object, "retryAfter")
+	}
+
+	if len(object) != 0 {
+		a.AdditionalProperties = make(map[string]interface{})
+		for fieldName, fieldBuf := range object {
+			var fieldVal interface{}
+			err := json.Unmarshal(fieldBuf, &fieldVal)
+			if err != nil {
+				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+			}
+			a.AdditionalProperties[fieldName] = fieldVal
+		}
+	}
+	return nil
+}
+
+// Override default JSON handling for Error to handle AdditionalProperties
+func (a Error) MarshalJSON() ([]byte, error) {
+	var err error
+	object := make(map[string]json.RawMessage)
+
+	object["code"], err = json.Marshal(a.Code)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'code': %w", err)
+	}
+
+	object["message"], err = json.Marshal(a.Message)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'message': %w", err)
+	}
+
+	object["requestId"], err = json.Marshal(a.RequestId)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'requestId': %w", err)
+	}
+
+	if a.RetryAfter != nil {
+		object["retryAfter"], err = json.Marshal(a.RetryAfter)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'retryAfter': %w", err)
+		}
+	}
+
+	for fieldName, field := range a.AdditionalProperties {
+		object[fieldName], err = json.Marshal(field)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling '%s': %w", fieldName, err)
+		}
+	}
+	return json.Marshal(object)
+}
+
+// Getter for additional properties for ErrorResponse. Returns the specified
+// element and whether it was found
+func (a ErrorResponse) Get(fieldName string) (value interface{}, found bool) {
+	if a.AdditionalProperties != nil {
+		value, found = a.AdditionalProperties[fieldName]
+	}
+	return
+}
+
+// Setter for additional properties for ErrorResponse
+func (a *ErrorResponse) Set(fieldName string, value interface{}) {
+	if a.AdditionalProperties == nil {
+		a.AdditionalProperties = make(map[string]interface{})
+	}
+	a.AdditionalProperties[fieldName] = value
+}
+
+// Override default JSON handling for ErrorResponse to handle AdditionalProperties
+func (a *ErrorResponse) UnmarshalJSON(b []byte) error {
+	object := make(map[string]json.RawMessage)
+	err := json.Unmarshal(b, &object)
+	if err != nil {
+		return err
+	}
+
+	if raw, found := object["error"]; found {
+		err = json.Unmarshal(raw, &a.Error)
+		if err != nil {
+			return fmt.Errorf("error reading 'error': %w", err)
+		}
+		delete(object, "error")
+	}
+
+	if len(object) != 0 {
+		a.AdditionalProperties = make(map[string]interface{})
+		for fieldName, fieldBuf := range object {
+			var fieldVal interface{}
+			err := json.Unmarshal(fieldBuf, &fieldVal)
+			if err != nil {
+				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+			}
+			a.AdditionalProperties[fieldName] = fieldVal
+		}
+	}
+	return nil
+}
+
+// Override default JSON handling for ErrorResponse to handle AdditionalProperties
+func (a ErrorResponse) MarshalJSON() ([]byte, error) {
+	var err error
+	object := make(map[string]json.RawMessage)
+
+	object["error"], err = json.Marshal(a.Error)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'error': %w", err)
+	}
+
+	for fieldName, field := range a.AdditionalProperties {
+		object[fieldName], err = json.Marshal(field)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling '%s': %w", fieldName, err)
+		}
+	}
+	return json.Marshal(object)
+}
+
+// Getter for additional properties for IssuedCredential. Returns the specified
+// element and whether it was found
+func (a IssuedCredential) Get(fieldName string) (value interface{}, found bool) {
+	if a.AdditionalProperties != nil {
+		value, found = a.AdditionalProperties[fieldName]
+	}
+	return
+}
+
+// Setter for additional properties for IssuedCredential
+func (a *IssuedCredential) Set(fieldName string, value interface{}) {
+	if a.AdditionalProperties == nil {
+		a.AdditionalProperties = make(map[string]interface{})
+	}
+	a.AdditionalProperties[fieldName] = value
+}
+
+// Override default JSON handling for IssuedCredential to handle AdditionalProperties
+func (a *IssuedCredential) UnmarshalJSON(b []byte) error {
+	object := make(map[string]json.RawMessage)
+	err := json.Unmarshal(b, &object)
+	if err != nil {
+		return err
+	}
+
+	if raw, found := object["name"]; found {
+		err = json.Unmarshal(raw, &a.Name)
+		if err != nil {
+			return fmt.Errorf("error reading 'name': %w", err)
+		}
+		delete(object, "name")
+	}
+
+	if raw, found := object["token"]; found {
+		err = json.Unmarshal(raw, &a.Token)
+		if err != nil {
+			return fmt.Errorf("error reading 'token': %w", err)
+		}
+		delete(object, "token")
+	}
+
+	if len(object) != 0 {
+		a.AdditionalProperties = make(map[string]interface{})
+		for fieldName, fieldBuf := range object {
+			var fieldVal interface{}
+			err := json.Unmarshal(fieldBuf, &fieldVal)
+			if err != nil {
+				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+			}
+			a.AdditionalProperties[fieldName] = fieldVal
+		}
+	}
+	return nil
+}
+
+// Override default JSON handling for IssuedCredential to handle AdditionalProperties
+func (a IssuedCredential) MarshalJSON() ([]byte, error) {
+	var err error
+	object := make(map[string]json.RawMessage)
+
+	object["name"], err = json.Marshal(a.Name)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'name': %w", err)
+	}
+
+	object["token"], err = json.Marshal(a.Token)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'token': %w", err)
+	}
+
+	for fieldName, field := range a.AdditionalProperties {
+		object[fieldName], err = json.Marshal(field)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling '%s': %w", fieldName, err)
+		}
+	}
+	return json.Marshal(object)
+}
+
+// Getter for additional properties for MessageAccepted. Returns the specified
+// element and whether it was found
+func (a MessageAccepted) Get(fieldName string) (value interface{}, found bool) {
+	if a.AdditionalProperties != nil {
+		value, found = a.AdditionalProperties[fieldName]
+	}
+	return
+}
+
+// Setter for additional properties for MessageAccepted
+func (a *MessageAccepted) Set(fieldName string, value interface{}) {
+	if a.AdditionalProperties == nil {
+		a.AdditionalProperties = make(map[string]interface{})
+	}
+	a.AdditionalProperties[fieldName] = value
+}
+
+// Override default JSON handling for MessageAccepted to handle AdditionalProperties
+func (a *MessageAccepted) UnmarshalJSON(b []byte) error {
+	object := make(map[string]json.RawMessage)
+	err := json.Unmarshal(b, &object)
+	if err != nil {
+		return err
+	}
+
+	if raw, found := object["acceptedAt"]; found {
+		err = json.Unmarshal(raw, &a.AcceptedAt)
+		if err != nil {
+			return fmt.Errorf("error reading 'acceptedAt': %w", err)
+		}
+		delete(object, "acceptedAt")
+	}
+
+	if raw, found := object["id"]; found {
+		err = json.Unmarshal(raw, &a.Id)
+		if err != nil {
+			return fmt.Errorf("error reading 'id': %w", err)
+		}
+		delete(object, "id")
+	}
+
+	if raw, found := object["logicalMessageId"]; found {
+		err = json.Unmarshal(raw, &a.LogicalMessageId)
+		if err != nil {
+			return fmt.Errorf("error reading 'logicalMessageId': %w", err)
+		}
+		delete(object, "logicalMessageId")
+	}
+
+	if raw, found := object["targetCount"]; found {
+		err = json.Unmarshal(raw, &a.TargetCount)
+		if err != nil {
+			return fmt.Errorf("error reading 'targetCount': %w", err)
+		}
+		delete(object, "targetCount")
+	}
+
+	if len(object) != 0 {
+		a.AdditionalProperties = make(map[string]interface{})
+		for fieldName, fieldBuf := range object {
+			var fieldVal interface{}
+			err := json.Unmarshal(fieldBuf, &fieldVal)
+			if err != nil {
+				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+			}
+			a.AdditionalProperties[fieldName] = fieldVal
+		}
+	}
+	return nil
+}
+
+// Override default JSON handling for MessageAccepted to handle AdditionalProperties
+func (a MessageAccepted) MarshalJSON() ([]byte, error) {
+	var err error
+	object := make(map[string]json.RawMessage)
+
+	object["acceptedAt"], err = json.Marshal(a.AcceptedAt)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'acceptedAt': %w", err)
+	}
+
+	object["id"], err = json.Marshal(a.Id)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'id': %w", err)
+	}
+
+	object["logicalMessageId"], err = json.Marshal(a.LogicalMessageId)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'logicalMessageId': %w", err)
+	}
+
+	object["targetCount"], err = json.Marshal(a.TargetCount)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'targetCount': %w", err)
+	}
+
+	for fieldName, field := range a.AdditionalProperties {
+		object[fieldName], err = json.Marshal(field)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling '%s': %w", fieldName, err)
+		}
+	}
+	return json.Marshal(object)
+}
+
+// Getter for additional properties for MessageDelivery. Returns the specified
+// element and whether it was found
+func (a MessageDelivery) Get(fieldName string) (value interface{}, found bool) {
+	if a.AdditionalProperties != nil {
+		value, found = a.AdditionalProperties[fieldName]
+	}
+	return
+}
+
+// Setter for additional properties for MessageDelivery
+func (a *MessageDelivery) Set(fieldName string, value interface{}) {
+	if a.AdditionalProperties == nil {
+		a.AdditionalProperties = make(map[string]interface{})
+	}
+	a.AdditionalProperties[fieldName] = value
+}
+
+// Override default JSON handling for MessageDelivery to handle AdditionalProperties
+func (a *MessageDelivery) UnmarshalJSON(b []byte) error {
+	object := make(map[string]json.RawMessage)
+	err := json.Unmarshal(b, &object)
+	if err != nil {
+		return err
+	}
+
+	if raw, found := object["deviceId"]; found {
+		err = json.Unmarshal(raw, &a.DeviceId)
+		if err != nil {
+			return fmt.Errorf("error reading 'deviceId': %w", err)
+		}
+		delete(object, "deviceId")
+	}
+
+	if raw, found := object["deviceName"]; found {
+		err = json.Unmarshal(raw, &a.DeviceName)
+		if err != nil {
+			return fmt.Errorf("error reading 'deviceName': %w", err)
+		}
+		delete(object, "deviceName")
+	}
+
+	if raw, found := object["failureCode"]; found {
+		err = json.Unmarshal(raw, &a.FailureCode)
+		if err != nil {
+			return fmt.Errorf("error reading 'failureCode': %w", err)
+		}
+		delete(object, "failureCode")
+	}
+
+	if raw, found := object["state"]; found {
+		err = json.Unmarshal(raw, &a.State)
+		if err != nil {
+			return fmt.Errorf("error reading 'state': %w", err)
+		}
+		delete(object, "state")
+	}
+
+	if len(object) != 0 {
+		a.AdditionalProperties = make(map[string]interface{})
+		for fieldName, fieldBuf := range object {
+			var fieldVal interface{}
+			err := json.Unmarshal(fieldBuf, &fieldVal)
+			if err != nil {
+				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+			}
+			a.AdditionalProperties[fieldName] = fieldVal
+		}
+	}
+	return nil
+}
+
+// Override default JSON handling for MessageDelivery to handle AdditionalProperties
+func (a MessageDelivery) MarshalJSON() ([]byte, error) {
+	var err error
+	object := make(map[string]json.RawMessage)
+
+	object["deviceId"], err = json.Marshal(a.DeviceId)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'deviceId': %w", err)
+	}
+
+	object["deviceName"], err = json.Marshal(a.DeviceName)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'deviceName': %w", err)
+	}
+
+	if a.FailureCode != nil {
+		object["failureCode"], err = json.Marshal(a.FailureCode)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'failureCode': %w", err)
+		}
+	}
+
+	object["state"], err = json.Marshal(a.State)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'state': %w", err)
+	}
+
+	for fieldName, field := range a.AdditionalProperties {
+		object[fieldName], err = json.Marshal(field)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling '%s': %w", fieldName, err)
+		}
+	}
+	return json.Marshal(object)
+}
+
+// Getter for additional properties for MessageDetail. Returns the specified
+// element and whether it was found
+func (a MessageDetail) Get(fieldName string) (value interface{}, found bool) {
+	if a.AdditionalProperties != nil {
+		value, found = a.AdditionalProperties[fieldName]
+	}
+	return
+}
+
+// Setter for additional properties for MessageDetail
+func (a *MessageDetail) Set(fieldName string, value interface{}) {
+	if a.AdditionalProperties == nil {
+		a.AdditionalProperties = make(map[string]interface{})
+	}
+	a.AdditionalProperties[fieldName] = value
+}
+
+// Override default JSON handling for MessageDetail to handle AdditionalProperties
+func (a *MessageDetail) UnmarshalJSON(b []byte) error {
+	object := make(map[string]json.RawMessage)
+	err := json.Unmarshal(b, &object)
+	if err != nil {
+		return err
+	}
+
+	if raw, found := object["logicalMessageId"]; found {
+		err = json.Unmarshal(raw, &a.LogicalMessageId)
+		if err != nil {
+			return fmt.Errorf("error reading 'logicalMessageId': %w", err)
+		}
+		delete(object, "logicalMessageId")
+	}
+
+	if raw, found := object["read"]; found {
+		err = json.Unmarshal(raw, &a.Read)
+		if err != nil {
+			return fmt.Errorf("error reading 'read': %w", err)
+		}
+		delete(object, "read")
+	}
+
+	if raw, found := object["revisions"]; found {
+		err = json.Unmarshal(raw, &a.Revisions)
+		if err != nil {
+			return fmt.Errorf("error reading 'revisions': %w", err)
+		}
+		delete(object, "revisions")
+	}
+
+	if len(object) != 0 {
+		a.AdditionalProperties = make(map[string]interface{})
+		for fieldName, fieldBuf := range object {
+			var fieldVal interface{}
+			err := json.Unmarshal(fieldBuf, &fieldVal)
+			if err != nil {
+				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+			}
+			a.AdditionalProperties[fieldName] = fieldVal
+		}
+	}
+	return nil
+}
+
+// Override default JSON handling for MessageDetail to handle AdditionalProperties
+func (a MessageDetail) MarshalJSON() ([]byte, error) {
+	var err error
+	object := make(map[string]json.RawMessage)
+
+	object["logicalMessageId"], err = json.Marshal(a.LogicalMessageId)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'logicalMessageId': %w", err)
+	}
+
+	object["read"], err = json.Marshal(a.Read)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'read': %w", err)
+	}
+
+	if a.Revisions != nil {
+		object["revisions"], err = json.Marshal(a.Revisions)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'revisions': %w", err)
+		}
+	}
+
+	for fieldName, field := range a.AdditionalProperties {
+		object[fieldName], err = json.Marshal(field)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling '%s': %w", fieldName, err)
+		}
+	}
+	return json.Marshal(object)
+}
+
+// Getter for additional properties for MessagePage. Returns the specified
+// element and whether it was found
+func (a MessagePage) Get(fieldName string) (value interface{}, found bool) {
+	if a.AdditionalProperties != nil {
+		value, found = a.AdditionalProperties[fieldName]
+	}
+	return
+}
+
+// Setter for additional properties for MessagePage
+func (a *MessagePage) Set(fieldName string, value interface{}) {
+	if a.AdditionalProperties == nil {
+		a.AdditionalProperties = make(map[string]interface{})
+	}
+	a.AdditionalProperties[fieldName] = value
+}
+
+// Override default JSON handling for MessagePage to handle AdditionalProperties
+func (a *MessagePage) UnmarshalJSON(b []byte) error {
+	object := make(map[string]json.RawMessage)
+	err := json.Unmarshal(b, &object)
+	if err != nil {
+		return err
+	}
+
+	if raw, found := object["items"]; found {
+		err = json.Unmarshal(raw, &a.Items)
+		if err != nil {
+			return fmt.Errorf("error reading 'items': %w", err)
+		}
+		delete(object, "items")
+	}
+
+	if raw, found := object["nextCursor"]; found {
+		err = json.Unmarshal(raw, &a.NextCursor)
+		if err != nil {
+			return fmt.Errorf("error reading 'nextCursor': %w", err)
+		}
+		delete(object, "nextCursor")
+	}
+
+	if len(object) != 0 {
+		a.AdditionalProperties = make(map[string]interface{})
+		for fieldName, fieldBuf := range object {
+			var fieldVal interface{}
+			err := json.Unmarshal(fieldBuf, &fieldVal)
+			if err != nil {
+				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+			}
+			a.AdditionalProperties[fieldName] = fieldVal
+		}
+	}
+	return nil
+}
+
+// Override default JSON handling for MessagePage to handle AdditionalProperties
+func (a MessagePage) MarshalJSON() ([]byte, error) {
+	var err error
+	object := make(map[string]json.RawMessage)
+
+	if a.Items != nil {
+		object["items"], err = json.Marshal(a.Items)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'items': %w", err)
+		}
+	}
+
+	if a.NextCursor != nil {
+		object["nextCursor"], err = json.Marshal(a.NextCursor)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'nextCursor': %w", err)
+		}
+	}
+
+	for fieldName, field := range a.AdditionalProperties {
+		object[fieldName], err = json.Marshal(field)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling '%s': %w", fieldName, err)
+		}
+	}
+	return json.Marshal(object)
+}
+
+// Getter for additional properties for MessageRevision. Returns the specified
+// element and whether it was found
+func (a MessageRevision) Get(fieldName string) (value interface{}, found bool) {
+	if a.AdditionalProperties != nil {
+		value, found = a.AdditionalProperties[fieldName]
+	}
+	return
+}
+
+// Setter for additional properties for MessageRevision
+func (a *MessageRevision) Set(fieldName string, value interface{}) {
+	if a.AdditionalProperties == nil {
+		a.AdditionalProperties = make(map[string]interface{})
+	}
+	a.AdditionalProperties[fieldName] = value
+}
+
+// Override default JSON handling for MessageRevision to handle AdditionalProperties
+func (a *MessageRevision) UnmarshalJSON(b []byte) error {
+	object := make(map[string]json.RawMessage)
+	err := json.Unmarshal(b, &object)
+	if err != nil {
+		return err
+	}
+
+	if raw, found := object["acceptedAt"]; found {
+		err = json.Unmarshal(raw, &a.AcceptedAt)
+		if err != nil {
+			return fmt.Errorf("error reading 'acceptedAt': %w", err)
+		}
+		delete(object, "acceptedAt")
+	}
+
+	if raw, found := object["body"]; found {
+		err = json.Unmarshal(raw, &a.Body)
+		if err != nil {
+			return fmt.Errorf("error reading 'body': %w", err)
+		}
+		delete(object, "body")
+	}
+
+	if raw, found := object["deliveries"]; found {
+		err = json.Unmarshal(raw, &a.Deliveries)
+		if err != nil {
+			return fmt.Errorf("error reading 'deliveries': %w", err)
+		}
+		delete(object, "deliveries")
+	}
+
+	if raw, found := object["format"]; found {
+		err = json.Unmarshal(raw, &a.Format)
+		if err != nil {
+			return fmt.Errorf("error reading 'format': %w", err)
+		}
+		delete(object, "format")
+	}
+
+	if raw, found := object["group"]; found {
+		err = json.Unmarshal(raw, &a.Group)
+		if err != nil {
+			return fmt.Errorf("error reading 'group': %w", err)
+		}
+		delete(object, "group")
+	}
+
+	if raw, found := object["id"]; found {
+		err = json.Unmarshal(raw, &a.Id)
+		if err != nil {
+			return fmt.Errorf("error reading 'id': %w", err)
+		}
+		delete(object, "id")
+	}
+
+	if raw, found := object["image"]; found {
+		err = json.Unmarshal(raw, &a.Image)
+		if err != nil {
+			return fmt.Errorf("error reading 'image': %w", err)
+		}
+		delete(object, "image")
+	}
+
+	if raw, found := object["senderName"]; found {
+		err = json.Unmarshal(raw, &a.SenderName)
+		if err != nil {
+			return fmt.Errorf("error reading 'senderName': %w", err)
+		}
+		delete(object, "senderName")
+	}
+
+	if raw, found := object["sound"]; found {
+		err = json.Unmarshal(raw, &a.Sound)
+		if err != nil {
+			return fmt.Errorf("error reading 'sound': %w", err)
+		}
+		delete(object, "sound")
+	}
+
+	if raw, found := object["subtitle"]; found {
+		err = json.Unmarshal(raw, &a.Subtitle)
+		if err != nil {
+			return fmt.Errorf("error reading 'subtitle': %w", err)
+		}
+		delete(object, "subtitle")
+	}
+
+	if raw, found := object["title"]; found {
+		err = json.Unmarshal(raw, &a.Title)
+		if err != nil {
+			return fmt.Errorf("error reading 'title': %w", err)
+		}
+		delete(object, "title")
+	}
+
+	if raw, found := object["url"]; found {
+		err = json.Unmarshal(raw, &a.Url)
+		if err != nil {
+			return fmt.Errorf("error reading 'url': %w", err)
+		}
+		delete(object, "url")
+	}
+
+	if len(object) != 0 {
+		a.AdditionalProperties = make(map[string]interface{})
+		for fieldName, fieldBuf := range object {
+			var fieldVal interface{}
+			err := json.Unmarshal(fieldBuf, &fieldVal)
+			if err != nil {
+				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+			}
+			a.AdditionalProperties[fieldName] = fieldVal
+		}
+	}
+	return nil
+}
+
+// Override default JSON handling for MessageRevision to handle AdditionalProperties
+func (a MessageRevision) MarshalJSON() ([]byte, error) {
+	var err error
+	object := make(map[string]json.RawMessage)
+
+	object["acceptedAt"], err = json.Marshal(a.AcceptedAt)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'acceptedAt': %w", err)
+	}
+
+	object["body"], err = json.Marshal(a.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'body': %w", err)
+	}
+
+	if a.Deliveries != nil {
+		object["deliveries"], err = json.Marshal(a.Deliveries)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'deliveries': %w", err)
+		}
+	}
+
+	object["format"], err = json.Marshal(a.Format)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'format': %w", err)
+	}
+
+	if a.Group != nil {
+		object["group"], err = json.Marshal(a.Group)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'group': %w", err)
+		}
+	}
+
+	object["id"], err = json.Marshal(a.Id)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'id': %w", err)
+	}
+
+	if a.Image != nil {
+		object["image"], err = json.Marshal(a.Image)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'image': %w", err)
+		}
+	}
+
+	object["senderName"], err = json.Marshal(a.SenderName)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'senderName': %w", err)
+	}
+
+	object["sound"], err = json.Marshal(a.Sound)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'sound': %w", err)
+	}
+
+	if a.Subtitle != nil {
+		object["subtitle"], err = json.Marshal(a.Subtitle)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'subtitle': %w", err)
+		}
+	}
+
+	object["title"], err = json.Marshal(a.Title)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'title': %w", err)
+	}
+
+	if a.Url != nil {
+		object["url"], err = json.Marshal(a.Url)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'url': %w", err)
+		}
+	}
+
+	for fieldName, field := range a.AdditionalProperties {
+		object[fieldName], err = json.Marshal(field)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling '%s': %w", fieldName, err)
+		}
+	}
+	return json.Marshal(object)
+}
+
+// Getter for additional properties for MessageSummary. Returns the specified
+// element and whether it was found
+func (a MessageSummary) Get(fieldName string) (value interface{}, found bool) {
+	if a.AdditionalProperties != nil {
+		value, found = a.AdditionalProperties[fieldName]
+	}
+	return
+}
+
+// Setter for additional properties for MessageSummary
+func (a *MessageSummary) Set(fieldName string, value interface{}) {
+	if a.AdditionalProperties == nil {
+		a.AdditionalProperties = make(map[string]interface{})
+	}
+	a.AdditionalProperties[fieldName] = value
+}
+
+// Override default JSON handling for MessageSummary to handle AdditionalProperties
+func (a *MessageSummary) UnmarshalJSON(b []byte) error {
+	object := make(map[string]json.RawMessage)
+	err := json.Unmarshal(b, &object)
+	if err != nil {
+		return err
+	}
+
+	if raw, found := object["acceptedAt"]; found {
+		err = json.Unmarshal(raw, &a.AcceptedAt)
+		if err != nil {
+			return fmt.Errorf("error reading 'acceptedAt': %w", err)
+		}
+		delete(object, "acceptedAt")
+	}
+
+	if raw, found := object["body"]; found {
+		err = json.Unmarshal(raw, &a.Body)
+		if err != nil {
+			return fmt.Errorf("error reading 'body': %w", err)
+		}
+		delete(object, "body")
+	}
+
+	if raw, found := object["deliveryState"]; found {
+		err = json.Unmarshal(raw, &a.DeliveryState)
+		if err != nil {
+			return fmt.Errorf("error reading 'deliveryState': %w", err)
+		}
+		delete(object, "deliveryState")
+	}
+
+	if raw, found := object["id"]; found {
+		err = json.Unmarshal(raw, &a.Id)
+		if err != nil {
+			return fmt.Errorf("error reading 'id': %w", err)
+		}
+		delete(object, "id")
+	}
+
+	if raw, found := object["logicalMessageId"]; found {
+		err = json.Unmarshal(raw, &a.LogicalMessageId)
+		if err != nil {
+			return fmt.Errorf("error reading 'logicalMessageId': %w", err)
+		}
+		delete(object, "logicalMessageId")
+	}
+
+	if raw, found := object["read"]; found {
+		err = json.Unmarshal(raw, &a.Read)
+		if err != nil {
+			return fmt.Errorf("error reading 'read': %w", err)
+		}
+		delete(object, "read")
+	}
+
+	if raw, found := object["senderName"]; found {
+		err = json.Unmarshal(raw, &a.SenderName)
+		if err != nil {
+			return fmt.Errorf("error reading 'senderName': %w", err)
+		}
+		delete(object, "senderName")
+	}
+
+	if raw, found := object["subtitle"]; found {
+		err = json.Unmarshal(raw, &a.Subtitle)
+		if err != nil {
+			return fmt.Errorf("error reading 'subtitle': %w", err)
+		}
+		delete(object, "subtitle")
+	}
+
+	if raw, found := object["title"]; found {
+		err = json.Unmarshal(raw, &a.Title)
+		if err != nil {
+			return fmt.Errorf("error reading 'title': %w", err)
+		}
+		delete(object, "title")
+	}
+
+	if raw, found := object["updateCount"]; found {
+		err = json.Unmarshal(raw, &a.UpdateCount)
+		if err != nil {
+			return fmt.Errorf("error reading 'updateCount': %w", err)
+		}
+		delete(object, "updateCount")
+	}
+
+	if len(object) != 0 {
+		a.AdditionalProperties = make(map[string]interface{})
+		for fieldName, fieldBuf := range object {
+			var fieldVal interface{}
+			err := json.Unmarshal(fieldBuf, &fieldVal)
+			if err != nil {
+				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+			}
+			a.AdditionalProperties[fieldName] = fieldVal
+		}
+	}
+	return nil
+}
+
+// Override default JSON handling for MessageSummary to handle AdditionalProperties
+func (a MessageSummary) MarshalJSON() ([]byte, error) {
+	var err error
+	object := make(map[string]json.RawMessage)
+
+	object["acceptedAt"], err = json.Marshal(a.AcceptedAt)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'acceptedAt': %w", err)
+	}
+
+	object["body"], err = json.Marshal(a.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'body': %w", err)
+	}
+
+	object["deliveryState"], err = json.Marshal(a.DeliveryState)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'deliveryState': %w", err)
+	}
+
+	object["id"], err = json.Marshal(a.Id)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'id': %w", err)
+	}
+
+	object["logicalMessageId"], err = json.Marshal(a.LogicalMessageId)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'logicalMessageId': %w", err)
+	}
+
+	object["read"], err = json.Marshal(a.Read)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'read': %w", err)
+	}
+
+	object["senderName"], err = json.Marshal(a.SenderName)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'senderName': %w", err)
+	}
+
+	if a.Subtitle != nil {
+		object["subtitle"], err = json.Marshal(a.Subtitle)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'subtitle': %w", err)
+		}
+	}
+
+	object["title"], err = json.Marshal(a.Title)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'title': %w", err)
+	}
+
+	object["updateCount"], err = json.Marshal(a.UpdateCount)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'updateCount': %w", err)
+	}
+
+	for fieldName, field := range a.AdditionalProperties {
+		object[fieldName], err = json.Marshal(field)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling '%s': %w", fieldName, err)
+		}
+	}
+	return json.Marshal(object)
+}
+
+// Getter for additional properties for OAuthError. Returns the specified
+// element and whether it was found
+func (a OAuthError) Get(fieldName string) (value interface{}, found bool) {
+	if a.AdditionalProperties != nil {
+		value, found = a.AdditionalProperties[fieldName]
+	}
+	return
+}
+
+// Setter for additional properties for OAuthError
+func (a *OAuthError) Set(fieldName string, value interface{}) {
+	if a.AdditionalProperties == nil {
+		a.AdditionalProperties = make(map[string]interface{})
+	}
+	a.AdditionalProperties[fieldName] = value
+}
+
+// Override default JSON handling for OAuthError to handle AdditionalProperties
+func (a *OAuthError) UnmarshalJSON(b []byte) error {
+	object := make(map[string]json.RawMessage)
+	err := json.Unmarshal(b, &object)
+	if err != nil {
+		return err
+	}
+
+	if raw, found := object["error"]; found {
+		err = json.Unmarshal(raw, &a.Error)
+		if err != nil {
+			return fmt.Errorf("error reading 'error': %w", err)
+		}
+		delete(object, "error")
+	}
+
+	if raw, found := object["error_description"]; found {
+		err = json.Unmarshal(raw, &a.ErrorDescription)
+		if err != nil {
+			return fmt.Errorf("error reading 'error_description': %w", err)
+		}
+		delete(object, "error_description")
+	}
+
+	if len(object) != 0 {
+		a.AdditionalProperties = make(map[string]interface{})
+		for fieldName, fieldBuf := range object {
+			var fieldVal interface{}
+			err := json.Unmarshal(fieldBuf, &fieldVal)
+			if err != nil {
+				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+			}
+			a.AdditionalProperties[fieldName] = fieldVal
+		}
+	}
+	return nil
+}
+
+// Override default JSON handling for OAuthError to handle AdditionalProperties
+func (a OAuthError) MarshalJSON() ([]byte, error) {
+	var err error
+	object := make(map[string]json.RawMessage)
+
+	object["error"], err = json.Marshal(a.Error)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'error': %w", err)
+	}
+
+	if a.ErrorDescription != nil {
+		object["error_description"], err = json.Marshal(a.ErrorDescription)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'error_description': %w", err)
+		}
+	}
+
+	for fieldName, field := range a.AdditionalProperties {
+		object[fieldName], err = json.Marshal(field)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling '%s': %w", fieldName, err)
+		}
+	}
+	return json.Marshal(object)
+}
+
+// Getter for additional properties for Pairing. Returns the specified
+// element and whether it was found
+func (a Pairing) Get(fieldName string) (value interface{}, found bool) {
+	if a.AdditionalProperties != nil {
+		value, found = a.AdditionalProperties[fieldName]
+	}
+	return
+}
+
+// Setter for additional properties for Pairing
+func (a *Pairing) Set(fieldName string, value interface{}) {
+	if a.AdditionalProperties == nil {
+		a.AdditionalProperties = make(map[string]interface{})
+	}
+	a.AdditionalProperties[fieldName] = value
+}
+
+// Override default JSON handling for Pairing to handle AdditionalProperties
+func (a *Pairing) UnmarshalJSON(b []byte) error {
+	object := make(map[string]json.RawMessage)
+	err := json.Unmarshal(b, &object)
+	if err != nil {
+		return err
+	}
+
+	if raw, found := object["credential"]; found {
+		err = json.Unmarshal(raw, &a.Credential)
+		if err != nil {
+			return fmt.Errorf("error reading 'credential': %w", err)
+		}
+		delete(object, "credential")
+	}
+
+	if raw, found := object["expiresAt"]; found {
+		err = json.Unmarshal(raw, &a.ExpiresAt)
+		if err != nil {
+			return fmt.Errorf("error reading 'expiresAt': %w", err)
+		}
+		delete(object, "expiresAt")
+	}
+
+	if raw, found := object["id"]; found {
+		err = json.Unmarshal(raw, &a.Id)
+		if err != nil {
+			return fmt.Errorf("error reading 'id': %w", err)
+		}
+		delete(object, "id")
+	}
+
+	if raw, found := object["interval"]; found {
+		err = json.Unmarshal(raw, &a.Interval)
+		if err != nil {
+			return fmt.Errorf("error reading 'interval': %w", err)
+		}
+		delete(object, "interval")
+	}
+
+	if raw, found := object["status"]; found {
+		err = json.Unmarshal(raw, &a.Status)
+		if err != nil {
+			return fmt.Errorf("error reading 'status': %w", err)
+		}
+		delete(object, "status")
+	}
+
+	if raw, found := object["userCode"]; found {
+		err = json.Unmarshal(raw, &a.UserCode)
+		if err != nil {
+			return fmt.Errorf("error reading 'userCode': %w", err)
+		}
+		delete(object, "userCode")
+	}
+
+	if raw, found := object["verificationUri"]; found {
+		err = json.Unmarshal(raw, &a.VerificationUri)
+		if err != nil {
+			return fmt.Errorf("error reading 'verificationUri': %w", err)
+		}
+		delete(object, "verificationUri")
+	}
+
+	if len(object) != 0 {
+		a.AdditionalProperties = make(map[string]interface{})
+		for fieldName, fieldBuf := range object {
+			var fieldVal interface{}
+			err := json.Unmarshal(fieldBuf, &fieldVal)
+			if err != nil {
+				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+			}
+			a.AdditionalProperties[fieldName] = fieldVal
+		}
+	}
+	return nil
+}
+
+// Override default JSON handling for Pairing to handle AdditionalProperties
+func (a Pairing) MarshalJSON() ([]byte, error) {
+	var err error
+	object := make(map[string]json.RawMessage)
+
+	if a.Credential != nil {
+		object["credential"], err = json.Marshal(a.Credential)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'credential': %w", err)
+		}
+	}
+
+	object["expiresAt"], err = json.Marshal(a.ExpiresAt)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'expiresAt': %w", err)
+	}
+
+	object["id"], err = json.Marshal(a.Id)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'id': %w", err)
+	}
+
+	object["interval"], err = json.Marshal(a.Interval)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'interval': %w", err)
+	}
+
+	object["status"], err = json.Marshal(a.Status)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'status': %w", err)
+	}
+
+	object["userCode"], err = json.Marshal(a.UserCode)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'userCode': %w", err)
+	}
+
+	object["verificationUri"], err = json.Marshal(a.VerificationUri)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'verificationUri': %w", err)
+	}
+
+	for fieldName, field := range a.AdditionalProperties {
+		object[fieldName], err = json.Marshal(field)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling '%s': %w", fieldName, err)
+		}
+	}
+	return json.Marshal(object)
+}
+
+// Getter for additional properties for PairingCreated. Returns the specified
+// element and whether it was found
+func (a PairingCreated) Get(fieldName string) (value interface{}, found bool) {
+	if a.AdditionalProperties != nil {
+		value, found = a.AdditionalProperties[fieldName]
+	}
+	return
+}
+
+// Setter for additional properties for PairingCreated
+func (a *PairingCreated) Set(fieldName string, value interface{}) {
+	if a.AdditionalProperties == nil {
+		a.AdditionalProperties = make(map[string]interface{})
+	}
+	a.AdditionalProperties[fieldName] = value
+}
+
+// Override default JSON handling for PairingCreated to handle AdditionalProperties
+func (a *PairingCreated) UnmarshalJSON(b []byte) error {
+	object := make(map[string]json.RawMessage)
+	err := json.Unmarshal(b, &object)
+	if err != nil {
+		return err
+	}
+
+	if raw, found := object["expiresAt"]; found {
+		err = json.Unmarshal(raw, &a.ExpiresAt)
+		if err != nil {
+			return fmt.Errorf("error reading 'expiresAt': %w", err)
+		}
+		delete(object, "expiresAt")
+	}
+
+	if raw, found := object["id"]; found {
+		err = json.Unmarshal(raw, &a.Id)
+		if err != nil {
+			return fmt.Errorf("error reading 'id': %w", err)
+		}
+		delete(object, "id")
+	}
+
+	if raw, found := object["interval"]; found {
+		err = json.Unmarshal(raw, &a.Interval)
+		if err != nil {
+			return fmt.Errorf("error reading 'interval': %w", err)
+		}
+		delete(object, "interval")
+	}
+
+	if raw, found := object["pairingSecret"]; found {
+		err = json.Unmarshal(raw, &a.PairingSecret)
+		if err != nil {
+			return fmt.Errorf("error reading 'pairingSecret': %w", err)
+		}
+		delete(object, "pairingSecret")
+	}
+
+	if raw, found := object["status"]; found {
+		err = json.Unmarshal(raw, &a.Status)
+		if err != nil {
+			return fmt.Errorf("error reading 'status': %w", err)
+		}
+		delete(object, "status")
+	}
+
+	if raw, found := object["userCode"]; found {
+		err = json.Unmarshal(raw, &a.UserCode)
+		if err != nil {
+			return fmt.Errorf("error reading 'userCode': %w", err)
+		}
+		delete(object, "userCode")
+	}
+
+	if raw, found := object["verificationUri"]; found {
+		err = json.Unmarshal(raw, &a.VerificationUri)
+		if err != nil {
+			return fmt.Errorf("error reading 'verificationUri': %w", err)
+		}
+		delete(object, "verificationUri")
+	}
+
+	if len(object) != 0 {
+		a.AdditionalProperties = make(map[string]interface{})
+		for fieldName, fieldBuf := range object {
+			var fieldVal interface{}
+			err := json.Unmarshal(fieldBuf, &fieldVal)
+			if err != nil {
+				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+			}
+			a.AdditionalProperties[fieldName] = fieldVal
+		}
+	}
+	return nil
+}
+
+// Override default JSON handling for PairingCreated to handle AdditionalProperties
+func (a PairingCreated) MarshalJSON() ([]byte, error) {
+	var err error
+	object := make(map[string]json.RawMessage)
+
+	object["expiresAt"], err = json.Marshal(a.ExpiresAt)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'expiresAt': %w", err)
+	}
+
+	object["id"], err = json.Marshal(a.Id)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'id': %w", err)
+	}
+
+	object["interval"], err = json.Marshal(a.Interval)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'interval': %w", err)
+	}
+
+	object["pairingSecret"], err = json.Marshal(a.PairingSecret)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'pairingSecret': %w", err)
+	}
+
+	object["status"], err = json.Marshal(a.Status)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'status': %w", err)
+	}
+
+	object["userCode"], err = json.Marshal(a.UserCode)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'userCode': %w", err)
+	}
+
+	object["verificationUri"], err = json.Marshal(a.VerificationUri)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'verificationUri': %w", err)
+	}
+
+	for fieldName, field := range a.AdditionalProperties {
+		object[fieldName], err = json.Marshal(field)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling '%s': %w", fieldName, err)
+		}
+	}
+	return json.Marshal(object)
+}
+
+// Getter for additional properties for SenderCredential. Returns the specified
+// element and whether it was found
+func (a SenderCredential) Get(fieldName string) (value interface{}, found bool) {
+	if a.AdditionalProperties != nil {
+		value, found = a.AdditionalProperties[fieldName]
+	}
+	return
+}
+
+// Setter for additional properties for SenderCredential
+func (a *SenderCredential) Set(fieldName string, value interface{}) {
+	if a.AdditionalProperties == nil {
+		a.AdditionalProperties = make(map[string]interface{})
+	}
+	a.AdditionalProperties[fieldName] = value
+}
+
+// Override default JSON handling for SenderCredential to handle AdditionalProperties
+func (a *SenderCredential) UnmarshalJSON(b []byte) error {
+	object := make(map[string]json.RawMessage)
+	err := json.Unmarshal(b, &object)
+	if err != nil {
+		return err
+	}
+
+	if raw, found := object["authorizationMethod"]; found {
+		err = json.Unmarshal(raw, &a.AuthorizationMethod)
+		if err != nil {
+			return fmt.Errorf("error reading 'authorizationMethod': %w", err)
+		}
+		delete(object, "authorizationMethod")
+	}
+
+	if raw, found := object["createdAt"]; found {
+		err = json.Unmarshal(raw, &a.CreatedAt)
+		if err != nil {
+			return fmt.Errorf("error reading 'createdAt': %w", err)
+		}
+		delete(object, "createdAt")
+	}
+
+	if raw, found := object["id"]; found {
+		err = json.Unmarshal(raw, &a.Id)
+		if err != nil {
+			return fmt.Errorf("error reading 'id': %w", err)
+		}
+		delete(object, "id")
+	}
+
+	if raw, found := object["kind"]; found {
+		err = json.Unmarshal(raw, &a.Kind)
+		if err != nil {
+			return fmt.Errorf("error reading 'kind': %w", err)
+		}
+		delete(object, "kind")
+	}
+
+	if raw, found := object["lastUsedAt"]; found {
+		err = json.Unmarshal(raw, &a.LastUsedAt)
+		if err != nil {
+			return fmt.Errorf("error reading 'lastUsedAt': %w", err)
+		}
+		delete(object, "lastUsedAt")
+	}
+
+	if raw, found := object["name"]; found {
+		err = json.Unmarshal(raw, &a.Name)
+		if err != nil {
+			return fmt.Errorf("error reading 'name': %w", err)
+		}
+		delete(object, "name")
+	}
+
+	if len(object) != 0 {
+		a.AdditionalProperties = make(map[string]interface{})
+		for fieldName, fieldBuf := range object {
+			var fieldVal interface{}
+			err := json.Unmarshal(fieldBuf, &fieldVal)
+			if err != nil {
+				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+			}
+			a.AdditionalProperties[fieldName] = fieldVal
+		}
+	}
+	return nil
+}
+
+// Override default JSON handling for SenderCredential to handle AdditionalProperties
+func (a SenderCredential) MarshalJSON() ([]byte, error) {
+	var err error
+	object := make(map[string]json.RawMessage)
+
+	if a.AuthorizationMethod != nil {
+		object["authorizationMethod"], err = json.Marshal(a.AuthorizationMethod)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'authorizationMethod': %w", err)
+		}
+	}
+
+	object["createdAt"], err = json.Marshal(a.CreatedAt)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'createdAt': %w", err)
+	}
+
+	object["id"], err = json.Marshal(a.Id)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'id': %w", err)
+	}
+
+	object["kind"], err = json.Marshal(a.Kind)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'kind': %w", err)
+	}
+
+	if a.LastUsedAt != nil {
+		object["lastUsedAt"], err = json.Marshal(a.LastUsedAt)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'lastUsedAt': %w", err)
+		}
+	}
+
+	object["name"], err = json.Marshal(a.Name)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'name': %w", err)
+	}
+
+	for fieldName, field := range a.AdditionalProperties {
+		object[fieldName], err = json.Marshal(field)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling '%s': %w", fieldName, err)
+		}
+	}
+	return json.Marshal(object)
+}
+
+// Getter for additional properties for Usage. Returns the specified
+// element and whether it was found
+func (a Usage) Get(fieldName string) (value interface{}, found bool) {
+	if a.AdditionalProperties != nil {
+		value, found = a.AdditionalProperties[fieldName]
+	}
+	return
+}
+
+// Setter for additional properties for Usage
+func (a *Usage) Set(fieldName string, value interface{}) {
+	if a.AdditionalProperties == nil {
+		a.AdditionalProperties = make(map[string]interface{})
+	}
+	a.AdditionalProperties[fieldName] = value
+}
+
+// Override default JSON handling for Usage to handle AdditionalProperties
+func (a *Usage) UnmarshalJSON(b []byte) error {
+	object := make(map[string]json.RawMessage)
+	err := json.Unmarshal(b, &object)
+	if err != nil {
+		return err
+	}
+
+	if raw, found := object["limit"]; found {
+		err = json.Unmarshal(raw, &a.Limit)
+		if err != nil {
+			return fmt.Errorf("error reading 'limit': %w", err)
+		}
+		delete(object, "limit")
+	}
+
+	if raw, found := object["periodEnd"]; found {
+		err = json.Unmarshal(raw, &a.PeriodEnd)
+		if err != nil {
+			return fmt.Errorf("error reading 'periodEnd': %w", err)
+		}
+		delete(object, "periodEnd")
+	}
+
+	if raw, found := object["periodStart"]; found {
+		err = json.Unmarshal(raw, &a.PeriodStart)
+		if err != nil {
+			return fmt.Errorf("error reading 'periodStart': %w", err)
+		}
+		delete(object, "periodStart")
+	}
+
+	if raw, found := object["used"]; found {
+		err = json.Unmarshal(raw, &a.Used)
+		if err != nil {
+			return fmt.Errorf("error reading 'used': %w", err)
+		}
+		delete(object, "used")
+	}
+
+	if len(object) != 0 {
+		a.AdditionalProperties = make(map[string]interface{})
+		for fieldName, fieldBuf := range object {
+			var fieldVal interface{}
+			err := json.Unmarshal(fieldBuf, &fieldVal)
+			if err != nil {
+				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+			}
+			a.AdditionalProperties[fieldName] = fieldVal
+		}
+	}
+	return nil
+}
+
+// Override default JSON handling for Usage to handle AdditionalProperties
+func (a Usage) MarshalJSON() ([]byte, error) {
+	var err error
+	object := make(map[string]json.RawMessage)
+
+	object["limit"], err = json.Marshal(a.Limit)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'limit': %w", err)
+	}
+
+	object["periodEnd"], err = json.Marshal(a.PeriodEnd)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'periodEnd': %w", err)
+	}
+
+	object["periodStart"], err = json.Marshal(a.PeriodStart)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'periodStart': %w", err)
+	}
+
+	object["used"], err = json.Marshal(a.Used)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling 'used': %w", err)
+	}
+
+	for fieldName, field := range a.AdditionalProperties {
+		object[fieldName], err = json.Marshal(field)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling '%s': %w", fieldName, err)
+		}
+	}
+	return json.Marshal(object)
+}
 
 // RequestEditorFn is the function signature for the RequestEditor callback function
 type RequestEditorFn func(ctx context.Context, req *http.Request) error

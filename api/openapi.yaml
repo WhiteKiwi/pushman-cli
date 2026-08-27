@@ -366,7 +366,7 @@ components:
   schemas:
     Error:
       type: object
-      additionalProperties: false
+      additionalProperties: true
       required:
         - code
         - message
@@ -385,7 +385,7 @@ components:
           description: Seconds until a retry is permitted.
     ErrorResponse:
       type: object
-      additionalProperties: false
+      additionalProperties: true
       required:
         - error
       properties:
@@ -393,7 +393,7 @@ components:
           $ref: '#/components/schemas/Error'
     DeviceAuthorization:
       type: object
-      additionalProperties: false
+      additionalProperties: true
       required:
         - device_code
         - user_code
@@ -422,7 +422,7 @@ components:
           minimum: 1
     DeviceToken:
       type: object
-      additionalProperties: false
+      additionalProperties: true
       required:
         - access_token
         - token_type
@@ -443,7 +443,7 @@ components:
           maxLength: 64
     OAuthError:
       type: object
-      additionalProperties: false
+      additionalProperties: true
       required:
         - error
       properties:
@@ -463,7 +463,7 @@ components:
       pattern: ^pair_[0-9A-HJKMNP-TV-Z]{26}$
     PairingCreated:
       type: object
-      additionalProperties: false
+      additionalProperties: true
       required:
         - id
         - userCode
@@ -495,7 +495,7 @@ components:
           description: One-time polling secret; never put it in a URL.
     IssuedCredential:
       type: object
-      additionalProperties: false
+      additionalProperties: true
       required:
         - token
         - name
@@ -507,7 +507,7 @@ components:
           type: string
     Pairing:
       type: object
-      additionalProperties: false
+      additionalProperties: true
       required:
         - id
         - userCode
@@ -554,7 +554,7 @@ components:
         - failed
     MessageSummary:
       type: object
-      additionalProperties: false
+      additionalProperties: true
       required:
         - id
         - logicalMessageId
@@ -590,7 +590,7 @@ components:
           $ref: '#/components/schemas/DeliveryState'
     MessagePage:
       type: object
-      additionalProperties: false
+      additionalProperties: true
       required:
         - items
       properties:
@@ -657,7 +657,7 @@ components:
             maxLength: 64
     MessageAccepted:
       type: object
-      additionalProperties: false
+      additionalProperties: true
       required:
         - id
         - logicalMessageId
@@ -680,7 +680,7 @@ components:
       pattern: ^dev_[0-9A-HJKMNP-TV-Z]{26}$
     MessageDelivery:
       type: object
-      additionalProperties: false
+      additionalProperties: true
       required:
         - deviceId
         - deviceName
@@ -696,7 +696,7 @@ components:
           type: string
     MessageRevision:
       type: object
-      additionalProperties: false
+      additionalProperties: true
       required:
         - id
         - title
@@ -744,7 +744,7 @@ components:
             $ref: '#/components/schemas/MessageDelivery'
     MessageDetail:
       type: object
-      additionalProperties: false
+      additionalProperties: true
       required:
         - logicalMessageId
         - read
@@ -761,7 +761,7 @@ components:
             $ref: '#/components/schemas/MessageRevision'
     SenderCredential:
       type: object
-      additionalProperties: false
+      additionalProperties: true
       required:
         - id
         - name
@@ -794,7 +794,7 @@ components:
           format: date-time
     Device:
       type: object
-      additionalProperties: false
+      additionalProperties: true
       required:
         - id
         - name
@@ -822,7 +822,7 @@ components:
           type: boolean
     Usage:
       type: object
-      additionalProperties: false
+      additionalProperties: true
       required:
         - used
         - limit
