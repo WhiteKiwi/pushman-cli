@@ -22,8 +22,10 @@ go mod download
 go generate ./internal/api
 go test -race ./...
 go vet ./...
-go run ./cmd/pushman help
+make pdev ARGS=help
 ```
+
+The development target builds `.bin/pushman-dev` with a loopback API default, a separate Keychain namespace, `PUSHMAN_DEV_TOKEN`, and self-update disabled. It never replaces or reads credentials from an installed release command named `pushman`. `make install-dev` optionally installs the isolated shortcut as `~/.local/bin/pdev`.
 
 Before submitting a pull request:
 

@@ -93,7 +93,8 @@ Closing the client's stdio connection stops the server cleanly. `Ctrl-C` or clie
 ```sh
 go test -race ./...
 go vet ./...
-go build -trimpath ./cmd/pushman
+make build-dev
+.bin/pushman-dev mcp
 ```
 
 Tests negotiate with the official MCP Go SDK client, verify all schemas and safety annotations, exercise successful and failed tool calls, and run the Cobra command in a separate process to prove protocol-only stdout and clean EOF shutdown.

@@ -41,3 +41,16 @@ func TestResolveVersionInfoIgnoresDevelopmentModuleVersion(t *testing.T) {
 		t.Fatalf("resolveVersionInfo() = %q, %q, %q", version, commit, date)
 	}
 }
+
+func TestCredentialServiceNameSeparatesDevelopmentCredentials(t *testing.T) {
+	baseURL := "https://api.pushman.example/v1"
+	production := credentialServiceName(baseURL, "")
+	development := credentialServiceName(baseURL, "dev")
+
+	if production == development {
+		t.Fatal("development credential service must not match production")
+	}
+	if development != production+".dev" {
+		t.Fatalf("development credential service = %q", development)
+	}
+}

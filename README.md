@@ -129,10 +129,12 @@ The CLI source is MIT licensed. The hosted Pushman service, iPhone app, monthly 
 The production API is `https://api.pushman.whitekiwi.link/v1`. For local development, an explicit loopback override is supported:
 
 ```sh
-PUSHMAN_API_URL=http://127.0.0.1:8080/v1 go run ./cmd/pushman status
+make pdev ARGS=status
 ```
 
-Overrides must use HTTPS except for loopback development and must end in `/v1`. Redirects are rejected to prevent credentials from being forwarded to another origin.
+This builds `.bin/pushman-dev`, defaults it to `http://127.0.0.1:8080/v1`, uses a separate development Keychain namespace, and reads automation credentials only from `PUSHMAN_DEV_TOKEN`. It cannot self-update. `PUSHMAN_API_URL` can still override the endpoint explicitly; overrides must use HTTPS except for loopback development and must end in `/v1`. Redirects are rejected to prevent credentials from being forwarded to another origin.
+
+For an optional global development shortcut, run `make install-dev`. It writes `pdev` to `~/.local/bin`, leaving a Homebrew or release installation named `pushman` untouched. Use `pushman` for the installed product and `pdev` only for a development checkout.
 
 ## Development
 
@@ -141,8 +143,8 @@ go mod download
 go generate ./internal/api
 go test -race ./...
 go vet ./...
-go run ./cmd/pushman help
-go run ./cmd/pushman mcp
+make pdev ARGS=help
+make pdev ARGS=mcp
 ```
 
 `api/openapi.yaml` is a bundled snapshot of the authoritative public contract. After updating it, run `go generate ./internal/api` and commit the generated client. CI rejects stale generated code.

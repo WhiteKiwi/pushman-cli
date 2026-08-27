@@ -16,9 +16,12 @@ import (
 )
 
 var (
-	version = "dev"
-	commit  = "none"
-	date    = "unknown"
+	version                    = "dev"
+	commit                     = "none"
+	date                       = "unknown"
+	defaultBaseURL             = pushclient.DefaultBaseURL
+	credentialNamespace        = ""
+	automationTokenEnvironment = "PUSHMAN_TOKEN"
 )
 
 func main() {
@@ -27,29 +30,33 @@ func main() {
 
 	baseURL := os.Getenv("PUSHMAN_API_URL")
 	if baseURL == "" {
-		baseURL = pushclient.DefaultBaseURL
+		baseURL = defaultBaseURL
 	}
 	validatedBaseURL, err := pushclient.ValidateBaseURL(baseURL)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(cli.ExitCode(err))
 	}
-	keyring := credential.NewKeyring(pushclient.CredentialServiceName(validatedBaseURL))
-	service, err := pushclient.New(validatedBaseURL, keyring, os.Getenv("PUSHMAN_TOKEN"), nil)
+	keyring := credential.NewKeyring(credentialServiceName(validatedBaseURL, credentialNamespace))
+	service, err := pushclient.New(validatedBaseURL, keyring, os.Getenv(automationTokenEnvironment), nil)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(cli.ExitCode(err))
 	}
 
 	resolvedVersion, resolvedCommit, resolvedDate := resolveVersionInfo(version, commit, date, readBuildInfo())
-	updater := selfupdate.New()
+	var update func(context.Context) (string, error)
+	if credentialNamespace == "" {
+		updater := selfupdate.New()
+		update = updater.Update
+	}
 	app := cli.New(cli.Dependencies{
 		In:          os.Stdin,
 		Out:         os.Stdout,
 		ErrOut:      os.Stderr,
 		IsTerminal:  cli.IsTerminalFile(os.Stdin),
 		OpenBrowser: browser.Open,
-		SelfUpdate:  updater.Update,
+		SelfUpdate:  update,
 		Service:     service,
 		Version: cli.VersionInfo{
 			Version: resolvedVersion,
@@ -62,6 +69,14 @@ func main() {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(cli.ExitCode(err))
 	}
+}
+
+func credentialServiceName(baseURL, namespace string) string {
+	service := pushclient.CredentialServiceName(baseURL)
+	if namespace == "" {
+		return service
+	}
+	return service + "." + namespace
 }
 
 func readBuildInfo() *debug.BuildInfo {
