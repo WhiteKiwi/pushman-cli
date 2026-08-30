@@ -1,6 +1,6 @@
 class Pushman < Formula
   desc "Send push notifications to your iPhone from the command-line"
-  homepage "https://github.com/pushmanhq/pushman-cli"
+  homepage "https://github.com/pushmanhq/pushman"
   license "MIT"
 
   on_macos do

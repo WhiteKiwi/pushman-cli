@@ -9,6 +9,11 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/pushmanhq/pushman">Pushman product home</a> ·
+  <a href="https://app.pushman.whitekiwi.link/support/">Support</a>
+</p>
+
+<p align="center">
   <a href="https://github.com/pushmanhq/pushman-cli/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/pushmanhq/pushman-cli/actions/workflows/ci.yml/badge.svg"></a>
   <a href="https://go.dev/"><img alt="Go 1.27+" src="https://img.shields.io/badge/Go-1.27%2B-00ADD8?logo=go&logoColor=white"></a>
   <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-151515"></a>
@@ -23,7 +28,7 @@ Accepted msg_01M0W2RDPVGEVX7D6ZWFK907B2 for 1 device
 Pushman is a small, script-friendly companion for getting your own operational messages onto your iPhone. Authorize once through a browser or the iPhone app, then use the same command interactively or in automation. Credentials live in the operating-system keyring, not a plaintext config file.
 
 > [!NOTE]
-> Pushman for iPhone is currently in private beta. The App Store link will be added here when the public listing is available.
+> Pushman for iPhone is preparing for its first App Store release. Follow the [product repository](https://github.com/pushmanhq/pushman) for availability and product documentation.
 
 ## Highlights
 

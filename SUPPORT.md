@@ -12,7 +12,7 @@ pushman help
 
 Search existing [issues](https://github.com/pushmanhq/pushman-cli/issues) before opening a new one. Use the provided bug-report form and include the CLI version, operating system, command shape, expected result, and redacted output.
 
-This repository supports the open-source CLI. Account, iPhone app, billing, quota, and hosted-service support channels will be documented separately as those products become publicly available.
+This repository supports the open-source CLI. For the iPhone app, accounts, quota, hosted-service behavior, or general product help, use the [Pushman support guide](https://github.com/pushmanhq/pushman/blob/main/SUPPORT.md).
 
 ## Protect your data
 

@@ -9,7 +9,7 @@ Thanks for helping improve Pushman CLI. Bug reports, focused fixes, tests, docum
 - Never include credentials, tokens, private notification content, or unredacted logs.
 - For vulnerabilities, follow [SECURITY.md](SECURITY.md) instead of opening a public issue.
 
-For a substantial feature or public command change, open a proposal first. The hosted API and product behavior are maintained outside this repository, so a CLI change may require an accepted contract change before implementation.
+For a substantial feature or public command change, open a proposal first in the [Pushman product repository](https://github.com/pushmanhq/pushman). The hosted API and product behavior are maintained outside this repository, so a CLI change may require an accepted contract change before implementation.
 
 ## Development
 

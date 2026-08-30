@@ -3,6 +3,9 @@ info:
   title: Pushman Public API
   version: 1.0.0
   description: Supported API for the Pushman CLI and developer automation.
+  license:
+    name: MIT
+    identifier: MIT
 servers:
   - url: https://api.pushman.whitekiwi.link/v1
     description: Production API origin.

@@ -2,7 +2,8 @@
 
 ## Product contract
 
-- Treat the frozen product specification in `../pushman/docs/SPEC.md` as the source of truth.
+- Treat the frozen product specification in `../pushman-internal/docs/SPEC.md` as the source of truth.
+- Keep supported public documentation aligned with `pushmanhq/pushman`.
 - Do not invent public API behavior in this repository. Keep transport work behind the `Service` interface until the shared OpenAPI contract is accepted.
 - Preserve stdout for successful command output and stdout machine output. Send errors and diagnostics to stderr.
 
